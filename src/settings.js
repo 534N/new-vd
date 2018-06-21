@@ -1,5 +1,3 @@
-'use strict';
-
 let HOST_NAME = 'https://client.solinkcloud.com';
 let S3_BUCKET_NAME = 'solinkimages';
 let SIGNALLER_URL = 'https://signaller.solinkcloud.com';

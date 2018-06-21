@@ -10,6 +10,9 @@ import {
 
 import './index.css';
 import App from './App';
+import Settings from './settings';
+import Auth0Lock from 'auth0-lock';
+
 import registerServiceWorker from './registerServiceWorker';
 
 const AuthExample = () => (
@@ -83,14 +86,82 @@ const Public = () => <h3>Public</h3>;
 const Protected = () => <h3>Protected</h3>;
 
 class Login extends React.Component {
-  state = {
-    redirectToReferrer: false
-  };
+  constructor(props) {
+    super(props);
 
-  login = () => {
+    this.state = {
+      redirectToReferrer: false
+    };
+
+
+    let sso = false;
+    const search = window.location.search;
+    if (/\?code=/.test(search)) {
+      sso = true;
+    }
+
+    this.lock = new Auth0Lock(
+      Settings.auth0_clientID,
+      Settings.auth0_domain,
+      {
+        allowSignUp: false,
+        oidcConformant: false,
+        container: 'root',
+        theme: {
+          logo: 'https://solinkcloud.com/assets/d93cde7b506b1fe81bdfb93f38981dd5.png',
+          primaryColor: '#0088cc'
+        },
+        auth: {
+          redirect: false,
+          responseType: 'token',
+          params: {
+            scope: 'openid app_metadata email user_metadata created_at roles tenantId userType eventTypes offline_access given_name family_name',
+            device: 'VD Web'
+          },
+          sso: sso,
+        }
+      }
+    );
+
+    this.lock.on('authenticated', function(authResult) {
+      if (authResult && authResult.refreshToken) {
+        // AuthActions.loginViaRefresh(authResult.refreshToken, authResult.idToken, authResult.state);
+        this.login(authResult.refreshToken, authResult.idToken, authResult.state);
+      }
+    });
+  }
+
+  componentDidMount() {
+    this.lock.show();
+  }
+
+  login = (refreshToken, jwtToken, state, sso = false) => {
     fakeAuth.authenticate(() => {
       this.setState({ redirectToReferrer: true });
+
+      if (refreshToken) {
+        this.startRefreshTimer(0, { refreshToken, jwtToken });
+      }
     });
+  };
+
+  stopRefreshTimer = () => {
+    if (this.refreshTimerId) {
+      clearTimeout(this.refreshTimerId);
+      this.refreshTimerId = null;
+    }
+  };
+
+  startRefreshTimer = (timeout, options, replace = false) => {
+    if (replace) {
+      this.stopRefreshTimer();
+    }
+    
+    if (this.refreshTimerId) {
+      this.refreshTimerId = setTimeout(() => {
+        console.debug('time out... need to refresh now')
+      }, timeout);
+    }
   };
 
   render() {
