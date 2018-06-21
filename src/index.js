@@ -5,63 +5,38 @@ import {
   Route,
   Link,
   Redirect,
-  withRouter
+  withRouter,
+  Switch
 } from "react-router-dom";
 
 import './index.css';
-import App from './App';
+// import App from './App';
 import Settings from './settings';
 import Auth0Lock from 'auth0-lock';
 
 import registerServiceWorker from './registerServiceWorker';
 
-const AuthExample = () => (
-  <Router>
-    <div>
-      <AuthButton />
-      <ul>
-        <li>
-          <Link to="/public">Public Page</Link>
-        </li>
-        <li>
-          <Link to="/protected">Protected Page</Link>
-        </li>
-      </ul>
-      <Route path="/public" component={Public} />
-      <Route path="/login" component={Login} />
-      <PrivateRoute path="/protected" component={Protected} />
-    </div>
-  </Router>
+const App = () => (
+  <Switch>
+    <Route exact path='/' component={home}/>
+    <Route path='/events' component={events}/>
+    <Route path='/cameras' component={cameras}/>
+    <Route component={NoMatch}/>
+  </Switch>
 );
 
-const fakeAuth = {
-  isAuthenticated: false,
-  authenticate(cb) {
-    this.isAuthenticated = true;
-    setTimeout(cb, 100); // fake async
-  },
-  signout(cb) {
-    this.isAuthenticated = false;
-    setTimeout(cb, 100);
-  }
-};
+const home = () => <div>Amazing home page</div>;
+const events = () => <div>Events go here</div>;
+const cameras = () => <div>Cameras go here</div>;
+const NoMatch = () => <div>Nothing to see here</div>;
 
-const AuthButton = withRouter(
-  ({ history }) =>
-    fakeAuth.isAuthenticated ? (
-      <p>
-        Welcome!{" "}
-        <button
-          onClick={() => {
-            fakeAuth.signout(() => history.push("/"));
-          }}
-        >
-          Sign out
-        </button>
-      </p>
-    ) : (
-      <p>You are not logged in.</p>
-    )
+const AuthExample = () => (
+  <Router>
+    <Switch>
+      <PrivateRoute path="/" component={App} />
+      <Route exact path='/login' component={Login} />
+    </Switch>
+  </Router>
 );
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -81,9 +56,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
     }
   />
 );
-
-const Public = () => <h3>Public</h3>;
-const Protected = () => <h3>Protected</h3>;
 
 class Login extends React.Component {
   constructor(props) {
@@ -130,6 +102,8 @@ class Login extends React.Component {
       }
     });
   }
+
+  
 
   componentDidMount() {
     this.lock.show();
@@ -181,6 +155,36 @@ class Login extends React.Component {
   }
 }
 
+
+const fakeAuth = {
+  isAuthenticated: false,
+  authenticate(cb) {
+    this.isAuthenticated = true;
+    setTimeout(cb, 100); // fake async
+  },
+  signout(cb) {
+    this.isAuthenticated = false;
+    setTimeout(cb, 100);
+  }
+};
+
+const AuthButton = withRouter(
+  ({ history }) =>
+    fakeAuth.isAuthenticated ? (
+      <p>
+        Welcome!{" "}
+        <button
+          onClick={() => {
+            fakeAuth.signout(() => history.push("/"));
+          }}
+        >
+          Sign out
+        </button>
+      </p>
+    ) : (
+      <p>You are not logged in.</p>
+    )
+);
 
 ReactDOM.render( <AuthExample /> , document.getElementById('root'));
 registerServiceWorker();
