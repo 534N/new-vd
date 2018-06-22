@@ -21,7 +21,6 @@ const App = () => (
     <Route exact path='/' component={home}/>
     <Route path='/events' component={events}/>
     <Route path='/cameras' component={cameras}/>
-    <Route component={NoMatch}/>
   </Switch>
 );
 
@@ -33,29 +32,34 @@ const NoMatch = () => <div>Nothing to see here</div>;
 const AuthExample = () => (
   <Router>
     <Switch>
-      <PrivateRoute path="/" component={App} />
+      <PrivateRoute exact path="/" component={PrivateRoute} />
       <Route exact path='/login' component={Login} />
+      <Route component={NoMatch}/>
     </Switch>
   </Router>
 );
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={props =>
-      fakeAuth.isAuthenticated ? (
-        <Component {...props} />
-      ) : (
-        <Redirect
-          to={{
-            pathname: "/login",
-            state: { from: props.location }
-          }}
-        />
-      )
-    }
-  />
-);
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  
+  console.debug(rest)
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        fakeAuth.isAuthenticated ? (
+          <Component {...props} />
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/login",
+              state: { from: props.location }
+            }}
+          />
+        )
+      }
+    />
+  )
+};
 
 class Login extends React.Component {
   constructor(props) {
@@ -95,29 +99,26 @@ class Login extends React.Component {
       }
     );
 
-    this.lock.on('authenticated', function(authResult) {
+    this.lock.on('authenticated', authResult => {
       if (authResult && authResult.refreshToken) {
         // AuthActions.loginViaRefresh(authResult.refreshToken, authResult.idToken, authResult.state);
-        this.login(authResult.refreshToken, authResult.idToken, authResult.state);
+        // this.login(authResult.refreshToken, authResult.idToken, authResult.state);
+
+        const { jwtToken, refreshToken } = authResult;
+        fakeAuth.authenticate(() => {
+          this.setState({ redirectToReferrer: true });
+    
+          if (refreshToken) {
+            this.startRefreshTimer(0, { refreshToken, jwtToken });
+          }
+        });
       }
     });
   }
-
-  
 
   componentDidMount() {
     this.lock.show();
   }
-
-  login = (refreshToken, jwtToken, state, sso = false) => {
-    fakeAuth.authenticate(() => {
-      this.setState({ redirectToReferrer: true });
-
-      if (refreshToken) {
-        this.startRefreshTimer(0, { refreshToken, jwtToken });
-      }
-    });
-  };
 
   stopRefreshTimer = () => {
     if (this.refreshTimerId) {
@@ -143,6 +144,9 @@ class Login extends React.Component {
     const { redirectToReferrer } = this.state;
 
     if (redirectToReferrer) {
+
+      console.debug('redirectToReferrer >>> ', redirectToReferrer)
+      console.debug('from >>> ', from)
       return <Redirect to={from} />;
     }
 
