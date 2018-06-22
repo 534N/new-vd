@@ -32,7 +32,7 @@ const NoMatch = () => <div>Nothing to see here</div>;
 const AuthExample = () => (
   <Router>
     <Switch>
-      <PrivateRoute exact path="/" component={PrivateRoute} />
+      <PrivateRoute exact path="/" component={App} />
       <Route exact path='/login' component={Login} />
       <Route component={NoMatch}/>
     </Switch>
@@ -40,8 +40,6 @@ const AuthExample = () => (
 );
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  
-  console.debug(rest)
   return (
     <Route
       {...rest}
@@ -49,12 +47,13 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         fakeAuth.isAuthenticated ? (
           <Component {...props} />
         ) : (
+          <div>
           <Redirect
             to={{
               pathname: "/login",
               state: { from: props.location }
-            }}
-          />
+            }} />
+          </div>
         )
       }
     />
@@ -68,7 +67,6 @@ class Login extends React.Component {
     this.state = {
       redirectToReferrer: false
     };
-
 
     let sso = false;
     const search = window.location.search;
@@ -99,19 +97,21 @@ class Login extends React.Component {
       }
     );
 
+    const cb = (refreshToken, jwtToken) => {
+      this.setState({ redirectToReferrer: true });
+
+      if (refreshToken) {
+        this.startRefreshTimer(0, { refreshToken, jwtToken });
+      }
+    };
+
     this.lock.on('authenticated', authResult => {
       if (authResult && authResult.refreshToken) {
         // AuthActions.loginViaRefresh(authResult.refreshToken, authResult.idToken, authResult.state);
         // this.login(authResult.refreshToken, authResult.idToken, authResult.state);
 
         const { jwtToken, refreshToken } = authResult;
-        fakeAuth.authenticate(() => {
-          this.setState({ redirectToReferrer: true });
-    
-          if (refreshToken) {
-            this.startRefreshTimer(0, { refreshToken, jwtToken });
-          }
-        });
+        fakeAuth.authenticate(cb.bind(this, refreshToken, jwtToken));
       }
     });
   }
@@ -119,6 +119,17 @@ class Login extends React.Component {
   componentDidMount() {
     this.lock.show();
   }
+
+  render() {
+    const { from } = this.props.location.state || { from: { pathname: "/" } };
+    const { redirectToReferrer } = this.state;
+
+    console.debug('redirectToReferrer >>> ', redirectToReferrer)
+    console.debug('from >>> ', from)
+    return <Redirect to={ redirectToReferrer ? from : '/login' } />;
+  }
+
+
 
   stopRefreshTimer = () => {
     if (this.refreshTimerId) {
@@ -131,32 +142,13 @@ class Login extends React.Component {
     if (replace) {
       this.stopRefreshTimer();
     }
-    
+
     if (this.refreshTimerId) {
       this.refreshTimerId = setTimeout(() => {
         console.debug('time out... need to refresh now')
       }, timeout);
     }
   };
-
-  render() {
-    const { from } = this.props.location.state || { from: { pathname: "/" } };
-    const { redirectToReferrer } = this.state;
-
-    if (redirectToReferrer) {
-
-      console.debug('redirectToReferrer >>> ', redirectToReferrer)
-      console.debug('from >>> ', from)
-      return <Redirect to={from} />;
-    }
-
-    return (
-      <div>
-        <p>You must log in to view the page at {from.pathname}</p>
-        <button onClick={this.login}>Log in</button>
-      </div>
-    );
-  }
 }
 
 
