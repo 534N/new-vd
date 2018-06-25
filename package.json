@@ -4,10 +4,16 @@
   "private": true,
   "dependencies": {
     "auth0-lock": "^11.7.2",
+    "axios": "^0.18.0",
+    "lodash": "^4.17.10",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "redux": "^4.0.0",
+    "redux-logger": "^3.0.6",
+    "redux-persist": "^5.10.0",
+    "redux-promise-middleware": "^5.1.1"
   },
   "scripts": {
     "start": "react-scripts start",

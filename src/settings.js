@@ -36,7 +36,7 @@ if (process.env.BRAND_NAME === 'solink') {
   BRAND_NAME = 'red_flag';
 }
 
-export default Object.assign({}, {
+export default ({
   host: HOST_NAME,
   s3_bucket_name: S3_BUCKET_NAME,
   signaller_url: SIGNALLER_URL,
@@ -46,5 +46,5 @@ export default Object.assign({}, {
   auth0_domain: AUTH0_DOMAIN,
   cloud_vms_host: CLOUD_VMS_HOST_NAME,
   callhome_url: CALLHOME_URL,
-  referral_url: REFERRAL_URL,
+  referral_url: REFERRAL_URL
 });
