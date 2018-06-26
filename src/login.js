@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Redirect,
 } from "react-router-dom";
+import { connect } from 'react-redux';
 
 import {
   auth0_clientID,
@@ -65,11 +66,13 @@ class Login extends React.Component {
 
         console.debug('authResult >> ', authResult);
         const { idToken, refreshToken, expiresIn } = authResult;
-        const { getUserMetadata } = callhome;
+        const { getUserMetadata, getCustomer, getBillingURL } = callhome;
         // fakeAuth.authenticate(cb.bind(this, refreshToken, jwtToken));
 
         store.dispatch({type: 'USER_LOG_IN', payload: {refreshToken, idToken, expiresIn}})
-        store.dispatch({type: 'USER_METADATA', payload: axios(getUserMetadata)})
+        store.dispatch({type: 'USER_METADATA', payload: axios(getUserMetadata(idToken))})
+        store.dispatch({type: 'CUSTOMER_INFO', payload: axios(getCustomer(idToken))})
+        store.dispatch({type: 'BILLING_INFO', payload: axios(getBillingURL(idToken))})
       }
     });
   }
@@ -82,13 +85,21 @@ class Login extends React.Component {
     debugger
   }
 
+  componentWillReceiveProps(nextProps) {
+    console.debug('>>>> ', nextProps)
+  }
+
   render() {
     const { from } = this.props.location.state || { from: { pathname: "/home" } };
     const { redirectToReferrer } = this.state;
 
     console.debug('redirectToReferrer >>> ', redirectToReferrer)
     console.debug('from >>> ', from)
-    return <div id='login-page'><Redirect to={ redirectToReferrer ? from : '/login' } /></div>;
+    return (
+      <div id='login-page' data-auth={JSON.stringify(this.props)}>
+        <Redirect to={ redirectToReferrer ? from : '/login' } />
+      </div>
+    )
   }
 
 
@@ -113,4 +124,8 @@ class Login extends React.Component {
   };
 }
 
-export default Login;
+export default connect(state => {
+  return {
+    auth: state.auth
+  };  
+})(Login);

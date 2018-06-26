@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import axios from 'axios';
 
-const authReducer = (state={
+const authReducer = (state = {
   isAuthenticated: false,
   timeout: 0,
   refreshToken: null,
@@ -28,16 +28,27 @@ const authReducer = (state={
   return state; 
 };
 
-const userReducer = (state={
+const userReducer = (state = {
   metaData: null,
+  billingURL: null,
 }, action) => {
   switch (action.type) {
-    case 'RECEIVE_USER_METADATA': {
-      const { userMetadata } = action.payload;
+    case 'USER_METADATA_FULFILLED': {
+      const { data } = action.payload;
 
       state = {
         ...state,
-        metaData: userMetadata,
+        metaData: data,
+      };
+      break;
+    }
+
+    case 'BILLING_INFO_FULFILLED': {
+      const { data } = action.payload;
+
+      state = {
+        ...state,
+        billingURL: data,
       };
       break;
     }
@@ -46,7 +57,28 @@ const userReducer = (state={
   return state;
 };
 
+const customerReducer = (state = {
+  customer: null,
+}, action) => {
+  switch (action.type) {
+    case 'CUSTOMER_INFO_FULFILLED': {
+      const { data } = action.payload;
+
+      state = {
+        ...state,
+        customer: data,
+      }
+      break;
+    }
+  }
+
+  return state;
+};
+
+
+
 export default combineReducers({
   auth: authReducer,
-  user: userReducer
+  user: userReducer,
+  customer: customerReducer,
 });

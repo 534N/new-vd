@@ -2,18 +2,43 @@ import {
   callhome_url,
 } from '../settings';
 
+const endPoints = {
+  userMetadata: {
+    method: 'GET',
+    url: `${callhome_url}/api/users/metadata`
+  }
+}
+
+const getHeader = jwtToken => {
+  return {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${jwtToken}`
+  };
+}
+
 export default {
   getUserMetadata(jwtToken) {
-    const headers = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${jwtToken}`,
-    };
-
     return {
       method: 'GET',
       url: `${callhome_url}/api/users/metadata`,
-      headers
+      headers: getHeader(jwtToken)
+    }
+  },
+
+  getCustomer(jwtToken) {
+    return {
+      method: 'GET',
+      url: `${callhome_url}/api/locations/customer`,
+      headers: getHeader(jwtToken)
+    }
+  },
+
+  getBillingURL(jwtToken) {
+    return {
+      method: 'GET',
+      url: `${callhome_url}/api/auth/billingUrl`,
+      headers: getHeader(jwtToken)
     }
   }
 }

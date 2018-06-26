@@ -7,51 +7,57 @@ import {
   withRouter,
   Switch
 } from "react-router-dom";
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import configPersist from './configureStore';
+import { connect } from 'react-redux';
+
+// import store from './store';
 
 import './index.css';
 import Login from './login';
 
 import registerServiceWorker from './registerServiceWorker';
+import PrivateRoute from './PrivateRoute';
+
+
+const { store, persistor } = configPersist();
+
 
 const home = () => <div>Amazing home page</div>;
 const events = () => <div>Events go here</div>;
 const cameras = () => <div>Cameras go here</div>;
 const NoMatch = () => <div>Nothing to see here</div>;
 
-const AuthExample = () => (
-  <Router>
-    <Switch>
-      <PrivateRoute exact path="/" component={home} />
-      <PrivateRoute path="/home" component={home} />
-      <PrivateRoute path='/home' component={home}/>
-      <PrivateRoute path='/events' component={events}/>
-      <PrivateRoute path='/cameras' component={cameras}/>
-      <Route exact path='/login' component={Login} />
-      <Route component={NoMatch}/>
-    </Switch>
-  </Router>
-);
-
-const PrivateRoute = ({ component: Component, ...rest }) => {
+const Counter = ({ auth }) => {
   return (
-    <Route
-      {...rest}
-      render={props =>
-        fakeAuth.isAuthenticated ? (
-          <Component {...props} />
-        ) : (
-          <div>
-          <Redirect
-            to={{
-              pathname: "/login",
-              state: { from: props.location }
-            }} />
-          </div>
-        )
-      }
-    />
-  )
+    <div>
+      <pre>auth::: { auth }</pre>
+    </div>
+  );
 };
+const TestComp = connect(state => {
+  return {
+    auth: state.auth,
+  };
+})(Counter);
+
+const AuthExample = () => (
+  <div>
+    <TestComp />
+    <Router>
+      <Switch>
+        <PrivateRoute exact path="/" component={home} />
+        <PrivateRoute path="/home" component={home} />
+        <PrivateRoute path='/home' component={home}/>
+        <PrivateRoute path='/events' component={events}/>
+        <PrivateRoute path='/cameras' component={cameras}/>
+        <Route exact path='/login' component={Login} />
+        <Route component={NoMatch}/>
+      </Switch>
+    </Router>
+  </div>
+);
 
 const fakeAuth = {
   isAuthenticated: false,
@@ -65,5 +71,10 @@ const fakeAuth = {
   }
 };
 
-ReactDOM.render( <AuthExample /> , document.getElementById('root'));
+ReactDOM.render(
+<Provider store={store}>
+  <PersistGate loading={null} persistor={persistor}>
+    <AuthExample />
+  </PersistGate>
+</Provider>, document.getElementById('root'));
 registerServiceWorker();
