@@ -1,0 +1,7 @@
+#login-page .auth0-lock-name {
+  display: none; }
+
+#login-page .auth0-lock-submit {
+  border-radius: 0;
+  width: 200px;
+  font-size: 12px; }

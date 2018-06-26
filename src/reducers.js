@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import axios from 'axios';
 
 const authReducer = (state = {
   isAuthenticated: false,

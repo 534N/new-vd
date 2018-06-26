@@ -4,18 +4,6 @@ import {
   Redirect
 } from "react-router-dom";
 import { connect } from 'react-redux';
-import WithStore from './WithStore';
-
-// const ProfilePage = () => 
-//   <WithStore
-//     selector={(state) => ({
-//       name: state.user.name,
-//       avatarUrl: avatarSelector(state),
-//     })}
-//   >
-//     { (props, dispatch) => <UserProfile name={props.name} avatarUrl={props.avatarUrl} /> }
-//   </WithStore>
-
 
 const PrivateRoute = ({ component: Component, auth, ...rest }) => {
   return (

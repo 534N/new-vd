@@ -2,13 +2,6 @@ import {
   callhome_url,
 } from '../settings';
 
-const endPoints = {
-  userMetadata: {
-    method: 'GET',
-    url: `${callhome_url}/api/users/metadata`
-  }
-}
-
 const getHeader = jwtToken => {
   return {
     Accept: 'application/json',

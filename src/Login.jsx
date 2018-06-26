@@ -9,9 +9,11 @@ import {
   auth0_domain
 } from './settings';
 import Auth0Lock from 'auth0-lock';
-import store from './store';
+import { store } from './store';
 import callhome from './api/Callhome';
 import axios from 'axios';
+
+import './Login.css';
 
 class Login extends React.Component {
   constructor(props) {
@@ -27,7 +29,6 @@ class Login extends React.Component {
       sso = true;
     }
 
-// console.debug('Settings', Settings);
     this.lock = new Auth0Lock(
       auth0_clientID,
       auth0_domain,
@@ -51,23 +52,11 @@ class Login extends React.Component {
       }
     );
 
-    const cb = (refreshToken, jwtToken) => {
-      this.setState({ redirectToReferrer: true });
-
-      if (refreshToken) {
-        this.startRefreshTimer(0, { refreshToken, jwtToken });
-      }
-    };
 
     this.lock.on('authenticated', authResult => {
       if (authResult && authResult.refreshToken) {
-        // AuthActions.loginViaRefresh(authResult.refreshToken, authResult.idToken, authResult.state);
-        // this.login(authResult.refreshToken, authResult.idToken, authResult.state);
-
-        console.debug('authResult >> ', authResult);
         const { idToken, refreshToken, expiresIn } = authResult;
         const { getUserMetadata, getCustomer, getBillingURL } = callhome;
-        // fakeAuth.authenticate(cb.bind(this, refreshToken, jwtToken));
 
         store.dispatch({type: 'USER_LOG_IN', payload: {refreshToken, idToken, expiresIn}})
         store.dispatch({type: 'USER_METADATA', payload: axios(getUserMetadata(idToken))})
@@ -81,47 +70,16 @@ class Login extends React.Component {
     this.lock.show();
   }
 
-  componentWillUnmount() {
-    debugger
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.debug('>>>> ', nextProps)
-  }
-
   render() {
     const { from } = this.props.location.state || { from: { pathname: "/home" } };
-    const { redirectToReferrer } = this.state;
+    const { auth } = this.props;
 
-    console.debug('redirectToReferrer >>> ', redirectToReferrer)
-    console.debug('from >>> ', from)
     return (
-      <div id='login-page' data-auth={JSON.stringify(this.props)}>
-        <Redirect to={ redirectToReferrer ? from : '/login' } />
+      <div id='login-page'>
+        <Redirect to={ auth.isAuthenticated ? from : '/login' } />
       </div>
     )
   }
-
-
-
-  stopRefreshTimer = () => {
-    if (this.refreshTimerId) {
-      clearTimeout(this.refreshTimerId);
-      this.refreshTimerId = null;
-    }
-  };
-
-  startRefreshTimer = (timeout, options, replace = false) => {
-    if (replace) {
-      this.stopRefreshTimer();
-    }
-
-    if (this.refreshTimerId) {
-      this.refreshTimerId = setTimeout(() => {
-        console.debug('time out... need to refresh now')
-      }, timeout);
-    }
-  };
 }
 
 export default connect(state => {
