@@ -14,8 +14,9 @@ import callhome from './api/Callhome';
 import axios from 'axios';
 import logo from './svg/solink.svg';
 
+import Flex from './components/Flex';
 
-import './Login.css';
+import './css/Login.css';
 
 class Login extends React.Component {
   constructor(props) {
@@ -37,7 +38,7 @@ class Login extends React.Component {
       {
         allowSignUp: false,
         oidcConformant: false,
-        container: 'login-page',
+        container: 'lock-panel',
         theme: {
           logo: logo,
           primaryColor: '#0088cc'
@@ -73,13 +74,15 @@ class Login extends React.Component {
   }
 
   render() {
-    const { from } = this.props.location.state || { from: { pathname: "/home" } };
+    const { from } = this.props.location.state || { from: { pathname: "/" } };
     const { auth } = this.props;
 
     return (
-      <div id='login-page'>
-        <Redirect to={ auth.isAuthenticated ? from : '/login' } />
-      </div>
+      <Flex justifyContent={`center`} alignItems={`center`} id='login-page'>
+        <div id='lock-panel'>
+          <Redirect to={ auth.isAuthenticated ? from : '/auth' } />
+        </div>
+      </Flex>
     )
   }
 }

@@ -1,0 +1,15 @@
+.primary-header {
+  display: flex; }
+  .primary-header nav {
+    flex: 1;
+    margin-left: 2em;
+    border-bottom: 2px solid #555; }
+    .primary-header nav a {
+      display: inline-block;
+      padding: 0.3em 1em;
+      color: #555; }
+      .primary-header nav a:hover {
+        background-color: #eee; }
+      .primary-header nav a.active {
+        background-color: #555;
+        color: #fff; }

@@ -1,8 +1,16 @@
 #login-page {
-  height: 100%; }
+  height: 100%;
+  background: #333; }
+  #login-page #lock-panel {
+    height: calc(100% - 100px);
+    width: calc(100% - 100px);
+    background: #fff;
+    box-shadow: 0 0px 20px 5px rgba(0, 0, 0, 0.1); }
   #login-page input:-webkit-autofill {
     background: none !important;
     -webkit-box-shadow: 0 0 0 30px white inset; }
+  #login-page .auth0-lock-widget {
+    transform: translate(0, 50px); }
   #login-page .auth0-lock-name {
     display: none; }
   #login-page .auth0-lock-submit {
@@ -16,7 +24,7 @@
     margin-right: auto;
     border-radius: 100px; }
   #login-page .auth0-lock-header-bg {
-    background: none; }
+    display: none; }
     #login-page .auth0-lock-header-bg .auth0-lock-header-bg-blur {
       background-image: none !important; }
   #login-page .auth0-lock-input-wrap {
@@ -28,6 +36,8 @@
     #login-page .auth0-lock-input-wrap .auth0-lock-icon.auth0-lock-icon-box {
       width: 16px;
       height: 24px; }
+  #login-page .auth0-lock-input-block {
+    margin-bottom: 10px; }
   #login-page .auth0-lock-input-show-password {
     padding-top: 10px;
     border-top: 1px solid #aaa; }

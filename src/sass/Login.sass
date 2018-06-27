@@ -1,10 +1,21 @@
 #login-page
   height: 100%
+  background: #333
+
+  #lock-panel
+    height: calc(100% - 100px)
+    width: calc(100% - 100px)
+    background: #fff
+    box-shadow: 0 0px 20px 5px rgba(0, 0, 0, 0.1)
 
   input
     &:-webkit-autofill
       background: none !important
       -webkit-box-shadow: 0 0 0 30px white inset
+
+  .auth0-lock-widget
+    transform: translate(0, 50px)
+
   .auth0-lock-name
     display: none
 
@@ -20,9 +31,10 @@
     border-radius: 100px
 
   .auth0-lock-header-bg
-    background: none
+    display: none
     .auth0-lock-header-bg-blur
       background-image: none !important
+
   .auth0-lock-input-wrap
     border: 0
     background: none
@@ -34,6 +46,9 @@
       &.auth0-lock-icon-box
         width: 16px
         height: 24px
+  
+  .auth0-lock-input-block
+    margin-bottom: 10px
 
   .auth0-lock-input-show-password
     padding-top: 10px
