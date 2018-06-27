@@ -1,7 +1,37 @@
-#login-page .auth0-lock-name {
-  display: none; }
-
-#login-page .auth0-lock-submit {
-  border-radius: 0;
-  width: 200px;
-  font-size: 12px; }
+#login-page {
+  height: 100%; }
+  #login-page input:-webkit-autofill {
+    background: none !important;
+    -webkit-box-shadow: 0 0 0 30px white inset; }
+  #login-page .auth0-lock-name {
+    display: none; }
+  #login-page .auth0-lock-submit {
+    border-radius: 0;
+    width: 200px;
+    font-size: 12px;
+    height: 45px;
+    padding: 0;
+    margin-top: 80px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 100px; }
+  #login-page .auth0-lock-header-bg {
+    background: none; }
+    #login-page .auth0-lock-header-bg .auth0-lock-header-bg-blur {
+      background-image: none !important; }
+  #login-page .auth0-lock-input-wrap {
+    border: 0;
+    background: none; }
+    #login-page .auth0-lock-input-wrap .auth0-lock-input {
+      height: 50px;
+      font-size: 16px; }
+    #login-page .auth0-lock-input-wrap .auth0-lock-icon.auth0-lock-icon-box {
+      width: 16px;
+      height: 24px; }
+  #login-page .auth0-lock-input-show-password {
+    padding-top: 10px;
+    border-top: 1px solid #aaa; }
+  #login-page .auth0-lock-alternative {
+    margin-top: 0;
+    transform: translate(0, 50px);
+    opacity: 0.5; }

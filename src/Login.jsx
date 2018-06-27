@@ -12,6 +12,8 @@ import Auth0Lock from 'auth0-lock';
 import { store } from './store';
 import callhome from './api/Callhome';
 import axios from 'axios';
+import logo from './svg/solink.svg';
+
 
 import './Login.css';
 
@@ -37,7 +39,7 @@ class Login extends React.Component {
         oidcConformant: false,
         container: 'login-page',
         theme: {
-          logo: 'https://solinkcloud.com/assets/d93cde7b506b1fe81bdfb93f38981dd5.png',
+          logo: logo,
           primaryColor: '#0088cc'
         },
         auth: {
