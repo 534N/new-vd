@@ -1,9 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Grid from './components/Grid';
-import Nav from './Nav'
 
-import './css/Home.css'
+import '../css/Home.css'
 
 class Home extends React.Component {
   constructor(props) {

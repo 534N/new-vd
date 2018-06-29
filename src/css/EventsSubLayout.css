@@ -1,0 +1,11 @@
+.events-sub-layout nav a {
+  color: #333;
+  padding: 0.2em 1em;
+  display: block; }
+  .events-sub-layout nav a.active {
+    background-color: #555;
+    color: #fff; }
+
+.events-sub-layout .primary-content {
+  flex: 1;
+  margin-left: 2em; }

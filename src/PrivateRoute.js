@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Route,
   Redirect
-} from "react-router-dom";
+} from 'react-router-dom';
 import { connect } from 'react-redux';
 
 const PrivateRoute = ({ component: Component, auth, ...rest }) => {
@@ -16,7 +16,7 @@ const PrivateRoute = ({ component: Component, auth, ...rest }) => {
           <div>
             <Redirect
               to={{
-                pathname: "/login",
+                pathname: '/auth/login',
                 state: { from: props.location }
               }} />
           </div>

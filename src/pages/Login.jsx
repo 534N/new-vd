@@ -1,24 +1,23 @@
 import React from 'react';
 import {
   Redirect,
-} from "react-router-dom";
+} from 'react-router-dom';
 import { connect } from 'react-redux';
+import Auth0Lock from 'auth0-lock';
 
 import {
   auth0_clientID,
   auth0_domain
-} from './settings';
-import Auth0Lock from 'auth0-lock';
-import { store } from './store';
-import callhome from './api/Callhome';
+} from '../settings';
+import { store } from '../store';
+import callhome from '../api/Callhome';
 import axios from 'axios';
-import logo from './svg/solink.svg';
+import logo from '../svg/solink.svg';
+import Flex from '../components/Flex';
 
-import Flex from './components/Flex';
+import '../css/Login.css';
 
-import './css/Login.css';
-
-class Login extends React.Component {
+class Auth extends React.Component {
   constructor(props) {
     super(props);
 
@@ -74,13 +73,13 @@ class Login extends React.Component {
   }
 
   render() {
-    const { from } = this.props.location.state || { from: { pathname: "/" } };
+    const { from } = this.props.location.state || { from: { pathname: '/app' } };
     const { auth } = this.props;
 
     return (
       <Flex justifyContent={`center`} alignItems={`center`} id='login-page'>
         <div id='lock-panel'>
-          <Redirect to={ auth.isAuthenticated ? from : '/auth' } />
+          <Redirect to={ auth.isAuthenticated ? from : '/auth/login' } />
         </div>
       </Flex>
     )
@@ -91,4 +90,4 @@ export default connect(state => {
   return {
     auth: state.auth
   };  
-})(Login);
+})(Auth);
