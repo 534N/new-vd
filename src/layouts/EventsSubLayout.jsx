@@ -1,5 +1,5 @@
 import React from 'react'
-import { Switch, Route, NavLink } from 'react-router-dom'
+import { Switch, Route, NavLink, Redirect } from 'react-router-dom'
 
 import EventsNav from '../ui/EventsNav'
 import Grid from '../components/Grid'
@@ -21,9 +21,11 @@ const EventsSubLayout = ({ match }) => (
     </Grid.Item>
     <Grid.Item gridColumn={`2/3`} className='primary-content'>
       <Switch>
-        <Route path={match.path} exact component={BrowseUsersPage} />
+        {/* <Route path={match.path} exact component={BrowseUsersPage} /> */}
+        <Route path={`${match.path}/all`}  component={BrowseUsersPage} />
         <Route path={`${match.path}/add`} exact component={AddUserPage} />
         <Route path={`${match.path}/:userId`}  component={UserProfilePage} />
+        <Redirect to={`${match.path}/all`} />
       </Switch>
     </Grid.Item>
   </Grid>
