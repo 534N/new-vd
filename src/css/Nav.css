@@ -1,14 +1,6 @@
-.primary-header nav {
-  flex: 1;
-  margin-left: 2em;
-  border-bottom: 2px solid #555; }
+#app-nav a.active .nav-link {
+  opacity: 1;
+  border-right: 2px solid #0088cc; }
 
-.primary-header a {
-  display: inline-block;
-  padding: 0.3em 1em;
-  color: #555; }
-  .primary-header a:hover {
-    background-color: #eee; }
-  .primary-header a.active {
-    background-color: #555;
-    color: #fff; }
+#app-nav .nav-link {
+  opacity: 0.5; }

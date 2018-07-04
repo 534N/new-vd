@@ -22,6 +22,9 @@ const authReducer = (state = {
         isAuthenticated: true
       };
       break;
+
+    default:
+      break;
   }
 
   return state; 
@@ -51,6 +54,9 @@ const userReducer = (state = {
       };
       break;
     }
+
+    default:
+      break;
   }
 
   return state;
@@ -69,6 +75,9 @@ const customerReducer = (state = {
       }
       break;
     }
+
+    default:
+      break;
   }
 
   return state;
