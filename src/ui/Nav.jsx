@@ -7,11 +7,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+// import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+// import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Hidden from '@material-ui/core/Hidden';
 
+import mdi from '../svg/MaterialIcons.svg';
 
 import NavLinks from './NavLinks'
 import '../css/Nav.css'
@@ -115,7 +115,7 @@ class MiniDrawer extends React.Component {
           {
             width === 'sm' &&
             <IconButton onClick={ open ? this._handleDrawerClose : this._handleDrawerOpen }>
-              { !open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+              {/* { !open ? <ChevronRightIcon /> : <ChevronLeftIcon />} */}
             </IconButton>
           }
         </div>
@@ -132,7 +132,9 @@ class MiniDrawer extends React.Component {
             aria-label='open drawer'
             onClick={open ? this._handleDrawerClose : this._handleDrawerOpen}
             className={classes.navIconHide}>
-            <MenuIcon />
+            <svg style={{ width: `24px`, height: `24px`, fill: `#555` }}>
+              <use xlinkHref={`${mdi}#menu`}></use>
+            </svg>
           </IconButton>
         </Hidden>
         <Hidden mdUp>

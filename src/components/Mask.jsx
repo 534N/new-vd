@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 
 // INTERNAL DEPENDENCIES
-import Grid from 'components/Grid/Grid'
+import Grid from './Grid'
 
 export default class Mask extends Component {
   constructor(props) {
@@ -11,13 +11,12 @@ export default class Mask extends Component {
 
   render() {
     const {
-      dispatch,
-      state,
       background,
       loading=true,
       onClickAction,
       position,
       top,
+      text
     } = this.props
 
     return (
@@ -30,11 +29,13 @@ export default class Mask extends Component {
         background={background || 'rgba(255,255,255,0.6)'}
         zIndex={10000}
         style={{
-          top: top || 'auto'
+          top: top || 'auto',
+          left: 0
         }} >
         { 
           loading && <img src={require('../svg/loading-cylon.svg')} />
         }
+        { text && <label style={{fontSize: `14px`}}>{text}</label> }
       </Grid>
     )
   }

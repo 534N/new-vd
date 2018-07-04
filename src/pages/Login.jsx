@@ -58,12 +58,13 @@ class Auth extends React.Component {
     this.lock.on('authenticated', authResult => {
       if (authResult && authResult.refreshToken) {
         const { idToken, refreshToken, expiresIn } = authResult;
-        const { getUserMetadata, getCustomer, getBillingURL } = callhome;
+        const { getUserMetadata, getCustomer, getBillingURL, getLocations } = callhome;
 
         store.dispatch({type: 'USER_LOG_IN', payload: {refreshToken, idToken, expiresIn}})
         store.dispatch({type: 'USER_METADATA', payload: axios(getUserMetadata(idToken))})
         store.dispatch({type: 'CUSTOMER_INFO', payload: axios(getCustomer(idToken))})
         store.dispatch({type: 'BILLING_INFO', payload: axios(getBillingURL(idToken))})
+        store.dispatch({type: 'LOCATION_INFO', payload: axios(getLocations(idToken)) })
       }
     });
   }

@@ -33,5 +33,13 @@ export default {
       url: `${callhome_url}/api/auth/billingUrl`,
       headers: getHeader(jwtToken)
     }
+  },
+
+  getLocations(jwtToken) {
+    return {
+      method: 'GET',
+      url: `${callhome_url}/api/locations`,
+      headers: getHeader(jwtToken)
+    }
   }
 }
