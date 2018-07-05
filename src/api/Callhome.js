@@ -2,6 +2,8 @@ import {
   callhome_url,
 } from '../settings';
 
+console.debug('callhome_url >>> ', callhome_url)
+
 const getHeader = jwtToken => {
   return {
     Accept: 'application/json',
@@ -40,6 +42,18 @@ export default {
       method: 'GET',
       url: `${callhome_url}/api/locations`,
       headers: getHeader(jwtToken)
+    }
+  },
+
+  refresh(jwtToken, refreshToken) {
+    return {
+      method: 'POST',
+      url: `${callhome_url}/api/auth/refresh`,
+      data: {
+        refreshToken: refreshToken,
+        jwtToken: jwtToken,
+        forceImpoersonate: false,
+      }
     }
   }
 }

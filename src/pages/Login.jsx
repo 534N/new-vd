@@ -5,12 +5,14 @@ import {
 import { connect } from 'react-redux';
 import Auth0Lock from 'auth0-lock';
 
+
 import {
   auth0_clientID,
   auth0_domain
 } from '../settings';
 import { store } from '../store';
 import callhome from '../api/Callhome';
+
 import axios from 'axios';
 import logo from '../svg/solink.svg';
 import Flex from '../components/Flex';
@@ -58,13 +60,16 @@ class Auth extends React.Component {
     this.lock.on('authenticated', authResult => {
       if (authResult && authResult.refreshToken) {
         const { idToken, refreshToken, expiresIn } = authResult;
-        const { getUserMetadata, getCustomer, getBillingURL, getLocations } = callhome;
+        const { getUserMetadata, getCustomer, getBillingURL, getLocations, refresh } = callhome;
 
-        store.dispatch({type: 'USER_LOG_IN', payload: {refreshToken, idToken, expiresIn}})
-        store.dispatch({type: 'USER_METADATA', payload: axios(getUserMetadata(idToken))})
-        store.dispatch({type: 'CUSTOMER_INFO', payload: axios(getCustomer(idToken))})
-        store.dispatch({type: 'BILLING_INFO', payload: axios(getBillingURL(idToken))})
-        store.dispatch({type: 'LOCATION_INFO', payload: axios(getLocations(idToken)) })
+
+        store.dispatch({ type: 'REFRESH_INFO', payload: axios(refresh(idToken, refreshToken)) })
+        store.dispatch({ type: 'USER_LOG_IN', payload: { refreshToken, idToken, expiresIn } })
+        store.dispatch({ type: 'CUSTOMER_INFO', payload: axios(getCustomer(idToken)) })
+        store.dispatch({ type: 'BILLING_INFO', payload: axios(getBillingURL(idToken)) })
+        store.dispatch({ type: 'LOCATION_INFO', payload: axios(getLocations(idToken)) })
+        
+
       }
     });
   }

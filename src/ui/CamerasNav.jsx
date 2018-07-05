@@ -4,7 +4,7 @@ import { NavLink, withRouter } from 'react-router-dom'
 const CamerasNav = ({ match, locations }) => (
   <nav className="context-nav">
     {
-      locations.map(loc => <NavLink to={`${match.path}/${loc.id}`} activeClassName="active">{loc.name}</NavLink>)
+      locations.map(loc => <NavLink key={loc.id} to={`${match.url}/${loc.id}`} activeClassName="active">{loc.name}</NavLink>)
     }
   </nav>
 )

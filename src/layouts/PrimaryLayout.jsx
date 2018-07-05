@@ -34,7 +34,7 @@ const PrimaryLayout = ({ match, width, locations }) => {
   //     </Grid.Item>
   //   </Grid>
   // )
-  if (!locations.locations) {
+  if (!locations.locations && !locations.fetching) {
     return <ForceLogout />
   }
 
@@ -50,7 +50,7 @@ const PrimaryLayout = ({ match, width, locations }) => {
           : <Switch>
               <Route path={`${match.path}`} exact component={Home} />
               <Route path={`${match.path}/events`} component={EventsSubLayout} />
-              <Route path={`${match.path}/cameras`} render={() => <CamerasSubLayout match={match} locations={locations.locations}/>} />
+              <Route path={`${match.path}/cameras`} render={props => <CamerasSubLayout {...props} locations={locations.locations}/>} />
               <Redirect to={`${match.url}`} />
             </Switch>
         }
@@ -64,4 +64,3 @@ export default connect(state => {
     locations: state.locations
   };
 })(withWidth()(PrimaryLayout));
-// export default withWidth()(PrimaryLayout);
