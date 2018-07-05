@@ -12,6 +12,7 @@ import withWidth from '@material-ui/core/withWidth';
 import EventsSubLayout from './EventsSubLayout'
 import CamerasSubLayout from './CamerasSubLayout'
 import Mask from '../components/Mask';
+import ForceLogout from '../components/ForceLogout';
 // import ProductSubLayout from './ProductSubLayout'
 
 
@@ -33,6 +34,9 @@ const PrimaryLayout = ({ match, width, locations }) => {
   //     </Grid.Item>
   //   </Grid>
   // )
+  if (!locations.locations) {
+    return <ForceLogout />
+  }
 
   return (
     <Grid container spacing={0} alignItems='stretch' style={{height: `100%`}}>

@@ -23,6 +23,18 @@ const authReducer = (state = {
       };
       break;
 
+    case 'USER_LOG_OUT': {
+      state = {
+        ...state,
+        isAuthenticated: false,
+        refreshToken: null,
+        timeout: 0,
+        jwtToken: null,
+      }
+
+      break;
+    }
+
     default:
       break;
   }
@@ -124,8 +136,6 @@ const locationsReducer = (state = {
 
   return state;
 };
-
-
 
 export default combineReducers({
   auth: authReducer,
