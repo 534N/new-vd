@@ -7,7 +7,10 @@ import Flex from '../components/Flex';
 import Icon from '../components/Icon';
 import IconText from '../components/IconText';
 
+import '../css/CameraItem.css'
+
 const sizes = {
+  xs: [320, 180],
   sm: [160, 90],
   md: [240, 135],
   lg: [320, 180],
@@ -19,10 +22,6 @@ const statusColor = {
 }
 
 const styles = theme => ({
-  root: {
-    position: 'relative',
-    margin: '10px',
-  },
   infoContainer: {
     position: 'absolute',
     bottom: 0,
@@ -55,7 +54,10 @@ const CameraItem = props => {
   const [ imgWidht, imgHeight ] = sizes[windowWidth];
 
   return (
-    <div className={classes.root}>
+    <div  className='camera-item'>
+      <Flex justifyContent='center' alignItems='center' className='camera-item-mask' >
+        <Icon path='play_circle' width='36px' height='36px' fill='#fff' />
+      </Flex>
       <S3Image
         width={imgWidht}
         height={imgHeight}
