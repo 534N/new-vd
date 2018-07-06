@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles'
 
 import S3Image from '../components/S3Image';
@@ -77,11 +76,10 @@ const CameraItem = props => {
       </Flex>
     </div>
   );
+
+  return (
+    <div />
+  )
 }
 
-export default connect(state => {
-  return {
-    auth: state.auth,
-    ...state.window
-  };
-})(withStyles(styles)(CameraItem));
+export default withStyles(styles)(CameraItem);

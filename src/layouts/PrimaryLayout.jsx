@@ -21,6 +21,11 @@ const cameras = () => <div>Cameras go here</div>;
 
 class PrimaryLayout extends React.Component {
 
+  componentWillMount() {
+    const { width } = this.props;
+    store.dispatch({ type: 'WINDOW_SIZE', payload: width })
+  }
+
   componentWillReceiveProps(nextProps) {
     const { width } = this.props;
     if (width !== nextProps.width) {
@@ -29,7 +34,7 @@ class PrimaryLayout extends React.Component {
   }
 
   render() {
-    const { match, width, locations } = this.props;
+    const { match, width, locations, auth } = this.props;
     return (
       <Grid container spacing={0} alignItems='stretch' style={{height: `100%`}}>
         <Grid item >
@@ -42,7 +47,7 @@ class PrimaryLayout extends React.Component {
             : <Switch>
                 <Route path={`${match.path}`} exact component={Home} />
                 <Route path={`${match.path}/events`} component={EventsSubLayout} />
-                <Route path={`${match.path}/cameras`} render={props => <CamerasSubLayout {...props} locations={locations.locations}/>} />
+                <Route path={`${match.path}/cameras`} render={props => <CamerasSubLayout {...props} locations={locations.locations} width={width} auth={auth}/>} />
                 <Redirect to={`${match.url}`} />
               </Switch>
           }
@@ -54,6 +59,7 @@ class PrimaryLayout extends React.Component {
 
 export default connect(state => {
   return {
-    locations: state.locations
+    locations: state.locations,
+    auth: state.auth
   };
 })(withWidth()(PrimaryLayout));
