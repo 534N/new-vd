@@ -61,6 +61,8 @@ export default class extends React.Component {
             position: images ? 'absolute' : 'relative',
             top: 0,
             left: 0,
+            width: '320px',
+            height: '180px',
             display: idx === current || thumbnails.length === 1 ? `block` : `none`,
           }}
           src={url}
@@ -113,14 +115,14 @@ export default class extends React.Component {
     const { bucketPrefix, aws } = this.props;
 
     const s3 = new S3(aws);
-    console.debug('s3_bucket_name >>> ', s3_bucket_name)
+    // const signedURL = s3.getSignedUrl('getObject', {
+    //   Bucket: s3_bucket_name,
+    //   Key: bucketPrefix + '/' + url
+    // });
 
     return {
       date: +new Date(date) || 0,
-      url: s3.getSignedUrl('getObject', {
-        Bucket: s3_bucket_name,
-        Key: bucketPrefix + '/' + url
-      }),
+      url: require('../svg/no-image-available.svg'),
     };
   }
 
