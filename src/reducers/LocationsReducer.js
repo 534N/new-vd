@@ -2,6 +2,7 @@ const LocationsReducer = (state = {
   locations: null,
   fetching: null,
   error: false,
+  selectedLocation: null,
 }, action) => {
   switch (action.type) {
     case 'LOCATION_INFO_FULFILLED':
@@ -35,6 +36,17 @@ const LocationsReducer = (state = {
         }
         break;
       }
+
+    case 'SELECTED_LOCATION':
+      {
+        const selectedLocation = action.payload;
+
+        state = {
+          ...state,
+          selectedLocation,
+        }
+        break;
+      }
     
     //
     // SHARED ACTIONS
@@ -46,6 +58,7 @@ const LocationsReducer = (state = {
           locations: null,
           fetching: null,
           error: false,
+          selectedLocation: null,
         }
 
         break;

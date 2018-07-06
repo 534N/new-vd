@@ -34,7 +34,7 @@ class PrimaryLayout extends React.Component {
   }
 
   render() {
-    const { match, width, locations, auth } = this.props;
+    const { match, width, locations } = this.props;
     return (
       <Grid container spacing={0} alignItems='stretch' style={{height: `100%`}}>
         <Grid item >
@@ -47,7 +47,7 @@ class PrimaryLayout extends React.Component {
             : <Switch>
                 <Route path={`${match.path}`} exact component={Home} />
                 <Route path={`${match.path}/events`} component={EventsSubLayout} />
-                <Route path={`${match.path}/cameras`} render={props => <CamerasSubLayout {...props} locations={locations.locations} width={width} />} />
+                <Route path={`${match.path}/cameras`} render={props => <CamerasSubLayout {...props} locState={locations} locations={locations.locations} width={width} />} />
                 <Redirect to={`${match.url}`} />
               </Switch>
           }

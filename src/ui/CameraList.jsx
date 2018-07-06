@@ -3,7 +3,8 @@ import React from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
 
-import IconButton from '@material-ui/core/IconButton';
+import { store } from '../store';
+
 import CameraItem from './CameraItem'
 
 const styles = theme => ({
@@ -29,9 +30,14 @@ const CameraList = props => {
   const { classes, match, locations } = props;
   const { locationId } = match.params;
 
-  const [ {cameras, name} ] = locations.filter(({ id }) => {
+  const [selectedLocation] = locations.filter(({ id }) => {
     return id === locationId;
   })
+ 
+  const { cameras, name } = selectedLocation;
+
+  // store.dispatch({ type: 'SELECTED_LOCATION', payload: selectedLocation })
+
 
   return (
     <div className={classes.root}>

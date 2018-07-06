@@ -9,7 +9,7 @@ import { store } from '../store';
 
 
 import { withStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
+import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton'
 import Left from '@material-ui/icons/KeyboardArrowLeft'
 import Right from '@material-ui/icons/KeyboardArrowRight'
@@ -40,7 +40,9 @@ class DatePickerComp extends React.Component {
 
     return (
       <Flex className={classes.container} alignItems='center' justifyContent='center' height='100%'>
-        <IconButton className={classes.buttonLeft} onClick={this._stepBackward}><Icon path='chevron_left' /></IconButton>
+        <Hidden smDown>
+          <IconButton className={classes.buttonLeft} onClick={this._stepBackward}><Icon path='chevron_left' /></IconButton>
+        </Hidden>
         <Icon path='calendar' fill='#888' marginRight='5px' />
         <MuiPickersUtilsProvider utils={MomentUtils}>
           <DatePicker
@@ -51,7 +53,9 @@ class DatePickerComp extends React.Component {
             rightArrowIcon={<Right />}
             onChange={this._handleDateChange} />
         </MuiPickersUtilsProvider>
-        <IconButton className={classes.buttonRight} onClick={this._stepForward}><Icon path='chevron_right' /></IconButton>
+        <Hidden smDown>
+          <IconButton className={classes.buttonRight} onClick={this._stepForward}><Icon path='chevron_right' /></IconButton>
+        </Hidden>
       </Flex>
     )
   }

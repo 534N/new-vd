@@ -2,9 +2,6 @@ import React from 'react'
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -91,18 +88,14 @@ class MiniDrawer extends React.Component {
   constructor(props) {
     super(props);
 
-    const { width } = props;
-
     this.state = {
-      open: width === 'sm' ? false : true,
+      open: false,
     };
   }
   
   componentWillReceiveProps(nextProps) {
-    const { width } = nextProps;
-
     this.setState({
-      open: width === 'sm' ? false : true,
+      open: false,
     });
   }
 
@@ -161,7 +154,7 @@ class MiniDrawer extends React.Component {
             classes={{
               paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
             }}
-            open={this.state.open}>
+            open={open}>
             { content }
           </Drawer>
         </Hidden>
