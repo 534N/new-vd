@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles'
 
 import S3Image from '../components/S3Image';
 import Flex from '../components/Flex';
+import Icon from '../components/Icon';
 import IconText from '../components/IconText';
 
 const sizes = {
@@ -37,7 +38,18 @@ const styles = theme => ({
 const CameraItem = props => {
 
   console.debug('props', props)
-  const { id, name, thumbnail, status, auth, width: windowWidth, classes } = props;
+  const {
+    id,
+    name,
+    thumbnail,
+    status,
+    audioParams,
+    isMotionEnabled,
+    motionParams,
+    auth,
+    width: windowWidth,
+    classes
+  } = props;
   const { tenantId, aws } = auth;
 
   const [ imgWidht, imgHeight ] = sizes[windowWidth];
@@ -51,10 +63,15 @@ const CameraItem = props => {
         src={thumbnail}
         bucketPrefix={tenantId} />
       <Flex className={classes.infoContainer}>
-        <div>
-          <IconText text={name} labelStyle={{fontSize: '14px'}} path='status' widht='10px' height='10px' fill={statusColor[status]}/>
-
-        </div>
+        <IconText text={name} labelStyle={{fontSize: '14px'}} path='status' widht='10px' height='10px' fill={statusColor[status]}/>
+        {
+          audioParams.enabled &&
+          <Icon path='volume' width='15px' height='15px' fill='#fff' />
+        }
+        {
+          isMotionEnabled && motionParams.enabled && motionParams.roi &&
+          <Icon path='motionSearch' width='15px' height='15px' fill='#fff' />
+        }
       </Flex>
     </div>
   );
