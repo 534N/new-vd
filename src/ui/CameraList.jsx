@@ -26,7 +26,7 @@ const styles = theme => ({
 
 const CameraList = props => {
 
-  const { classes, match, locations, width, auth } = props;
+  const { classes, match, locations } = props;
   const { locationId } = match.params;
 
   const [ {cameras, name} ] = locations.filter(({ id }) => {
@@ -37,7 +37,7 @@ const CameraList = props => {
     <div className={classes.root}>
       {
         cameras.map(cam => (
-          <CameraItem key={cam.id} {...cam} width={width} auth={auth} />
+          <CameraItem key={cam.id} {...cam} />
         ))
       }
     </div>

@@ -6,6 +6,8 @@ import Flex from '../components/Flex';
 import Icon from '../components/Icon';
 import IconText from '../components/IconText';
 
+import { CamerasPageContext } from '../layouts/CamerasSubLayout'
+
 import '../css/CameraItem.css'
 
 const sizes = {
@@ -33,53 +35,56 @@ const styles = theme => ({
   },
 })
 
-const CameraItem = props => {
+class CameraItem extends React.Component {
 
-  console.debug('props', props)
-  const {
-    id,
-    name,
-    thumbnail,
-    status,
-    audioParams,
-    isMotionEnabled,
-    motionParams,
-    auth,
-    width: windowWidth,
-    classes
-  } = props;
-  const { tenantId, aws } = auth;
+  render() {
+    const {
+      id,
+      name,
+      thumbnail,
+      status,
+      audioParams,
+      isMotionEnabled,
+      motionParams,
+      classes
+    } = this.props;
 
-  const [ imgWidht, imgHeight ] = sizes[windowWidth];
-
-  return (
-    <div  className='camera-item'>
-      <Flex justifyContent='center' alignItems='center' className='camera-item-mask' >
-        <Icon path='play_circle' width='36px' height='36px' fill='#fff' />
-      </Flex>
-      <S3Image
-        width={imgWidht}
-        height={imgHeight}
-        name={name}
-        src={thumbnail}
-        bucketPrefix={tenantId} />
-      <Flex className={classes.infoContainer}>
-        <IconText text={name} labelStyle={{fontSize: '14px'}} path='status' widht='10px' height='10px' fill={statusColor[status]}/>
+    return (
+      <CamerasPageContext.Consumer>
         {
-          audioParams.enabled &&
-          <Icon path='volume' width='15px' height='15px' fill='#fff' />
-        }
-        {
-          isMotionEnabled && motionParams.enabled && motionParams.roi &&
-          <Icon path='motionSearch' width='15px' height='15px' fill='#fff' />
-        }
-      </Flex>
-    </div>
-  );
+          ({ auth, width: windowWidth }) => {
+            const { tenantId } = auth;
+            const [imgWidht, imgHeight] = sizes[windowWidth];
 
-  return (
-    <div />
-  )
+            return (
+              <div className='camera-item'>
+                <Flex justifyContent='center' alignItems='center' className='camera-item-mask' >
+                  <Icon path='play_circle' width='36px' height='36px' fill='#fff' />
+                </Flex>
+                <S3Image
+                  width={imgWidht}
+                  height={imgHeight}
+                  name={name}
+                  src={thumbnail}
+                  bucketPrefix={tenantId} />
+                <Flex className={classes.infoContainer}>
+                  <IconText text={name} labelStyle={{ fontSize: '14px' }} path='status' widht='10px' height='10px' fill={statusColor[status]} />
+                  {
+                    audioParams.enabled &&
+                    <Icon path='volume' width='15px' height='15px' fill='#fff' />
+                  }
+                  {
+                    isMotionEnabled && motionParams.enabled && motionParams.roi &&
+                    <Icon path='motionSearch' width='15px' height='15px' fill='#fff' />
+                  }
+                </Flex>
+              </div>
+            )
+          }
+        }
+      </CamerasPageContext.Consumer>
+    );
+  }
 }
 
 export default withStyles(styles)(CameraItem);

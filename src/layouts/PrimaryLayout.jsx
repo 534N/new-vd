@@ -47,7 +47,7 @@ class PrimaryLayout extends React.Component {
             : <Switch>
                 <Route path={`${match.path}`} exact component={Home} />
                 <Route path={`${match.path}/events`} component={EventsSubLayout} />
-                <Route path={`${match.path}/cameras`} render={props => <CamerasSubLayout {...props} locations={locations.locations} width={width} auth={auth}/>} />
+                <Route path={`${match.path}/cameras`} render={props => <CamerasSubLayout {...props} locations={locations.locations} width={width} />} />
                 <Redirect to={`${match.url}`} />
               </Switch>
           }
@@ -60,6 +60,5 @@ class PrimaryLayout extends React.Component {
 export default connect(state => {
   return {
     locations: state.locations,
-    auth: state.auth
   };
 })(withWidth()(PrimaryLayout));
