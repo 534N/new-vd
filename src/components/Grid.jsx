@@ -15,7 +15,8 @@ const Grid = styled.div`
   position: ${({ position }) => position || 'relative'};
   background: ${({ background }) => background || 'auto'};
   color: ${({ color }) => color || 'auto'};
-  z-index: ${({ zIndex }) => zIndex || 'auto'}
+  z-index: ${({ zIndex }) => zIndex || 'auto'};
+  box-sizing: border-box
 `;
 
 Grid.Item = styled.div`
@@ -27,6 +28,7 @@ Grid.Item = styled.div`
   align-self: ${({ alignSelf }) => alignSelf || 'center'};
   z-index: ${({ zIndex }) => zIndex || 'auto'};
   position: ${({ position }) => position || 'relative'};
+  box-sizing: border-box
 `
 
 export default Grid

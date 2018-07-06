@@ -7,6 +7,9 @@ import {
 } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+import MomentUtils from 'material-ui-pickers/utils/moment-utils';
+
 import 'typeface-roboto'
 
 import {
@@ -22,18 +25,19 @@ import PrimaryLayout from './layouts/PrimaryLayout.jsx';
 import UnauthorizedLayout from './layouts/UnauthorizedLayout';
 
 const App = props => (
-
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <Router>
-        <Switch>
-          <Route path='/auth' component={UnauthorizedLayout} />
-          <PrivateRoute path='/app' component={PrimaryLayout} />
-          <Redirect to='/auth'/>
-        </Switch>
-      </Router>
-    </PersistGate>
-  </Provider>
+  <MuiPickersUtilsProvider utils={MomentUtils}>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <Router>
+          <Switch>
+            <Route path='/auth' component={UnauthorizedLayout} />
+            <PrivateRoute path='/app' component={PrimaryLayout} />
+            <Redirect to='/auth'/>
+          </Switch>
+        </Router>
+      </PersistGate>
+    </Provider>
+  </MuiPickersUtilsProvider>
 );
 
 export default App;

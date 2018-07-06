@@ -4,6 +4,7 @@ import {
 } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Auth0Lock from 'auth0-lock';
+import axios from 'axios';
 
 
 import {
@@ -13,7 +14,6 @@ import {
 import { store } from '../store';
 import callhome from '../api/Callhome';
 
-import axios from 'axios';
 import logo from '../svg/solink.svg';
 import Flex from '../components/Flex';
 
@@ -68,7 +68,7 @@ class Auth extends React.Component {
         store.dispatch({ type: 'CUSTOMER_INFO', payload: axios(getCustomer(idToken)) })
         store.dispatch({ type: 'BILLING_INFO', payload: axios(getBillingURL(idToken)) })
         store.dispatch({ type: 'LOCATION_INFO', payload: axios(getLocations(idToken)) })
-        
+        store.dispatch({ type: 'CHANGE_TIME', payload: { time: new Date() }})
 
       }
     });

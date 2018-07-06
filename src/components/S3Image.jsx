@@ -49,7 +49,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const { id, images } = this.props;
+    const { id, images, width, height } = this.props;
     const { current, thumbnails } = this.state;
 
     const thumbnailDOMs = thumbnails.map(({ date, url }, idx) => {
@@ -57,12 +57,13 @@ export default class extends React.Component {
         <img
           ref={date}
           id={date}
+          key={idx}
           style={{
             position: images ? 'absolute' : 'relative',
             top: 0,
             left: 0,
-            width: '320px',
-            height: '180px',
+            width: width || '320px',
+            height: height || '180px',
             display: idx === current || thumbnails.length === 1 ? `block` : `none`,
           }}
           src={url}

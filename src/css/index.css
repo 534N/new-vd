@@ -11,6 +11,9 @@ a {
   text-decoration: none;
   color: blue; }
 
+div {
+  box-sizing: border-box; }
+
 #root {
   height: 100%; }
 

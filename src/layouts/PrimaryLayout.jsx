@@ -2,6 +2,7 @@ import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
 
+import { store } from '../store';
 import Nav from '../ui/Nav'
 import Home from '../pages/Home';
 
@@ -18,45 +19,37 @@ import ForceLogout from '../components/ForceLogout';
 
 const cameras = () => <div>Cameras go here</div>;
 
-const PrimaryLayout = ({ match, width, locations }) => {
-  // return (
-  //   <Grid gridTemplateColumns={`80px calc(100% - 80px)`} gridTemplateRows={`100%`} height={`100%`} className='primary-layout'>
-  //     <Grid.Item gridColumn={`1 / 2`} width={`100%`} height={`100%`}>
-  //       <Nav />
-  //     </Grid.Item>
-  //     <Grid.Item gridColumn={`2 / 3`} width={`100%`} height={`100%`}>
-  //       <Switch>
-  //         <Route path={`${match.path}`} exact component={Home} />
-  //         <Route path={`${match.path}/events`} component={EventsSubLayout} />
-  //         <Route path={`${match.path}/cameras`} component={cameras} />
-  //         <Redirect to={`${match.url}`} />
-  //       </Switch>
-  //     </Grid.Item>
-  //   </Grid>
-  // )
-  if (!locations.locations && !locations.fetching) {
-    return <ForceLogout />
+class PrimaryLayout extends React.Component {
+
+  componentWillReceiveProps(nextProps) {
+    const { width } = this.props;
+    if (width !== nextProps.width) {
+      store.dispatch({ type: 'WINDOW_SIZE', payload: nextProps.width })
+    }
   }
 
-  return (
-    <Grid container spacing={0} alignItems='stretch' style={{height: `100%`}}>
-      <Grid item >
-        <Nav width={width}/>
+  render() {
+    const { match, width, locations } = this.props;
+    return (
+      <Grid container spacing={0} alignItems='stretch' style={{height: `100%`}}>
+        <Grid item >
+          <Nav width={width}/>
+        </Grid>
+        <Grid item xs>
+          {
+            locations.fetching
+            ? <Mask text={`Loading locations`}/>
+            : <Switch>
+                <Route path={`${match.path}`} exact component={Home} />
+                <Route path={`${match.path}/events`} component={EventsSubLayout} />
+                <Route path={`${match.path}/cameras`} render={props => <CamerasSubLayout {...props} locations={locations.locations}/>} />
+                <Redirect to={`${match.url}`} />
+              </Switch>
+          }
+        </Grid>
       </Grid>
-      <Grid item xs>
-        {
-          locations.fetching
-          ? <Mask text={`Loading locations`}/>
-          : <Switch>
-              <Route path={`${match.path}`} exact component={Home} />
-              <Route path={`${match.path}/events`} component={EventsSubLayout} />
-              <Route path={`${match.path}/cameras`} render={props => <CamerasSubLayout {...props} locations={locations.locations}/>} />
-              <Redirect to={`${match.url}`} />
-            </Switch>
-        }
-      </Grid>
-    </Grid>
-  )
+    )
+  }
 }
 
 export default connect(state => {
