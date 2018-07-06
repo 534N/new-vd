@@ -60,7 +60,7 @@ const CamerasSubLayout = ({ match, locState, width, auth }) => {
           </Hidden>
         </Grid.Item>
         <Grid.Item gridRow={`2/3`} gridColumn={`2/3`} width={`100%`} height={`100%`} className='primary-content'> 
-          <Hidden smUp>
+          <Hidden mdUp>
             <CamerasNavMobile locations={locations} match={match} selectedLocation={selectedLocation}/>
           </Hidden>
           <Switch>
