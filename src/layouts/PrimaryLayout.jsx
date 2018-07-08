@@ -1,19 +1,20 @@
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 
-import { store } from '../store';
+import { store } from '../store'
 import Nav from '../ui/Nav'
-import Home from '../pages/Home';
+import Home from '../pages/Home'
 
-import Grid from '@material-ui/core/Grid';
-import withWidth from '@material-ui/core/withWidth';
+import Grid from '@material-ui/core/Grid'
+import withWidth from '@material-ui/core/withWidth'
 
 // Sub Layouts
 import EventsSubLayout from './EventsSubLayout'
 import CamerasSubLayout from './CamerasSubLayout'
-import Mask from '../components/Mask';
-import ForceLogout from '../components/ForceLogout';
+import VideoPlayingSubLayout from './VideoPlayingSubLayout'
+import Mask from '../components/Mask'
+import ForceLogout from '../components/ForceLogout'
 // import ProductSubLayout from './ProductSubLayout'
 
 
@@ -34,9 +35,14 @@ class PrimaryLayout extends React.Component {
   }
 
   render() {
-    const { match, width, locations } = this.props;
+    const { match, width, locations, error } = this.props;
+    
+    if (error) {
+      return <ForceLogout />
+    }
+
     return (
-      <Grid container spacing={0} alignItems='stretch' style={{height: `100%`}}>
+      <Grid container spacing={0} alignItems='stretch' style={{height: `100%`, overflowY: 'hidden'}}>
         <Grid item >
           <Nav width={width}/>
         </Grid>
@@ -48,6 +54,7 @@ class PrimaryLayout extends React.Component {
                 <Route path={`${match.path}`} exact component={Home} />
                 <Route path={`${match.path}/events`} component={EventsSubLayout} />
                 <Route path={`${match.path}/cameras`} render={props => <CamerasSubLayout {...props} locState={locations} locations={locations.locations} width={width} />} />
+                <Route path={`${match.path}/play`} render={props => <VideoPlayingSubLayout  {...props} locState={locations} width={width} {...props} /> } />
                 <Redirect to={`${match.url}`} />
               </Switch>
           }
@@ -60,5 +67,6 @@ class PrimaryLayout extends React.Component {
 export default connect(state => {
   return {
     locations: state.locations,
+    ...state.error
   };
 })(withWidth()(PrimaryLayout));

@@ -1,0 +1,13 @@
+#camera-list {
+  overflow: scroll; }
+  #camera-list::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 8px;
+    height: 8px; }
+  #camera-list::-webkit-scrollbar-thumb {
+    background: rgba(150, 150, 150, 0.5); }
+  #camera-list::-webkit-scrollbar-track {
+    background: transparent; }
+  #camera-list body {
+    scrollbar-face-color: rgba(150, 150, 150, 0.5);
+    scrollbar-track-color: transparent; }

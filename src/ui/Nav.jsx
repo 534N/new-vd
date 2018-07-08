@@ -21,11 +21,12 @@ const drawerWidth = 240;
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    height: 430,
+    height: '100%',
     zIndex: 1,
     overflow: 'hidden',
     position: 'relative',
     display: 'flex',
+    zIndex: 10000
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -69,6 +70,9 @@ const styles = theme => ({
       width: theme.spacing.unit * 9,
     },
   },
+  navIconHide: {
+    position: 'absolute'
+  },
   toolbar: {
     display: 'flex',
     alignItems: 'center',
@@ -83,19 +87,25 @@ const styles = theme => ({
   },
 });
 
+const mdDown = width => {
+  return (width === 'xs' || width === 'sm' || width === 'md');
+}
 
 class MiniDrawer extends React.Component {
   constructor(props) {
     super(props);
+    const { width } = props;
 
     this.state = {
-      open: false,
+      open: mdDown(width) ? false : true,
     };
   }
   
   componentWillReceiveProps(nextProps) {
+    const { width } = nextProps;
+
     this.setState({
-      open: false,
+      open: mdDown(width) ? false : true,
     });
   }
 
@@ -107,7 +117,7 @@ class MiniDrawer extends React.Component {
       <div>
         <div className={classes.toolbar}>
           {
-            width === 'sm' &&
+            mdDown(width) &&
             <IconButton onClick={ open ? this._handleDrawerClose : this._handleDrawerOpen }>
               { !open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
             </IconButton>
@@ -120,7 +130,7 @@ class MiniDrawer extends React.Component {
 
     return (
       <div className={classes.root} id='app-nav'>
-        <Hidden smUp>
+        <Hidden mdUp>
           <IconButton
             color='inherit'
             aria-label='open drawer'
@@ -133,7 +143,6 @@ class MiniDrawer extends React.Component {
         </Hidden>
 
         <Hidden mdUp>
-          
           <Drawer
             variant='temporary'
             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
@@ -148,7 +157,7 @@ class MiniDrawer extends React.Component {
             { content }
           </Drawer>
         </Hidden>
-        <Hidden xsDown implementation='css'>
+        <Hidden smDown implementation='css'>
           <Drawer
             variant='permanent'
             classes={{

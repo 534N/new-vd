@@ -1,0 +1,24 @@
+@mixin scrollbar
+  // For Google Chrome
+  &::-webkit-scrollbar
+    -webkit-appearance: none
+    width: 8px
+    height: 8px
+
+  &::-webkit-scrollbar-thumb 
+    background: rgba(150,150,150,0.5)
+  
+
+  &::-webkit-scrollbar-track 
+    background: transparent
+  
+
+  // For Internet Explorer
+  body 
+    scrollbar-face-color: rgba(150,150,150,0.5)
+    scrollbar-track-color: transparent
+
+#camera-list
+  overflow: scroll
+
+  @include scrollbar

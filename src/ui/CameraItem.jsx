@@ -1,20 +1,33 @@
-import React from 'react';
+import React from 'react'
+import { Link, withRouter } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
+
 import { withStyles } from '@material-ui/core/styles'
 
-import S3Image from '../components/S3Image';
-import Flex from '../components/Flex';
-import Icon from '../components/Icon';
-import IconText from '../components/IconText';
+import S3Image from '../components/S3Image'
+import Flex from '../components/Flex'
+import Icon from '../components/Icon'
+import IconText from '../components/IconText'
 
-import { CamerasPageContext } from '../layouts/CamerasSubLayout'
+import ErrorHandler from '../utils/ErrorHandler'
+
 
 import '../css/CameraItem.css'
 
 const sizes = {
-  xs: [320, 180],
-  sm: [160, 90],
-  md: [240, 135],
-  lg: [320, 180],
+  video: {
+    xs: [320, 180],
+    sm: [160, 90],
+    md: [208, 117],
+    lg: [256, 144],
+  },
+  cameras: {
+    xs: [320, 180],
+    sm: [160, 90],
+    md: [240, 135],
+    lg: [320, 180],
+  }
+  
 }
 
 const statusColor = {
@@ -35,6 +48,30 @@ const styles = theme => ({
   },
 })
 
+
+const getConsumer = context => {
+
+  switch (context) {
+    case 'cameras':
+      {
+        const { CamerasPageContext } = require('../layouts/CamerasSubLayout');
+        return CamerasPageContext.Consumer;
+        break;
+      }
+
+    case 'video':
+      {
+        const { VideoPlayingContext } = require('../layouts/VideoPlayingSubLayout');
+        return VideoPlayingContext.Consumer;
+        break;
+      }
+
+    default:
+      return null;
+      break;
+  }
+}
+
 class CameraItem extends React.Component {
 
   render() {
@@ -46,45 +83,60 @@ class CameraItem extends React.Component {
       audioParams,
       isMotionEnabled,
       motionParams,
-      classes
+      streams,
+      match,
+      classes,
+      context
     } = this.props;
 
+    const [{ id: streamId }] = streams;
+    const { locationId } = match.params;
+
+    const Consumer = getConsumer(context);
+
+    if (!Consumer) {
+      ErrorHandler.send(`Consumer error: ${Consumer}, context: ${context}`)
+      return <div />;
+    }
+
     return (
-      <CamerasPageContext.Consumer>
+      <Consumer>
         {
           ({ auth, width: windowWidth }) => {
             const { tenantId } = auth;
-            const [imgWidht, imgHeight] = sizes[windowWidth];
+            const [imgWidht, imgHeight] = sizes[context][windowWidth];
 
             return (
-              <div className='camera-item'>
-                <Flex justifyContent='center' alignItems='center' className='camera-item-mask' >
-                  <Icon path='play_circle' width='36px' height='36px' fill='#fff' />
-                </Flex>
-                <S3Image
-                  width={imgWidht}
-                  height={imgHeight}
-                  name={name}
-                  src={thumbnail}
-                  bucketPrefix={tenantId} />
-                <Flex className={classes.infoContainer}>
-                  <IconText text={name} labelStyle={{ fontSize: '14px' }} path='status' widht='10px' height='10px' fill={statusColor[status]} />
-                  {
-                    audioParams.enabled &&
-                    <Icon path='volume' width='15px' height='15px' fill='#fff' />
-                  }
-                  {
-                    isMotionEnabled && motionParams.enabled && motionParams.roi &&
-                    <Icon path='motionSearch' width='15px' height='15px' fill='#fff' />
-                  }
-                </Flex>
-              </div>
+              <Link to={`/app/play?locationId=${locationId}&&cameraId=${id}&&streamId=${streamId}`}>
+                <div className='camera-item' style={{width: `${imgWidht}px`, height: `${imgHeight}px`}}>
+                  <Flex justifyContent='center' alignItems='center' className='camera-item-mask' >
+                    <Icon path='play_circle' width='36px' height='36px' fill='#fff' />
+                  </Flex>
+                  <S3Image
+                    width={imgWidht}
+                    height={imgHeight}
+                    name={name}
+                    src={thumbnail}
+                    bucketPrefix={tenantId} />
+                  <Flex className={classes.infoContainer}>
+                    <IconText text={name} labelStyle={{ fontSize: '14px' }} path='status' widht='10px' height='10px' fill={statusColor[status]} />
+                    {
+                      audioParams.enabled &&
+                      <Icon path='volume' width='15px' height='15px' fill='#fff' />
+                    }
+                    {
+                      isMotionEnabled && motionParams.enabled && motionParams.roi &&
+                      <Icon path='motionSearch' width='15px' height='15px' fill='#fff' />
+                    }
+                  </Flex>
+                </div>
+              </Link>
             )
           }
         }
-      </CamerasPageContext.Consumer>
+      </Consumer>
     );
   }
 }
 
-export default withStyles(styles)(CameraItem);
+export default withRouter(withStyles(styles)(CameraItem));

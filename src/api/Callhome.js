@@ -2,8 +2,6 @@ import {
   callhome_url,
 } from '../settings';
 
-console.debug('callhome_url >>> ', callhome_url)
-
 const getHeader = jwtToken => {
   return {
     Accept: 'application/json',

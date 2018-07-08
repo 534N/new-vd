@@ -12,7 +12,6 @@ class Player extends React.Component {
   componentDidMount() {
     const { m3u8 } = this.props;
     if (m3u8) {
-      console.debug('init hls');
       this._initializeHLS(() => {
         const videoElement = this.refs.roiPlayer;
 
@@ -84,15 +83,12 @@ class Player extends React.Component {
   }
 
   _initializeHLS(cb) {
-    const { m3u8, auth } = this.props;
-    const { jwtToken } = auth;
+    const { m3u8, jwtToken } = this.props;
 
     const config = {
       xhrSetup: (xhr, url) => {
         xhr.withCredentials = true;
-        // if (/\.m3u8/.test(url)) {
-          xhr.setRequestHeader('Authorization', `Bearer ${jwtToken}`);
-        // }
+        xhr.setRequestHeader('Authorization', `Bearer ${jwtToken}`);
       },
       autoStartLoad: false,
       debug: false,
@@ -179,8 +175,4 @@ class Player extends React.Component {
   }
 }
 
-export default connect(state => {
-  return {
-    auth: state.auth
-  };  
-})(Player);
+export default Player;

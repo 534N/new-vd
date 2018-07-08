@@ -1,10 +1,11 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
 
-import AuthReducer from './reducers/AuthReducer';
-import UserReducer from './reducers/UserReducer';
-import CustomerReducer from './reducers/CustomerReducer';
-import LocationsReducer from './reducers/LocationsReducer';
-import DateTimeReducer from './reducers/DateTimeReducer';
+import AuthReducer from './reducers/AuthReducer'
+import UserReducer from './reducers/UserReducer'
+import CustomerReducer from './reducers/CustomerReducer'
+import LocationsReducer from './reducers/LocationsReducer'
+import DateTimeReducer from './reducers/DateTimeReducer'
+import VideoReducer from './reducers/VideoReducer'
 
 
 const WindowReducer = (state = {
@@ -21,10 +22,39 @@ const WindowReducer = (state = {
       }
 
     default: 
-      break;
+      break
   }
 
-  return state;
+  return state
+}
+
+const ErrorReducer = (state = {
+  error: false,
+}, action) => {
+  switch(action.type) {
+    case 'ERROR': 
+      {
+        state = {
+          ...state,
+          error: true
+        }
+        break
+      }
+
+    case 'USER_LOG_OUT':
+      {
+        state = {
+          ...state,
+          error: false
+        }
+        break
+      }
+
+    default: 
+      break
+  }
+
+  return state
 }
 
 export default combineReducers({
@@ -34,4 +64,6 @@ export default combineReducers({
   locations: LocationsReducer,
   time: DateTimeReducer,
   window: WindowReducer,
+  video: VideoReducer,
+  error: ErrorReducer
 });
