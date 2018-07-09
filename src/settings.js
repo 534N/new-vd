@@ -10,14 +10,14 @@ let CALLHOME_URL = 'https://callhome.solinkcloud.com';
 let REFERRAL_URL = 'https://go.solink.com/invite';
 
 if (process.env.NODE_ENV === 'development') {
-  HOST_NAME = 'https://test-api.solinkcloud.com';
-  S3_BUCKET_NAME = 'int-solinkcloud-images';
-  SIGNALLER_URL = 'https://test-signaller.solinkcloud.com';
-  INTERCOM_ID = 'rm5ya6w8';
-  AUTH0_CLIENT_ID = 'apgeIHLz2aSl1PyHUET1jpy3VCL4HAEe';
-  AUTH0_DOMAIN = 'solink-test.auth0.com';
-  CLOUD_VMS_HOST_NAME = 'https://int-cloudvms.solinkcloud.com';
-  CALLHOME_URL = 'https://test-callhome.solinkcloud.com';
+  // HOST_NAME = 'https://test-api.solinkcloud.com';
+  // S3_BUCKET_NAME = 'int-solinkcloud-images';
+  // SIGNALLER_URL = 'https://test-signaller.solinkcloud.com';
+  // INTERCOM_ID = 'rm5ya6w8';
+  // AUTH0_CLIENT_ID = 'apgeIHLz2aSl1PyHUET1jpy3VCL4HAEe';
+  // AUTH0_DOMAIN = 'solink-test.auth0.com';
+  // CLOUD_VMS_HOST_NAME = 'https://int-cloudvms.solinkcloud.com';
+  // CALLHOME_URL = 'https://test-callhome.solinkcloud.com';
 } else if (process.env.NODE_ENV === 'integration') {
   HOST_NAME = 'https://test-api.solinkcloud.com';
   S3_BUCKET_NAME = 'int-solinkcloud-images';

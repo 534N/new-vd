@@ -16,8 +16,6 @@ import '../css/Nav.css'
 
 const drawerWidth = 240;
 
-
-
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -26,7 +24,6 @@ const styles = theme => ({
     overflow: 'hidden',
     position: 'relative',
     display: 'flex',
-    zIndex: 10000
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -110,7 +107,7 @@ class MiniDrawer extends React.Component {
   }
 
   render() {
-    const { classes, theme, width } = this.props;
+    const { classes, theme, width, locations } = this.props;
     const { open } = this.state;
 
     const content = (
@@ -124,7 +121,7 @@ class MiniDrawer extends React.Component {
           }
         </div>
         <Divider />
-        <NavLinks />
+        <NavLinks locations={locations} />
       </div>
     );
 

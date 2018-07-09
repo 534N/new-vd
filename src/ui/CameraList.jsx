@@ -9,6 +9,13 @@ import CameraItem from './CameraItem'
 
 import '../css/CameraList.css'
 
+const cameraListWidth = {
+  xs: 340,
+  sm: 180,
+  md: 260,
+  lg: 340,
+}
+
 const styles = theme => ({
   root: {
     overflow: 'hidden',
@@ -30,30 +37,38 @@ const styles = theme => ({
   },
 });
 
-const CameraList = props => {
+class CameraList extends React.Component {
 
-  const { classes, match, locations, locationId: locationIdFromProps, context } = props;
-  const { locationId: locationIdFromURL } = match.params;
+  constructor(props) {
+    super(props);
 
-  const locationId = locationIdFromProps || locationIdFromURL;
+    const { match, locations } = props;
+    const { locationId } = match.params;
+    const selectedLocation = _.find(locations, loc => loc.id === locationId);
 
-  const selectedLocation = _.find(locations, loc => loc.id === locationId);
-  const { cameras, name } = selectedLocation;
+    this.selectedLocation = selectedLocation;
+  }
 
-  // store.dispatch({ type: 'SELECTED_LOCATION', payload: selectedLocation })
+  componentDidMount() {
+    store.dispatch({ type: 'SELECTED_LOCATION', payload: this.selectedLocation })
+  }
 
+  render() {
+    const { width, classes, match, locations, context } = this.props;
+    const { cameras, name } = this.selectedLocation;
 
-  return (
-    <div id='camera-list' className={classes.root} style={{backgroundColor: context === 'video' ? '#f1f1f1': '#fff', height: 'calc(100vh - 70px'}}>
-      <div className={classes.camerasWrap}>
-        {
-          cameras.map(cam => (
-            <CameraItem key={cam.id} {...cam} context={context} match={match}/>
-          ))
-        }
+    return (
+      <div id='camera-list' className={classes.root}>
+        <div className={classes.camerasWrap}>
+          {
+            cameras.map(cam => (
+              <CameraItem key={cam.id} {...cam} match={match} context={context} />
+            ))
+          }
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 }
   
 export default withStyles(styles)(CameraList);

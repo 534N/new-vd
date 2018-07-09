@@ -6,7 +6,7 @@ import { store } from '../store'
 import ConnectAPI from '../api/Connect'
 import { isCloudOnly } from '../utils/FeatureUtil'
 
-const getDeviceURL = location => location.accessibleAddress || `https://${location.id}.solink.direct:8080`;
+const getDeviceURL = location => location.accessibleAddress || `https://${location.id}.solink.direct`;
 
 export const getM3u8 = (locations, locationId, cameraId, streamId, time) => {
   const location = _.find(locations, loc => loc.id === locationId);

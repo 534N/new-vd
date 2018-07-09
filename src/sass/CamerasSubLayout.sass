@@ -19,27 +19,28 @@
     scrollbar-track-color: transparent
   
 
+#camera-nav
+  font-size: 14px
+  padding: 5px
+  display: flex
+  flex-direction: column
+  min-width: 400px
+  line-height: 2em
+
+  @include scrollbar
+
+  a
+    color: #333
+    padding: 0.2em 1em
+    display: block
+    line-height: 20px
+    margin-bottom: 3px
+    white-space: nowrap
+    &.active
+      background-color: #f5ae73
+      color: #fff
+
 .cameras-sub-layout
-  nav
-    font-size: 14px
-    height: calc(100vh - 200px)
-    overflow: scroll
-    padding: 5px
-
-    @include scrollbar
-
-    a
-      color: #333
-      padding: 0.2em 1em
-      display: block
-      border-radius: 50px
-      line-height: 20px
-      margin-bottom: 3px
-      white-space: nowrap
-      &.active
-        background-color: #f5ae73
-        color: #fff
-
   .primary-content
     flex: 1
     padding: 1em

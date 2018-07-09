@@ -48,20 +48,13 @@ const navRowHeight = {
   lg: 65,
 }
 
-const videoWidth = {
+const playerWidthChart = {
   xs: 400,
-  sm: 640,
-  md: 960,
-  lg: 1280,
+  sm: 600,
+  md: 650,
+  lg: 960,
+  xl: 1580
 }
-
-
-// const layout = {
-//   regular: {
-//     gridTemplateColumns: 
-//   },
-// }
-
 
 const VideoPlayingSubLayout = ({ match, location, locState, width, auth, video, classes }) => {
   const { locations, selectedLocation } = locState;
@@ -76,11 +69,8 @@ const VideoPlayingSubLayout = ({ match, location, locState, width, auth, video, 
           <DatePicker />
         </Grid>
         <Grid container spacing={0} className={classes.videoPanel}>
-          <Grid item xs={12} sm={12} md={theater ? 12 : 9} lg={ theater ? 12 : 9}>
-            <VideoContainer locations={locations} locationId={locationId} cameraId={cameraId} streamId={streamId} />
-          </Grid>
-          <Grid item xs={12} sm={12} md={theater ? 12 : 3} lg={ theater ? 12 : 3}>
-            <CameraList match={match} locations={locations} locationId={locationId} context='video'/>
+          <Grid item xs={12} sm={12} md={theater ? 12 : 9} lg={ theater ? 12 : 9} style={{maxWidth: `${playerWidthChart[width] + 20}px`}}>
+            <VideoContainer locations={locations} locationId={locationId} cameraId={cameraId} streamId={streamId} width={width}/>
           </Grid>
         </Grid>
       </Grid>

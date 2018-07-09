@@ -36,7 +36,6 @@ class PrimaryLayout extends React.Component {
 
   render() {
     const { match, width, locations, error } = this.props;
-    
     if (error) {
       return <ForceLogout />
     }
@@ -44,7 +43,7 @@ class PrimaryLayout extends React.Component {
     return (
       <Grid container spacing={0} alignItems='stretch' style={{height: `100%`, overflowY: 'hidden'}}>
         <Grid item >
-          <Nav width={width}/>
+          <Nav width={width} locations={locations} />
         </Grid>
         <Grid item xs>
           {

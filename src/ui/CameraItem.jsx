@@ -77,6 +77,7 @@ class CameraItem extends React.Component {
   render() {
     const {
       id,
+      cameraId,
       name,
       thumbnail,
       status,
@@ -107,7 +108,7 @@ class CameraItem extends React.Component {
             const [imgWidht, imgHeight] = sizes[context][windowWidth];
 
             return (
-              <Link to={`/app/play?locationId=${locationId}&&cameraId=${id}&&streamId=${streamId}`}>
+              <Link to={`/app/play?locationId=${locationId}&&cameraId=${cameraId}&&streamId=${streamId}`}>
                 <div className='camera-item' style={{width: `${imgWidht}px`, height: `${imgHeight}px`}}>
                   <Flex justifyContent='center' alignItems='center' className='camera-item-mask' >
                     <Icon path='play_circle' width='36px' height='36px' fill='#fff' />

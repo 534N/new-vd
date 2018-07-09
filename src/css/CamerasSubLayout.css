@@ -1,28 +1,29 @@
-.cameras-sub-layout nav {
+#camera-nav {
   font-size: 14px;
-  height: calc(100vh - 200px);
-  overflow: scroll;
-  padding: 5px; }
-  .cameras-sub-layout nav::-webkit-scrollbar {
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  min-width: 400px;
+  line-height: 2em; }
+  #camera-nav::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 8px;
     height: 8px; }
-  .cameras-sub-layout nav::-webkit-scrollbar-thumb {
+  #camera-nav::-webkit-scrollbar-thumb {
     background: rgba(150, 150, 150, 0.5); }
-  .cameras-sub-layout nav::-webkit-scrollbar-track {
+  #camera-nav::-webkit-scrollbar-track {
     background: transparent; }
-  .cameras-sub-layout nav body {
+  #camera-nav body {
     scrollbar-face-color: rgba(150, 150, 150, 0.5);
     scrollbar-track-color: transparent; }
-  .cameras-sub-layout nav a {
+  #camera-nav a {
     color: #333;
     padding: 0.2em 1em;
     display: block;
-    border-radius: 50px;
     line-height: 20px;
     margin-bottom: 3px;
     white-space: nowrap; }
-    .cameras-sub-layout nav a.active {
+    #camera-nav a.active {
       background-color: #f5ae73;
       color: #fff; }
 
