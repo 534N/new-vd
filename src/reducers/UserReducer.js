@@ -1,6 +1,5 @@
-import jwtDecode from 'jwt-decode';
-
-const allowRemotePlayback = (metadata) => !(metadata.playbackSource.toLowerCase() === 'local');
+import jwtDecode from 'jwt-decode'
+import { allowRemotePlayback } from './utils/User'
 
 const userReducer = (state = {
   metadata: null,

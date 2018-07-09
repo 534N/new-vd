@@ -2,7 +2,7 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { connect } from 'react-redux';
 import queryString from 'query-string';
-
+import _ from 'lodash'
 
 import IconText from '../components/IconText'
 import Icon from '../components/Icon'
@@ -14,6 +14,7 @@ import CameraList from '../ui/CameraList'
 import DatePicker from '../ui/DatePicker'
 import VideoContainer from '../ui/VideoContainer'
 import LocationSelector from '../ui/LocationSelector'
+import CameraSelector from '../ui/CameraSelector'
 
 import Hidden from '@material-ui/core/Hidden';
 import { withStyles } from '@material-ui/core/styles'
@@ -38,7 +39,7 @@ const styles = theme => ({
     justifyContent: 'center'
   },
   colorDefault: {
-    background: '#333',
+    background: '#111',
     color: '#fff',
   },
   navIconHide: {
@@ -49,15 +50,17 @@ const styles = theme => ({
 class VideoPlayingSubLayout extends React.Component {
   
   render() {
-    const { match, location, locState, width, auth, video, classes } = this.props;
+    const { location, locState, width, auth, video, classes } = this.props;
     const { locations, selectedLocation } = locState;
-    const { theater, fullscreen } = video;
   
     const { locationId, cameraId, streamId } = queryString.parse(location.search);
-  
+
+    const { cameras } = selectedLocation;
+    const selectedCamera = _.find(cameras, cam => cam.cameraId === cameraId);
+
     return (
-      <VideoPlayingContext.Provider value={{auth, width}}>
-        <AppBar position='sticky' color='default' classes={{colorDefault: classes.colorDefault}} style={{height: '65px', boxShadow: 'none', borderBottom: '1px solid #ddd'}}>
+      <VideoPlayingContext.Provider value={{ auth, width, selectedLocation}}>
+        <AppBar position='sticky' color='default' classes={{colorDefault: classes.colorDefault}} style={{height: '65px'}}>
           <Toolbar> 
             <IconButton
               color='inherit'
@@ -68,7 +71,7 @@ class VideoPlayingSubLayout extends React.Component {
                 <Icon path='menu' fill='#fff'/>
               </SvgIcon>
             </IconButton>
-            <LocationSelector fill='#fff' />
+            <CameraSelector fill='#fff' locations={locations} selectedLocation={selectedLocation} selectedCamera={selectedCamera} />
             <DatePicker fill='#fff'/>
           </Toolbar>
         </AppBar>

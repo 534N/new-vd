@@ -67,16 +67,16 @@ class CameraList extends React.Component {
   }
 
   render() {
-    const { width, classes, match, locations, context } = this.props;
+    const { classes, context, onSelect } = this.props;
     const { selectedLocation } = this.state;
-    const { cameras, name } = selectedLocation;
+    const { cameras } = selectedLocation;
 
     return (
       <div id='camera-list' className={classes.root}>
         <div className={classes.camerasWrap}>
           {
             cameras.map(cam => (
-              <CameraItem key={cam.id} {...cam} match={match} context={context} />
+              <CameraItem key={cam.id} {...cam} selectedLocation={selectedLocation} onSelect={onSelect} context={context} />
             ))
           }
         </div>

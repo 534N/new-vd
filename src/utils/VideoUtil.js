@@ -32,8 +32,6 @@ export const listVideo = (locations, locationId, cameraId, streamId, time, tenan
     end,
   };
 
-
-  debugger
   const connect = new ConnectAPI({
     deviceUrl: getDeviceURL(location),
     jwtToken: jwtToken,

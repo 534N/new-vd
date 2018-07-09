@@ -85,6 +85,7 @@ class CameraItem extends React.Component {
       isMotionEnabled,
       motionParams,
       streams,
+      onSelect,
       match,
       classes,
       context
@@ -103,12 +104,12 @@ class CameraItem extends React.Component {
     return (
       <Consumer>
         {
-          ({ auth, width: windowWidth }) => {
+          ({ auth, width: windowWidth, selectedLocation }) => {
             const { tenantId } = auth;
             const [imgWidht, imgHeight] = sizes[context][windowWidth];
 
             return (
-              <Link to={`/app/play?locationId=${locationId}&&cameraId=${cameraId}&&streamId=${streamId}`}>
+              <Link to={`/app/play?locationId=${locationId || selectedLocation.id}&&cameraId=${cameraId}&&streamId=${streamId}`} onClick={onSelect}>
                 <div className='camera-item' style={{width: `${imgWidht}px`, height: `${imgHeight}px`}}>
                   <Flex justifyContent='center' alignItems='center' className='camera-item-mask' >
                     <Icon path='play_circle' width='36px' height='36px' fill='#fff' />
