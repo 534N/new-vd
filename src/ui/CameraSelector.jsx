@@ -29,6 +29,9 @@ const styles = theme => ({
   toggle: {
     display: 'flex',
     alignItems: 'center',
+  },
+  content: {
+    padding: 0
   }
 
 })
@@ -66,7 +69,7 @@ class CameraSelector extends React.Component {
           maxWidth='md'
           className={classes.root}>
           <DialogTitle id='scroll-dialog-title'>Cameras @ {selectedLocation.name}</DialogTitle>
-          <DialogContent>
+          <DialogContent className={classes.content} id='cameralist-wrap'>
             <CameraList locations={locations} context='video' onSelect={this._handleClose} match={{params: { locationId: selectedLocation.id }}} />
           </DialogContent>
         </Dialog>

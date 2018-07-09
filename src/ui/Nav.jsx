@@ -118,7 +118,6 @@ class MiniDrawer extends React.Component {
     const { classes, theme, width, locations, video } = this.props;
     const { open } = this.props;
 
-    console.debug('video .>> ', video)
     const content = (
       <div>
         <div className={classes.toolbar}>

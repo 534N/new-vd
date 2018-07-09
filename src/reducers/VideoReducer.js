@@ -30,6 +30,16 @@ const VideoReducer = (state = {
           break;
 
         }
+
+      case 'NAV_LINK_CLICK':
+        {
+          state = {
+            ...state,
+            playing: false,
+            recordings: null,
+          }
+          break;
+        }
   
       case 'USER_LOG_OUT':
         {

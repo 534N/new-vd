@@ -1,20 +1,25 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { withStyles } from '@material-ui/core/styles';
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import { withStyles } from '@material-ui/core/styles'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import SvgIcon from '@material-ui/core/SvgIcon'
 
-import mdi from '../svg/MaterialIcons.svg';
+import { store } from '../store'
+import Icon from '../components/Icon'
 
 const styles = {
   root: {
     opacity: 0.7,
   },
 };
-  
+
+const broadCastAction = () => {
+  store.dispatch({ type: 'NAV_LINK_CLICK', payload: {} })
+}
   
 const NavLinks = props => {
   const { selectedLocation } = props.locations;
@@ -34,11 +39,11 @@ const NavLinkComponent = props => {
 
   return (
     <NavLink {...navLinkProps} activeClassName='active'>
-      <ListItem button classes={{root: 'nav-link'}}>
+      <ListItem button classes={{ root: 'nav-link' }} onClick={broadCastAction}>
         <ListItemIcon>
-          <svg style={{width: `24px`, height: `24px`, fill: `#555`}}>
-            <use xlinkHref={`${mdi}#${path}`}></use>
-          </svg>
+          <SvgIcon>
+            <Icon path={path} />
+          </SvgIcon>
         </ListItemIcon>
         <ListItemText primary={name} />
       </ListItem>

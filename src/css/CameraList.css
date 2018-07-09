@@ -1,3 +1,18 @@
+#cameralist-wrap::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 8px;
+  height: 8px; }
+
+#cameralist-wrap::-webkit-scrollbar-thumb {
+  background: rgba(150, 150, 150, 0.5); }
+
+#cameralist-wrap::-webkit-scrollbar-track {
+  background: transparent; }
+
+#cameralist-wrap body {
+  scrollbar-face-color: rgba(150, 150, 150, 0.5);
+  scrollbar-track-color: transparent; }
+
 #camera-list {
   overflow: scroll; }
   #camera-list::-webkit-scrollbar {

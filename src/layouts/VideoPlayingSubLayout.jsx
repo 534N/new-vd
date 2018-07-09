@@ -34,9 +34,9 @@ export const VideoPlayingContext = React.createContext(
 );
 
 const styles = theme => ({
-  videoPanel: {
-    display: 'flex',
-    justifyContent: 'center'
+  root: {
+    background: '#111',
+    height: '100%'
   },
   colorDefault: {
     background: '#111',
@@ -60,24 +60,26 @@ class VideoPlayingSubLayout extends React.Component {
 
     return (
       <VideoPlayingContext.Provider value={{ auth, width, selectedLocation}}>
-        <AppBar position='sticky' color='default' classes={{colorDefault: classes.colorDefault}} style={{height: '65px'}}>
-          <Toolbar> 
-            <IconButton
-              color='inherit'
-              aria-label='open drawer'
-              onClick={this._toggleNav}
-              className={classes.navIconHide}>
-              <SvgIcon>
-                <Icon path='menu' fill='#fff'/>
-              </SvgIcon>
-            </IconButton>
-            <CameraSelector fill='#fff' locations={locations} selectedLocation={selectedLocation} selectedCamera={selectedCamera} />
-            <DatePicker fill='#fff'/>
-          </Toolbar>
-        </AppBar>
-        <Switch>
-          <VideoContainer locations={locations} locationId={locationId} cameraId={cameraId} streamId={streamId} width={width}/>
-        </Switch>
+        <div className={classes.root}>
+          <AppBar position='sticky' color='default' classes={{colorDefault: classes.colorDefault}} style={{height: '65px'}}>
+            <Toolbar> 
+              <IconButton
+                color='inherit'
+                aria-label='open drawer'
+                onClick={this._toggleNav}
+                className={classes.navIconHide}>
+                <SvgIcon>
+                  <Icon path='menu' fill='#fff'/>
+                </SvgIcon>
+              </IconButton>
+              <CameraSelector fill='#fff' locations={locations} selectedLocation={selectedLocation} selectedCamera={selectedCamera} />
+              <DatePicker fill='#fff'/>
+            </Toolbar>
+          </AppBar>
+          <Switch>
+            <VideoContainer locations={locations} locationId={locationId} cameraId={cameraId} streamId={streamId} />
+          </Switch>
+        </div>
       </VideoPlayingContext.Provider>
     )
   }
