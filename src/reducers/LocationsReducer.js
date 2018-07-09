@@ -3,6 +3,7 @@ const LocationsReducer = (state = {
   fetching: null,
   error: false,
   selectedLocation: null,
+  localId: null,
 }, action) => {
   switch (action.type) {
     case 'LOCATION_INFO_FULFILLED':

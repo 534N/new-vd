@@ -1,15 +1,19 @@
 import React from 'react'
 import classNames from 'classnames';
+import { connect } from 'react-redux';
+
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import MenuIcon from '@material-ui/icons/Menu';
 import Hidden from '@material-ui/core/Hidden';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
-
-import mdi from '../svg/MaterialIcons.svg';
+import { store } from '../store'
+import Icon from '../components/Icon'
 
 import NavLinks from './NavLinks'
 import '../css/Nav.css'
@@ -88,10 +92,14 @@ const mdDown = width => {
   return (width === 'xs' || width === 'sm' || width === 'md');
 }
 
+const mdUp = width => {
+  return (width === 'lg' || width === 'xl');
+}
+
 class MiniDrawer extends React.Component {
   constructor(props) {
     super(props);
-    const { width } = props;
+    const { width, video } = props;
 
     this.state = {
       open: mdDown(width) ? false : true,
@@ -107,9 +115,10 @@ class MiniDrawer extends React.Component {
   }
 
   render() {
-    const { classes, theme, width, locations } = this.props;
-    const { open } = this.state;
+    const { classes, theme, width, locations, video } = this.props;
+    const { open } = this.props;
 
+    console.debug('video .>> ', video)
     const content = (
       <div>
         <div className={classes.toolbar}>
@@ -127,19 +136,8 @@ class MiniDrawer extends React.Component {
 
     return (
       <div className={classes.root} id='app-nav'>
-        <Hidden mdUp>
-          <IconButton
-            color='inherit'
-            aria-label='open drawer'
-            onClick={open ? this._handleDrawerClose : this._handleDrawerOpen}
-            className={classes.navIconHide}>
-            <svg style={{ width: `24px`, height: `24px`, fill: `#555` }}>
-              <use xlinkHref={`${mdi}#menu`}></use>
-            </svg>
-          </IconButton>
-        </Hidden>
-
-        <Hidden mdUp>
+        {
+          (video.playing || mdUp(width)) &&
           <Drawer
             variant='temporary'
             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
@@ -153,17 +151,21 @@ class MiniDrawer extends React.Component {
             }}>
             { content }
           </Drawer>
-        </Hidden>
-        <Hidden smDown implementation='css'>
-          <Drawer
-            variant='permanent'
-            classes={{
-              paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
-            }}
-            open={open}>
-            { content }
-          </Drawer>
-        </Hidden>
+        }
+        {
+          !video.playing &&
+          <Hidden smDown implementation='css'>
+            <Drawer
+              variant='permanent'
+              classes={{
+                paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
+              }}
+              open={open}>
+              { content }
+            </Drawer>
+          </Hidden>
+        }
+        
       </div>
     )
   }
@@ -173,10 +175,15 @@ class MiniDrawer extends React.Component {
   };
 
   _handleDrawerClose = () => {
-    this.setState({ open: false });
+    store.dispatch({ type: 'TOGGLE_NAV', payload: {} })
   };
 }
 
-export default withStyles(styles, { withTheme: true })(MiniDrawer);
+export default connect(state => {
+  return {
+    video: state.video,
+    ...state.nav
+  };
+})(withStyles(styles, { withTheme: true })(MiniDrawer));
 
 // export default Nav

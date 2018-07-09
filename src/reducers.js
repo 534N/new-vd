@@ -57,6 +57,36 @@ const ErrorReducer = (state = {
   return state
 }
 
+const NavReducer = (state = {
+  open: false,
+}, action) => {
+  switch(action.type) {
+    case 'TOGGLE_NAV': 
+      {
+        const { open } = state;
+        state = {
+          ...state,
+          open: !open
+        }
+        break
+      }
+
+    case 'USER_LOG_OUT':
+      {
+        state = {
+          ...state,
+          open: false
+        }
+        break
+      }
+
+    default: 
+      break
+  }
+
+  return state
+}
+
 export default combineReducers({
   auth: AuthReducer,
   user: UserReducer,
@@ -65,5 +95,6 @@ export default combineReducers({
   time: DateTimeReducer,
   window: WindowReducer,
   video: VideoReducer,
-  error: ErrorReducer
+  error: ErrorReducer,
+  nav: NavReducer,
 });

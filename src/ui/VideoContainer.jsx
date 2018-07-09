@@ -11,7 +11,8 @@ import Player from './Player'
 const styles = theme => ({
   root: {
     backgroundColor: '#333',
-    height: '100%',
+    width: '100%',
+    height: 'calc(100vw * 9 / 16)',
   },
 
 });
@@ -34,18 +35,24 @@ const onTimeUpdate = playerTime => {
   // this.setState({recordingTime})
 }
 
-const VideoContainer = (props) => {
-  const { width, locations, locationId, cameraId, streamId, time, auth, user, classes } = props;
+class VideoContainer extends React.Component {
+  componentDidMount() {
+    store.dispatch({ type: 'PLAY_VIDEO', payload: {}})
+  }
 
-  const m3u8 = getM3u8(locations, locationId, cameraId, streamId, time);
-  listVideo(locations, locationId, cameraId, streamId, time, auth.tenantId, auth.jwtToken, user.user)
+  render() {
+    const { width, locations, locationId, cameraId, streamId, time, auth, user, classes } = this.props;
 
-  const playerWidth = playerWidthChart[width];
-  return (
-    <div className={classes.root} style={{width: `${playerWidth}px`, height: `${playerWidth * 9 / 16}px`}}>
-      <Player jwtToken={auth.jwtToken} m3u8={m3u8} width='100%' height='100%' onTimeUpdate={onTimeUpdate}/>
-    </div>
-  )
+    const m3u8 = getM3u8(locations, locationId, cameraId, streamId, time);
+    listVideo(locations, locationId, cameraId, streamId, time, auth.tenantId, auth.jwtToken, user.user)
+
+    const playerWidth = playerWidthChart[width];
+    return (
+      <div className={classes.root}>
+        <Player jwtToken={auth.jwtToken} m3u8={m3u8} onTimeUpdate={onTimeUpdate}/>
+      </div>
+    )
+  }
 }
 
 

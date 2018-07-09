@@ -61,8 +61,8 @@ class Player extends React.Component {
         ref='roiPlayer'
         src={m3u8}
         autoPlay={true}
-        width={`${width}px`}
-        height={`${height}px`}
+        width='100%'
+        height='100%'
         controls={false} />
     )
   }

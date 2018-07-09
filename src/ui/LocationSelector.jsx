@@ -45,7 +45,7 @@ class LocationSelector extends React.Component {
   
 
   render() {
-    const { locations, selectedLocation, classes } = this.props;
+    const { locations, selectedLocation, classes, fill } = this.props;
     const { open } = this.state;
     
     return (
@@ -53,10 +53,13 @@ class LocationSelector extends React.Component {
         <div className={classes.toggle}>
           <IconButton onClick={this._handleClickOpen}>
             <SvgIcon>
-              <Icon path='location' />
+              <Icon path='location' fill={fill || '#333'}/>
             </SvgIcon>
           </IconButton>
-          <label className={classes.label}>{selectedLocation.name}</label>
+          {
+            selectedLocation &&
+            <label className={classes.label}>{selectedLocation.name}</label>          
+          }
         </div>
         <Dialog
           open={open}
@@ -67,7 +70,7 @@ class LocationSelector extends React.Component {
           <DialogTitle id='scroll-dialog-title'>Locations</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              <CamerasNav locations={locations} selected={selectedLocation.id} onSelect={this._handleSelection} />
+              <CamerasNav locations={locations} selected={selectedLocation ? selectedLocation.id : null} onSelect={this._handleSelection} />
             </DialogContentText>
           </DialogContent>
         </Dialog>
@@ -84,7 +87,8 @@ class LocationSelector extends React.Component {
   };
 
   _handleSelection = selection => {
-    debugger
+    store.dispatch({ type: 'SELECTED_LOCATION', payload: selection })
+    this._handleClose()
   }
 }
 

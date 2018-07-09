@@ -16,13 +16,13 @@ const convertTimestampsToInts = data => {
 export default class ConnectAPI {
     
   constructor({deviceUrl, jwtToken, cloudOnly=false}) {
-    this.host = cloudOnly ? deviceUrl : cloud_vms_host;
+    this.host = cloudOnly ? cloud_vms_host : deviceUrl;
     this.jwtToken = jwtToken;
     this.cloudOnly = cloudOnly;
   }
 
 
-  listVideos({ tenantId, deviceId, cameraId, streamId, start, end, motiongrid, forceCloud }) {
+  listVideos({ tenantId, deviceId, cameraId, streamId, start, end, motiongrid, forceCloud=false }) {
     let source = '';
 
     let url = '';

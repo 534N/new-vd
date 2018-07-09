@@ -13,6 +13,7 @@ import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton'
 import Left from '@material-ui/icons/KeyboardArrowLeft'
 import Right from '@material-ui/icons/KeyboardArrowRight'
+import SvgIcon from '@material-ui/core/SvgIcon'
 
 import Flex from '../components/Flex'
 import Icon from '../components/Icon'
@@ -36,12 +37,16 @@ const styles = theme => ({
 class DatePickerComp extends React.Component {
   
   render() {
-    const { classes, time } = this.props;
+    const { classes, time, fill } = this.props;
 
     return (
       <Flex className={classes.container} alignItems='center' justifyContent='center' height='100%'>
         <Hidden smDown>
-          <IconButton className={classes.buttonLeft} onClick={this._stepBackward}><Icon path='chevron_left' /></IconButton>
+          <IconButton className={classes.buttonLeft} onClick={this._stepBackward}>
+            <SvgIcon>
+              <Icon path='chevron_left' fill={fill || '#333'}/>
+            </SvgIcon>
+          </IconButton>
         </Hidden>
         <Icon path='calendar' fill='#888' marginRight='5px' />
         <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -54,7 +59,11 @@ class DatePickerComp extends React.Component {
             onChange={this._handleDateChange} />
         </MuiPickersUtilsProvider>
         <Hidden smDown>
-          <IconButton className={classes.buttonRight} onClick={this._stepForward}><Icon path='chevron_right' /></IconButton>
+          <IconButton className={classes.buttonRight} onClick={this._stepForward}>
+            <SvgIcon>
+              <Icon path='chevron_right' fill={fill || '#333'}/>
+            </SvgIcon>
+          </IconButton>
         </Hidden>
       </Flex>
     )

@@ -46,16 +46,30 @@ class CameraList extends React.Component {
     const { locationId } = match.params;
     const selectedLocation = _.find(locations, loc => loc.id === locationId);
 
-    this.selectedLocation = selectedLocation;
+    this.state = {
+      selectedLocation
+    };
   }
 
   componentDidMount() {
-    store.dispatch({ type: 'SELECTED_LOCATION', payload: this.selectedLocation })
+    const { selectedLocation } = this.state;
+    store.dispatch({ type: 'SELECTED_LOCATION', payload: selectedLocation })
+  }
+  
+  componentWillReceiveProps(nextProps) {
+    const { match, locations } = nextProps;
+    const { locationId } = match.params;
+    const selectedLocation = _.find(locations, loc => loc.id === locationId);
+
+    this.setState({
+      selectedLocation
+    })
   }
 
   render() {
     const { width, classes, match, locations, context } = this.props;
-    const { cameras, name } = this.selectedLocation;
+    const { selectedLocation } = this.state;
+    const { cameras, name } = selectedLocation;
 
     return (
       <div id='camera-list' className={classes.root}>

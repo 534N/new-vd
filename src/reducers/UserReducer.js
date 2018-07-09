@@ -1,11 +1,14 @@
 import jwtDecode from 'jwt-decode';
 
+const allowRemotePlayback = (metadata) => !(metadata.playbackSource.toLowerCase() === 'local');
+
 const userReducer = (state = {
   metadata: null,
   billingURL: null,
   features: null,
   cameraGroups: [],
   user: null,
+  permissions: null,
 }, action) => {
   switch (action.type) {
     case 'BILLING_INFO_FULFILLED':
@@ -31,10 +34,17 @@ const userReducer = (state = {
         } = action.payload;
 
         const user = jwtDecode(jwtToken);
+        const { user_metadata } = user;
 
+        const permissions = {
+          ...state.permissions,
+          allowRemotePlayback: allowRemotePlayback(user_metadata)
+        };
+        
         state = {
           ...state,
-          user
+          user,
+          permissions,
         };
         break;
       }
@@ -66,6 +76,7 @@ const userReducer = (state = {
           billingURL: null,
           features: null,
           cameraGroups: [],
+          permissions: null,
         }
 
         break;

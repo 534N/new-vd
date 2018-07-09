@@ -1,44 +1,46 @@
 const VideoReducer = (state = {
-    theater: false,
+    playing: false,
     fullscreen: false,
+    recordings: null,
   }, action) => {
     switch (action.type) {
-      case 'THEATER_MODE_ON':
+      case 'TOGGLE_FULLSCREEN':
         {
+          const { fullscreen } = state;
           state = {
             ...state,
-            theater: true,
+            fullscreen: !fullscreen,
           }
           break;
         }
-      
-      case 'THEATER_MODE_OFF':
+  
+      case 'PLAY_VIDEO': 
         {
           state = {
             ...state,
-            theater: false,
+            playing: true,
           }
           break;
         }
 
-      case 'FULLSCREEN_MODE_ON':
+      case 'LIST_VIDEO':
         {
-          state = {
-            ...state,
-            fullscreen: true,
-          }
+          console.debug('recordings >>> ', action.payload)
+          debugger
           break;
+
         }
   
-      case 'FULLSCREEN_MODE_OFF':
+      case 'USER_LOG_OUT':
         {
           state = {
             ...state,
+            playing: false,
             fullscreen: false,
+            recordings: null,
           }
           break;
         }
-  
     
       default:
         break;
