@@ -6,9 +6,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import MenuIcon from '@material-ui/icons/Menu';
 import Hidden from '@material-ui/core/Hidden';
 import SvgIcon from '@material-ui/core/SvgIcon';
 
@@ -96,6 +93,8 @@ const mdUp = width => {
   return (width === 'lg' || width === 'xl');
 }
 
+const hasPlayerMounted = players => Object.keys(players).length > 0;
+
 class MiniDrawer extends React.Component {
   constructor(props) {
     super(props);
@@ -124,7 +123,7 @@ class MiniDrawer extends React.Component {
           {
             mdDown(width) &&
             <IconButton onClick={ open ? this._handleDrawerClose : this._handleDrawerOpen }>
-              { !open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+              {!open ? <SvgIcon><Icon path='cheveron_right' /></SvgIcon> : <SvgIcon><Icon path='cheveron_left' /></SvgIcon>}
             </IconButton>
           }
         </div>
@@ -136,7 +135,7 @@ class MiniDrawer extends React.Component {
     return (
       <div className={classes.root} id='app-nav'>
         {
-          (video.playing || mdUp(width)) &&
+          (hasPlayerMounted || mdUp(width)) &&
           <Drawer
             variant='temporary'
             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
@@ -152,7 +151,7 @@ class MiniDrawer extends React.Component {
           </Drawer>
         }
         {
-          !video.playing &&
+          !hasPlayerMounted &&
           <Hidden smDown implementation='css'>
             <Drawer
               variant='permanent'

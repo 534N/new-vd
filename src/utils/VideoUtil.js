@@ -14,7 +14,19 @@ export const getM3u8 = (locations, locationId, cameraId, streamId, time) => {
   const end = +new Date(moment(time).endOf('day').format());
 
   const deviceUrl = getDeviceURL(location);
-  return `${deviceUrl}/cameras/${cameraId}/video.m3u8?begin=${start}&end=${end}&stream=${streamId}`;
+  const m3u8 = `${deviceUrl}/cameras/${cameraId}/video.m3u8?begin=${start}&end=${end}&stream=${streamId}`;
+
+  store.dispatch({
+    type: 'SET_M3U8',
+    meta: {
+      locationId,
+      cameraId,
+      streamId
+    },
+    payload: m3u8
+  })
+
+  return m3u8;
 }
 
 export const listVideo = (locations, locationId, cameraId, streamId, time, tenantId, jwtToken, user) => {

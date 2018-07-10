@@ -2,24 +2,20 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { connect } from 'react-redux';
 
-import IconText from '../components/IconText'
-import Icon from '../components/Icon'
-
 import CameraList from '../ui/CameraList'
 import DatePicker from '../ui/DatePicker'
 import LocationSelector from '../ui/LocationSelector'
 
 import { store } from '../store'
 
-import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden'
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
-import SvgIcon from '@material-ui/core/SvgIcon';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import SvgIcon from '@material-ui/core/SvgIcon'
+import IconButton from '@material-ui/core/IconButton'
 
+import Icon from '../components/Icon'
 import '../css/CamerasSubLayout.css'
 
 export const CamerasPageContext = React.createContext(
@@ -58,7 +54,7 @@ class CamerasSubLayout extends React.Component {
                 onClick={this._toggleNav}
                 className={classes.navIconHide}>
                 <SvgIcon>
-                  <MenuIcon />
+                  <Icon path='menu' />
                 </SvgIcon>
               </IconButton>
             </Hidden>

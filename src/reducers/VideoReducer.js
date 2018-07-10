@@ -1,6 +1,31 @@
+const generatePlayerId = meta => Object.values(meta).join('-');
+const savePlayerConfigToState = (players, playerId, config, state) => {
+  players[playerId] = config;
+  state = {
+    ...state,
+    players: {
+      ...players
+    }
+  }
+
+  return state;
+}
+
+const initPlayerState = {
+  id: null,
+  m3u8: null,
+  ttf: null,
+  recordings: null,
+  playTime: null,
+  fetching: false,
+  playing: false,
+  paused: false,
+  ended: false,
+  live: false,
+  error: null,
+};
+
 const VideoReducer = (state = {
-    fetching: false,
-    playing: false,
     players: {},
     fullscreen: false,
   }, action) => {
@@ -15,7 +40,7 @@ const VideoReducer = (state = {
           break;
         }
   
-      case 'PLAY_VIDEO': 
+      case 'INIT_VIDEO':
         {
           const {
             locationId,
@@ -23,80 +48,89 @@ const VideoReducer = (state = {
             streamId,
           } = action.payload;
 
-          debugger
-          const playerId = `${locationId}-${cameraId}-${streamId}`;
-          const config = {
-            ttf: null,
-            mu38: null,
-            recordings: null,
-            state: 'init'
+          const playerId = generatePlayerId({ locationId, cameraId, streamId });
+          const playerState = {
+            ...initPlayerState,
+            id: playerId,
           };
 
-          state = {
-            ...state,
-            players: {
-              playerId: config,
-            }
+          const newState = {
+            ...state
+          };
+
+          newState.players[playerId] = playerState;
+          state = newState
+          break;
+        }
+
+      case 'SET_M3U8':
+        {
+          const playerId = generatePlayerId(action.meta);
+          const players = state.players;
+          const config = {
+            ...players[playerId],
+            m3u8: action.payload,
           }
+
+          savePlayerConfigToState(players, playerId, config, state);
+
           break;
         }
 
       case 'LIST_VIDEO_PENDING':
         {
-          console.debug('Loading Recordings >>> ')
-          const locationId = action.meta.locationId;
-          
-          const playerId = `${action.meta.locationId}-${action.meta.cameraId}-${action.meta.streamId}`;
-
-debugger
-          
+          const playerId = generatePlayerId(action.meta);
           const players = state.players;
           const config = {
             ...players[playerId],
-            state: 'loading',
+            fetching: true,
           }
 
-          state = {
-            ...state,
-            fetching: true,
-            players: {
-              ...players,
-              playerId: config,
-            }
-          }
+          savePlayerConfigToState(players, playerId, config, state);
 
           break;
-
         }
 
         case 'LIST_VIDEO_FULFILLED':
         {
-          console.debug('recordings >>> ', action.payload)
+          const {
+            data
+          } = action.payload
 
-          debugger
+          const playerId = generatePlayerId(action.meta);
+
+          const players = state.players;
+          const config = {
+            ...players[playerId],
+            recordings: data.videos
+          }
+
+          savePlayerConfigToState(players, playerId, config, state);
+
           break;
-
         }
 
         case 'LIST_VIDEO_REJECTED':
         {
-          console.debug('recordings >>> ', action.payload)
-          const { data } = action.payload;
+          const playerId = generatePlayerId(action.meta);
 
-          state = {
-            ...state,
-            recordings: data.video,
+          const players = state.players;
+          const config = {
+            ...players[playerId],
+            fetching: false,
+            error: action.payload
           }
-          break;
 
+          savePlayerConfigToState(players, playerId, config, state);
+
+          break;
         }
 
       case 'NAV_LINK_CLICK':
         {
           state = {
             ...state,
-            playing: false,
-            recordings: null,
+            players: {},
           }
           break;
         }
@@ -105,9 +139,8 @@ debugger
         {
           state = {
             ...state,
-            playing: false,
             fullscreen: false,
-            recordings: null,
+            players: {},
           }
           break;
         }

@@ -46,6 +46,9 @@ const styles = theme => ({
     width: '100%',
     height: '30%'
   },
+  actionItem: {
+    cursor: 'pointer'
+  }
 })
 
 
@@ -109,30 +112,31 @@ class CameraItem extends React.Component {
             const [imgWidht, imgHeight] = sizes[context][windowWidth];
 
             return (
-              <Link to={`/app/play?locationId=${locationId || selectedLocation.id}&&cameraId=${cameraId}&&streamId=${streamId}`} onClick={onSelect}>
-                <div className='camera-item' style={{width: `${imgWidht}px`, height: `${imgHeight}px`}}>
-                  <Flex justifyContent='center' alignItems='center' className='camera-item-mask' >
+              <div className='camera-item' style={{width: `${imgWidht}px`, height: `${imgHeight}px`}}>
+                <Flex justifyContent='space-around' alignItems='center' className='camera-item-mask' >
+                  <Link to={`/app/play?locationId=${locationId || selectedLocation.id}&&cameraId=${cameraId}&&streamId=${streamId}`} onClick={onSelect} className={classes.actionItem}>
                     <Icon path='play_circle' width='36px' height='36px' fill='#fff' />
-                  </Flex>
-                  <S3Image
-                    width={imgWidht}
-                    height={imgHeight}
-                    name={name}
-                    src={thumbnail}
-                    bucketPrefix={tenantId} />
-                  <Flex className={classes.infoContainer}>
-                    <IconText text={name} labelStyle={{ fontSize: '14px' }} path='status' widht='10px' height='10px' fill={statusColor[status]} />
-                    {
-                      audioParams.enabled &&
-                      <Icon path='volume' width='15px' height='15px' fill='#fff' />
-                    }
-                    {
-                      isMotionEnabled && motionParams.enabled && motionParams.roi &&
-                      <Icon path='motionSearch' width='15px' height='15px' fill='#fff' />
-                    }
-                  </Flex>
-                </div>
-              </Link>
+                  </Link>
+                  <Icon path='add_box' width='36px' height='36px' fill='#fff' />
+                </Flex>
+                <S3Image
+                  width={imgWidht}
+                  height={imgHeight}
+                  name={name}
+                  src={thumbnail}
+                  bucketPrefix={tenantId} />
+                <Flex className={classes.infoContainer}>
+                  <IconText text={name} labelStyle={{ fontSize: '14px' }} path='status' widht='10px' height='10px' fill={statusColor[status]} />
+                  {
+                    audioParams.enabled &&
+                    <Icon path='volume' width='15px' height='15px' fill='#fff' />
+                  }
+                  {
+                    isMotionEnabled && motionParams.enabled && motionParams.roi &&
+                    <Icon path='motionSearch' width='15px' height='15px' fill='#fff' />
+                  }
+                </Flex>
+              </div>
             )
           }
         }

@@ -1,8 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import { scaleLinear } from 'd3-scale';
+import _ from 'lodash'
 
 import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 
 import { store } from '../store';
 
@@ -13,73 +15,69 @@ const styles = () => ({
   root: {
     backgroundColor: '#333',
     width: '100%',
-    height: 'calc(100vw * 9 / 16)',
+    height: '100%',
   },
+  playerWrap: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 
 });
+
+const isMultiPlay = players => Object.keys(players).length > 1;
 
 
 class VideoContainer extends React.Component {
   constructor(props) {
     super(props);
-
-    const initState = this._updateVideoData(props);
-
-    this.state = {
-      ...initState
-    }
+    this._kickOffVideoLoading(props);
   }
 
   componentWillReceiveProps(nextProps) {
-    console.debug('>>>>> play container will receive props')
-
-    console.debug('nextProps', nextProps)
-    // const newState = this._updateVideoData(nextProps);
-
-    // this.setState = ({
-    //   ...newState
-    // })
-
-  }
-
-  componentDidMount() {
-    store.dispatch({ type: 'PLAY_VIDEO', payload: this.props})
   }
 
   render() {
-    const { locations, locationId, cameraId, streamId, time, auth, user, classes } = this.props;
-    const { m3u8 } = this.state;
+    const { video, locations, locationId, cameraId, streamId, time, auth, user, classes } = this.props;
+    const { players } = video;
 
     return (
       <div className={classes.root}>
-        <Player jwtToken={auth.jwtToken} m3u8={m3u8} onTimeUpdate={this._onTimeUpdate.bind(this)}/>
+        <Grid container>
+        {
+          Object.keys(players).map(playerId => {
+            const config = players[playerId];
+
+            return (
+              <Grid key={playerId} item xs={12} sm={isMultiPlay(players) ? 6 : 12} md={isMultiPlay(players) ? 6 : 12} lg={isMultiPlay(players) ? 6 : 12} className={classes.playerWrap}>
+                <Player jwtToken={auth.jwtToken} {...config} onTimeUpdate={this._onTimeUpdate.bind(this)} />
+              </Grid>
+            )
+          })
+        }
+        </Grid>
       </div>
     )
   }
 
-  _updateVideoData(props) {
+  _kickOffVideoLoading(props) {
     const { locations, locationId, cameraId, streamId, time, auth, user } = props;
-    const m3u8 = getM3u8(locations, locationId, cameraId, streamId, time);
-    const segments = listVideo(locations, locationId, cameraId, streamId, time, auth.tenantId, auth.jwtToken, user.user);
+    store.dispatch({ type: 'INIT_VIDEO', payload: this.props })
+    getM3u8(locations, locationId, cameraId, streamId, time);
+    listVideo(locations, locationId, cameraId, streamId, time, auth.tenantId, auth.jwtToken, user.user);
 
     // debugger
     // const mergedPlaylist = this._mergeSegments(segments)
     // const { playerDomain } = this._storePlayerDomain(segments);
     // const recordingDomain = this._storeRecordingDomain(segments);
 
-    return {
-      m3u8,
-      // segments,
-      // playlist: mergedPlaylist,
-      // ttf: scaleLinear().domain(playerDomain).range(recordingDomain),
-    }
   }
 
   _onTimeUpdate(playerTime) {
-    const { ttf, m3u8 } = this.state;
-    if (!m3u8) {
-      return;
-    }
+    // const { ttf, m3u8 } = this.state;
+    // if (!m3u8) {
+    //   return;
+    // }
 
     // const recordingTime = ttf(playerTime * 1000);
     // this.setState({ recordingTime })

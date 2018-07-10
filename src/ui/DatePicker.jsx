@@ -11,8 +11,6 @@ import { store } from '../store';
 import { withStyles } from '@material-ui/core/styles'
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton'
-import Left from '@material-ui/icons/KeyboardArrowLeft'
-import Right from '@material-ui/icons/KeyboardArrowRight'
 import SvgIcon from '@material-ui/core/SvgIcon'
 
 import Flex from '../components/Flex'
@@ -54,8 +52,8 @@ class DatePickerComp extends React.Component {
             value={time}  
             format='LL'
             showTodayButton
-            leftArrowIcon={<Left />}
-            rightArrowIcon={<Right />}
+            leftArrowIcon={<SvgIcon><Icon path='cheveron_right' /></SvgIcon>}
+            rightArrowIcon={<SvgIcon><Icon path='cheveron_left' /></SvgIcon>}
             onChange={this._handleDateChange} />
         </MuiPickersUtilsProvider>
         <Hidden smDown>

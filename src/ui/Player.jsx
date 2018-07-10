@@ -1,6 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import Mask from '../components/Mask'
 import Hls from 'connect-hls.js';
+
+import Overlay from './PlayerOverlay'
 
 class Player extends React.Component {
   constructor(props) {
@@ -52,18 +54,21 @@ class Player extends React.Component {
   }
 
   render() {
-    const { m3u8, width, height } = this.props;
+    const { m3u8, fetching, id } = this.props;
     return (
-      <video
-        style={{
-          objectFit: `fill`,
-        }}
-        ref='roiPlayer'
-        src={m3u8}
-        autoPlay={true}
-        width='100%'
-        height='100%'
-        controls={false} />
+      <div style={{width: '100%', height: '100%', position: 'relative'}}>
+        <Overlay id={id} />
+        <video
+          style={{
+            objectFit: `fill`,
+          }}
+          ref='roiPlayer'
+          src={m3u8}
+          autoPlay={true}
+          width='100%'
+          height='calc(100vw * 9 / 16)'
+          controls={false} />
+      </div>
     )
   }
 

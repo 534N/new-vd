@@ -4,25 +4,18 @@ import { connect } from 'react-redux';
 import queryString from 'query-string';
 import _ from 'lodash'
 
-import IconText from '../components/IconText'
 import Icon from '../components/Icon'
 import { store } from '../store'
 
-import CamerasNav from '../ui/CamerasNav'
-import CamerasNavMobile from '../ui/CamerasNavMobile'
-import CameraList from '../ui/CameraList'
 import DatePicker from '../ui/DatePicker'
 import VideoContainer from '../ui/VideoContainer'
-import LocationSelector from '../ui/LocationSelector'
 import CameraSelector from '../ui/CameraSelector'
 
-import Hidden from '@material-ui/core/Hidden';
 import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import SvgIcon from '@material-ui/core/SvgIcon';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 
 // import '../css/VideoPlayingSubLayout.css';
 
