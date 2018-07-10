@@ -38,5 +38,8 @@ export const listVideo = (locations, locationId, cameraId, streamId, time, tenan
     cloudOnly: isCloudOnly(location, user),
   });
 
-  store.dispatch({ type: 'LIST_VIDEO', payload: axios(connect.listVideos(params)) })
+  store.dispatch({ 
+    type: 'LIST_VIDEO', 
+    meta: { locationId, cameraId, streamId },
+    payload: axios(connect.listVideos(params)) })
 }
