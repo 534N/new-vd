@@ -32,16 +32,18 @@ class VideoContainer extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     console.debug('>>>>> play container will receive props')
-    const newState = this._updateVideoData(nextProps);
 
-    this.setState = ({
-      ...newState
-    })
+    console.debug('nextProps', nextProps)
+    // const newState = this._updateVideoData(nextProps);
+
+    // this.setState = ({
+    //   ...newState
+    // })
 
   }
 
   componentDidMount() {
-    store.dispatch({ type: 'PLAY_VIDEO', payload: {}})
+    store.dispatch({ type: 'PLAY_VIDEO', payload: this.props})
   }
 
   render() {
@@ -60,16 +62,16 @@ class VideoContainer extends React.Component {
     const m3u8 = getM3u8(locations, locationId, cameraId, streamId, time);
     const segments = listVideo(locations, locationId, cameraId, streamId, time, auth.tenantId, auth.jwtToken, user.user);
 
-    debugger
-    const mergedPlaylist = this._mergeSegments(segments)
-    const { playerDomain } = this._storePlayerDomain(segments);
-    const recordingDomain = this._storeRecordingDomain(segments);
+    // debugger
+    // const mergedPlaylist = this._mergeSegments(segments)
+    // const { playerDomain } = this._storePlayerDomain(segments);
+    // const recordingDomain = this._storeRecordingDomain(segments);
 
     return {
       m3u8,
-      segments,
-      playlist: mergedPlaylist,
-      ttf: scaleLinear().domain(playerDomain).range(recordingDomain),
+      // segments,
+      // playlist: mergedPlaylist,
+      // ttf: scaleLinear().domain(playerDomain).range(recordingDomain),
     }
   }
 
@@ -79,8 +81,8 @@ class VideoContainer extends React.Component {
       return;
     }
 
-    const recordingTime = ttf(playerTime * 1000);
-    this.setState({ recordingTime })
+    // const recordingTime = ttf(playerTime * 1000);
+    // this.setState({ recordingTime })
   }
 
   _mergeSegments(segments) {
@@ -148,5 +150,6 @@ export default connect(state => {
     auth: state.auth,
     user: state.user,
     ...state.time,
+    video: state.video,
   };
 })(withStyles(styles)(VideoContainer));
