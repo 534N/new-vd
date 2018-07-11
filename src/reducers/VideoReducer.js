@@ -26,6 +26,7 @@ const initPlayerState = {
 };
 
 const VideoReducer = (state = {
+    lastUpdate: +new Date(),
     players: {},
     fullscreen: false,
   }, action) => {
@@ -69,7 +70,7 @@ const VideoReducer = (state = {
           const players = state.players;
           const config = {
             ...players[playerId],
-            m3u8: action.payload,
+            m3u8: action.payload,            
           }
 
           savePlayerConfigToState(players, playerId, config, state);
@@ -86,12 +87,12 @@ const VideoReducer = (state = {
             fetching: true,
           }
 
-          savePlayerConfigToState(players, playerId, config, state);
+          state = savePlayerConfigToState(players, playerId, config, state);
 
           break;
         }
 
-        case 'LIST_VIDEO_FULFILLED':
+      case 'LIST_VIDEO_FULFILLED':
         {
           const {
             data
@@ -105,12 +106,12 @@ const VideoReducer = (state = {
             recordings: data.videos
           }
 
-          savePlayerConfigToState(players, playerId, config, state);
+          state = savePlayerConfigToState(players, playerId, config, state);
 
           break;
         }
 
-        case 'LIST_VIDEO_REJECTED':
+      case 'LIST_VIDEO_REJECTED':
         {
           const playerId = generatePlayerId(action.meta);
 
@@ -121,8 +122,47 @@ const VideoReducer = (state = {
             error: action.payload
           }
 
-          savePlayerConfigToState(players, playerId, config, state);
+          state = savePlayerConfigToState(players, playerId, config, state);
 
+          break;
+        }
+
+      case 'UPDATE_PLAY_TIME': 
+        {
+          const { playerId } = action.meta;
+          const players = state.players;
+
+          if (!playerId || typeof(playerId) !== 'string' || !players[playerId]) {
+            return
+          }
+
+          const config = {
+            ...players[playerId],
+            fetching: false,
+            playTime: action.payload,
+            playing: true,
+          }
+
+
+          state = savePlayerConfigToState(players, playerId, config, state);
+          
+          break;
+        }
+
+
+      case 'REMOVE_VIDEO': 
+        {
+          const id = action.payload;
+
+          const { players } = state;
+          delete(players[id]);
+
+          debugger
+          state = {
+            ...state,
+            players
+          };
+          
           break;
         }
 

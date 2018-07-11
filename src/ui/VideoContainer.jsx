@@ -13,9 +13,11 @@ import Player from './Player'
 
 const styles = () => ({
   root: {
-    backgroundColor: '#333',
+    backgroundColor: '#000',
     width: '100%',
-    height: '100%',
+    minHeight: 'calc(100vw * 9 / 16)',
+    display: 'flex',
+    alignItems: 'center'
   },
   playerWrap: {
     display: 'flex',
@@ -26,6 +28,7 @@ const styles = () => ({
 });
 
 const isMultiPlay = players => Object.keys(players).length > 1;
+const isMultiRows = players => Object.keys(players).length > 2;
 
 
 class VideoContainer extends React.Component {
@@ -35,6 +38,7 @@ class VideoContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.debug('>>> nextProps', nextProps)
   }
 
   render() {
@@ -47,10 +51,9 @@ class VideoContainer extends React.Component {
         {
           Object.keys(players).map(playerId => {
             const config = players[playerId];
-
             return (
               <Grid key={playerId} item xs={12} sm={isMultiPlay(players) ? 6 : 12} md={isMultiPlay(players) ? 6 : 12} lg={isMultiPlay(players) ? 6 : 12} className={classes.playerWrap}>
-                <Player jwtToken={auth.jwtToken} {...config} onTimeUpdate={this._onTimeUpdate.bind(this)} />
+                <Player jwtToken={auth.jwtToken} {...config} multiPlay={isMultiPlay(players)} onTimeUpdate={this._onTimeUpdate.bind(this)} />
               </Grid>
             )
           })
@@ -73,7 +76,7 @@ class VideoContainer extends React.Component {
 
   }
 
-  _onTimeUpdate(playerTime) {
+  _onTimeUpdate(id, playerTime) {
     // const { ttf, m3u8 } = this.state;
     // if (!m3u8) {
     //   return;
@@ -81,6 +84,7 @@ class VideoContainer extends React.Component {
 
     // const recordingTime = ttf(playerTime * 1000);
     // this.setState({ recordingTime })
+    store.dispatch({ type: 'UPDATE_PLAY_TIME', meta: { playerId: id }, payload: playerTime})
   }
 
   _mergeSegments(segments) {

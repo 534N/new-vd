@@ -1,4 +1,4 @@
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore, compose } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist'
 import { createLogger } from 'redux-logger';
 import promise from 'redux-promise-middleware';
@@ -21,8 +21,7 @@ const middleware = applyMiddleware(promise(), createLogger());
 
 const store = createStore(
   persistedReducer,
-  middleware,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  compose(middleware, window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f)
 )
 
 const persistor = persistStore(store)

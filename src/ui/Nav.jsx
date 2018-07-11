@@ -135,7 +135,7 @@ class MiniDrawer extends React.Component {
     return (
       <div className={classes.root} id='app-nav'>
         {
-          (hasPlayerMounted || mdUp(width)) &&
+          (hasPlayerMounted(video.players) || mdUp(width)) &&
           <Drawer
             variant='temporary'
             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
@@ -151,7 +151,7 @@ class MiniDrawer extends React.Component {
           </Drawer>
         }
         {
-          !hasPlayerMounted &&
+          !hasPlayerMounted(video.players) &&
           <Hidden smDown implementation='css'>
             <Drawer
               variant='permanent'

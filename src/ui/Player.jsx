@@ -2,7 +2,7 @@ import React from 'react';
 import Mask from '../components/Mask'
 import Hls from 'connect-hls.js';
 
-import Overlay from './PlayerOverlay'
+import PlayerOverlay from './PlayerOverlay'
 
 class Player extends React.Component {
   constructor(props) {
@@ -54,10 +54,12 @@ class Player extends React.Component {
   }
 
   render() {
-    const { m3u8, fetching, id } = this.props;
+    const { m3u8, id, multiPlay } = this.props;
+    const height = multiPlay ? '100%' : 'calc(100vw * 9 / 16';
+
     return (
-      <div style={{width: '100%', height: '100%', position: 'relative'}}>
-        <Overlay id={id} />
+      <div style={{width: '100%', height: height, position: 'relative'}}>
+        <PlayerOverlay id={id} {...this.props} />
         <video
           style={{
             objectFit: `fill`,
@@ -66,7 +68,7 @@ class Player extends React.Component {
           src={m3u8}
           autoPlay={true}
           width='100%'
-          height='calc(100vw * 9 / 16)'
+          height='100%'
           controls={false} />
       </div>
     )
@@ -131,12 +133,12 @@ class Player extends React.Component {
 
   _handleTimeUpdate(d) {
 
-    const { onTimeUpdate } = this.props;
+    const { id, onTimeUpdate } = this.props;
     const currentTick = parseInt(d.target.currentTime);
 
     if (this.currentTick !== currentTick) {
       this.currentTick = currentTick;
-      onTimeUpdate(currentTick)
+      onTimeUpdate(id, currentTick)
     }
 
   }
