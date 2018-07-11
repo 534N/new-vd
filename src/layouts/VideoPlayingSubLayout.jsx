@@ -43,7 +43,7 @@ const styles = theme => ({
 class VideoPlayingSubLayout extends React.Component {
   
   render() {
-    const { location, locState, width, auth, video, classes } = this.props;
+    const { location, locState, width, auth, video, classes, user, time } = this.props;
     const { locations, selectedLocation } = locState;
   
     const { locationId, cameraId, streamId } = queryString.parse(location.search);
@@ -70,7 +70,7 @@ class VideoPlayingSubLayout extends React.Component {
             </Toolbar>
           </AppBar>
           <Switch>
-            <VideoContainer locations={locations} locationId={locationId} cameraId={cameraId} streamId={streamId} />
+            <VideoContainer locations={locations} locationId={locationId} cameraId={cameraId} streamId={streamId} video={video} user={user} time={time} auth={auth}/>
           </Switch>
         </div>
       </VideoPlayingContext.Provider>
@@ -85,6 +85,8 @@ class VideoPlayingSubLayout extends React.Component {
 export default connect(state => {
   return {
     auth: state.auth,
-    video: state.video
+    user: state.user,
+    ...state.time,
+    video: state.video,
   };
 })(withStyles(styles)(VideoPlayingSubLayout));

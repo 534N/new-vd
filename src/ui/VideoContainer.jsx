@@ -39,12 +39,20 @@ class VideoContainer extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     console.debug('>>> nextProps', nextProps)
+
+    const {
+      video: {
+        players
+      }
+    } = nextProps;
+
+    console.debug('>>> players', Object.keys(players))
   }
 
   render() {
-    const { video, locations, locationId, cameraId, streamId, time, auth, user, classes } = this.props;
-    const { players } = video;
-
+    const { video: { players }, locations, locationId, cameraId, streamId, time, auth, user, classes } = this.props;
+    
+    console.debug('>>> players', Object.keys(players))
     return (
       <div className={classes.root}>
         <Grid container>
@@ -52,7 +60,7 @@ class VideoContainer extends React.Component {
           Object.keys(players).map(playerId => {
             const config = players[playerId];
             return (
-              <Grid key={playerId} item xs={12} sm={isMultiPlay(players) ? 6 : 12} md={isMultiPlay(players) ? 6 : 12} lg={isMultiPlay(players) ? 6 : 12} className={classes.playerWrap}>
+              <Grid key={playerId} item xs={12} sm={isMultiPlay(players) ? 6 : 12} md={isMultiPlay(players) ? 6 : 12} lg={isMultiPlay(players) ? 4 : 12} className={classes.playerWrap}>
                 <Player jwtToken={auth.jwtToken} {...config} multiPlay={isMultiPlay(players)} onTimeUpdate={this._onTimeUpdate.bind(this)} />
               </Grid>
             )
@@ -78,13 +86,26 @@ class VideoContainer extends React.Component {
 
   _onTimeUpdate(id, playerTime) {
     // const { ttf, m3u8 } = this.state;
+
+    const {
+      video: {
+        players
+      }
+    } = this.props;
+
+    const {
+      playTime
+    } = players[id];
     // if (!m3u8) {
     //   return;
     // }
 
     // const recordingTime = ttf(playerTime * 1000);
     // this.setState({ recordingTime })
-    store.dispatch({ type: 'UPDATE_PLAY_TIME', meta: { playerId: id }, payload: playerTime})
+
+    if (playerTime - playTime >= 10) {
+      store.dispatch({ type: 'UPDATE_PLAY_TIME', meta: { playerId: id }, payload: playerTime })
+    }
   }
 
   _mergeSegments(segments) {
@@ -147,11 +168,4 @@ class VideoContainer extends React.Component {
 }
 
 
-export default connect(state => {
-  return {
-    auth: state.auth,
-    user: state.user,
-    ...state.time,
-    video: state.video,
-  };
-})(withStyles(styles)(VideoContainer));
+export default withStyles(styles)(VideoContainer);

@@ -56,7 +56,8 @@ const VideoReducer = (state = {
           };
 
           const newState = {
-            ...state
+            ...state,
+            lastUpdate: +new Date(),
           };
 
           newState.players[playerId] = playerState;
