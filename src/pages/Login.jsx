@@ -85,7 +85,7 @@ class Auth extends React.Component {
     return (
       <Flex justifyContent={`center`} alignItems={`center`} id='login-page'>
         <div id='lock-panel'>
-          <Redirect to={ auth.isAuthenticated ? from : '/auth/login' } />
+          <Redirect to={auth.auth0Authenticated ? from : '/auth/login' } />
         </div>
       </Flex>
     )

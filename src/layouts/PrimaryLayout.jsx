@@ -15,8 +15,6 @@ import CamerasSubLayout from './CamerasSubLayout'
 import VideoPlayingSubLayout from './VideoPlayingSubLayout'
 import Mask from '../components/Mask'
 import ForceLogout from '../components/ForceLogout'
-// import ProductSubLayout from './ProductSubLayout'
-
 
 const cameras = () => <div>Cameras go here</div>;
 
@@ -36,6 +34,7 @@ class PrimaryLayout extends React.Component {
 
   render() {
     const { match, width, locations, error } = this.props;
+
     if (error) {
       return <ForceLogout />
     }

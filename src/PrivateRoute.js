@@ -4,13 +4,15 @@ import {
   Redirect
 } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { isAuthenticated } from './utils/AuthUtil'
 
 const PrivateRoute = ({ component: Component, auth, ...rest }) => {
+
   return (
     <Route
       {...rest}
       render={props =>
-        auth.isAuthenticated ? (
+        isAuthenticated(auth) ? (
           <Component {...props} />
         ) : (
           <div>

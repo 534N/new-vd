@@ -1,8 +1,8 @@
 import jwtDecode from 'jwt-decode';
 
 const authReducer = (state = {
-  isAuthenticated: false,
-  timeout: 0,
+  auth0Authenticated: false,
+  jwtTimeout: null,
   refreshToken: null,
   jwtToken: null,
   aws: null,
@@ -19,17 +19,18 @@ const authReducer = (state = {
         const {
           refreshToken,
           idToken: jwtToken,
-          expiresIn: timeout
+          expiresIn,
         } = action.payload;
 
+        const jwtTimeout = +new Date() + expiresIn * 1000;
         const { tenantId } = jwtDecode(jwtToken);
 
         state = {
           ...state,
           refreshToken,
           jwtToken,
-          timeout,
-          isAuthenticated: true,
+          jwtTimeout,
+          auth0Authenticated: true,
           tenantId
         };
         break;
@@ -42,12 +43,18 @@ const authReducer = (state = {
         } = action.payload;
 
         const {
-          aws
+          aws: {
+            expiration,
+            ...restAWS
+          }
         } = data.response;
 
         state = {
           ...state,
-          aws
+          aws: {
+            expiration: +new Date(expiration),
+            ...restAWS
+          }
         }
 
         break;
@@ -56,7 +63,7 @@ const authReducer = (state = {
     case 'USER_LOG_OUT': {
       state = {
         ...state,
-        isAuthenticated: false,
+        auth0Authenticated: false,
         refreshToken: null,
         timeout: 0,
         jwtToken: null,
