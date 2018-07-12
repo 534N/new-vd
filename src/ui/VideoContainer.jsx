@@ -34,29 +34,26 @@ const isMultiRows = players => Object.keys(players).length > 2;
 class VideoContainer extends React.Component {
   constructor(props) {
     super(props);
-    this._kickOffVideoLoading(props);
+    const { playlist } = props;
+    const isMultiPlay = Object.keys(playlist).length > 1;
+
+    this._kickOffVideoLoading({ ...props, replace: !isMultiPlay });
   }
 
   componentWillReceiveProps(nextProps) {
-    const { playlist, video: { players }, locations, time, auth, user } = nextProps;
+    const { playlist } = nextProps;
+    const { playlist: oldPlayList } = this.props;
 
-    const newPlaylist = {};
+    const diff = _.omitBy(playlist, (v, k) => oldPlayList[k] === v);
+    const isMultiPlay = Object.keys(playlist).length > 1;
 
-    Object.keys(playlist).filter(idx => {
-      const playerId = playlist[idx];
-      return !players[playerId]
-    }).map(idx => {
-      return newPlaylist[idx] = playlist[idx];
-    })
-    
-    this._kickOffVideoLoading({ locations, playlist: newPlaylist, time, auth, user });
+    if (!_.isEmpty(diff)) {
+      this._kickOffVideoLoading({ ...nextProps, playlist: diff, replace: !isMultiPlay });
+    }
   }
 
   render() {
-    const { video: { players }, auth, classes, playlist } = this.props;
-    
-    console.debug('>>> players', Object.keys(players))
-    console.debug('>>> playlist', Object.keys(playlist))
+    const { video: { players }, auth, classes } = this.props;
 
     return (
       <div className={classes.root}>
@@ -76,14 +73,13 @@ class VideoContainer extends React.Component {
     )
   }
 
-  _kickOffVideoLoading(props) {
-    const { locations, playlist, time, auth, user } = props;
+  _kickOffVideoLoading({ locations, playlist, time, auth, user, replace=false }) {
 
     Object.keys(playlist).forEach(playerIdx => {
       const playerId = playlist[playerIdx];
-
+      
       const [ locationId, cameraId, streamId ] = playerId.split('|');
-      store.dispatch({ type: 'INIT_VIDEO', payload: { playerId } })
+      store.dispatch({ type: 'INIT_VIDEO', payload: { playerId, replace } })
       getM3u8(locations, playerId, locationId, cameraId, streamId, time);
       listVideo(locations, playerId, locationId, cameraId, streamId, time, auth.tenantId, auth.jwtToken, user.user);
     })
@@ -105,6 +101,11 @@ class VideoContainer extends React.Component {
       }
     } = this.props;
 
+    if (!players[id]) {
+      return
+    }
+
+    
     const {
       playTime
     } = players[id];

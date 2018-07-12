@@ -44,20 +44,35 @@ const VideoReducer = (state = {
       case 'INIT_VIDEO':
         {
           const {
-            playerId
+            playerId,
+            replace
           } = action.payload;
 
+          // 
+          // initialize a new player state with the player id
           const playerState = {
             ...initPlayerState,
             id: playerId,
           };
 
+          // 
+          // decide replace vs append
+          const players = replace ? {} : {
+            ...state.players
+          };
+          
+          // 
+          // set the players object
+          players[playerId] = playerState;
+
+          // 
+          // set state
           const newState = {
             ...state,
+            players,
             lastUpdate: +new Date(),
           };
 
-          newState.players[playerId] = playerState;
           state = newState
           break;
         }

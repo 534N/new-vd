@@ -55,7 +55,7 @@ class Player extends React.Component {
 
   render() {
     const { m3u8, id, multiPlay } = this.props;
-    const height = multiPlay ? '100%' : 'calc(100vw * 9 / 16';
+    const height = multiPlay ? '100%' : 'calc(100vw * 9 / 16)';
 
     return (
       <div style={{width: '100%', height: height, position: 'relative'}}>
