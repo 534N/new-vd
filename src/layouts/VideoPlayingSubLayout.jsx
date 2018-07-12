@@ -40,19 +40,18 @@ const styles = theme => ({
   }
 })
 
+const parsePlayerId = playerId => playerId.split('|');
+
 class VideoPlayingSubLayout extends React.Component {
   
   render() {
     const { location, locState, width, auth, video, classes, user, time } = this.props;
     const { locations, selectedLocation } = locState;
   
-    const { locationId, cameraId, streamId } = queryString.parse(location.search);
-
-    const { cameras } = selectedLocation;
-    const selectedCamera = _.find(cameras, cam => cam.cameraId === cameraId);
+    const playlist = queryString.parse(location.search);
 
     return (
-      <VideoPlayingContext.Provider value={{ auth, width, selectedLocation}}>
+      <VideoPlayingContext.Provider value={{ auth, width, selectedLocation, players: playlist}}>
         <div className={classes.root}>
           <AppBar position='sticky' color='default' classes={{colorDefault: classes.colorDefault}} style={{height: '65px'}}>
             <Toolbar> 
@@ -65,12 +64,12 @@ class VideoPlayingSubLayout extends React.Component {
                   <Icon path='menu' fill='#fff'/>
                 </SvgIcon>
               </IconButton>
-              <CameraSelector fill='#fff' locations={locations} selectedLocation={selectedLocation} selectedCamera={selectedCamera} />
+              <CameraSelector fill='#fff' locations={locations} selectedLocation={selectedLocation} playlist={playlist} />
               <DatePicker fill='#fff'/>
             </Toolbar>
           </AppBar>
           <Switch>
-            <VideoContainer locations={locations} locationId={locationId} cameraId={cameraId} streamId={streamId} video={video} user={user} time={time} auth={auth}/>
+            <VideoContainer locations={locations} playlist={playlist} video={video} user={user} time={time} auth={auth}/>
           </Switch>
         </div>
       </VideoPlayingContext.Provider>

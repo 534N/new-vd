@@ -75,6 +75,15 @@ const getConsumer = context => {
   }
 }
 
+const addPlayerToURL = (players, id) => {
+  const playerIds = Object.values(players);
+
+  return playerIds.map((pid, idx) => (`player${idx}=${pid}`)).join('&') + `&player${playerIds.length}=${id}`
+}
+
+const replacePlayerURL = id => `player0=${id}`;
+
+
 class CameraItem extends React.Component {
 
   render() {
@@ -107,17 +116,27 @@ class CameraItem extends React.Component {
     return (
       <Consumer>
         {
-          ({ auth, width: windowWidth, selectedLocation }) => {
+          ({ auth, width: windowWidth, selectedLocation, players }) => {
             const { tenantId } = auth;
             const [imgWidht, imgHeight] = sizes[context][windowWidth];
+
+            const playerId = `${locationId || selectedLocation.id}|${cameraId}|${streamId}`;
 
             return (
               <div className='camera-item' style={{width: `${imgWidht}px`, height: `${imgHeight}px`}}>
                 <Flex justifyContent='space-around' alignItems='center' className='camera-item-mask' >
-                  <Link to={`/app/play?locationId=${locationId || selectedLocation.id}&&cameraId=${cameraId}&&streamId=${streamId}`} onClick={onSelect} className={classes.actionItem}>
+                  {
+                    false &&
+                    <Link to={`/app/play?locationId=${locationId || selectedLocation.id}&&cameraId=${cameraId}&&streamId=${streamId}`} onClick={onSelect} className={classes.actionItem}>
+                      <Icon path='play_circle' width='36px' height='36px' fill='#fff' />
+                    </Link>
+                  }
+                  <Link to={`/app/play?${replacePlayerURL(playerId)}`} onClick={onSelect} className={classes.actionItem}>
                     <Icon path='play_circle' width='36px' height='36px' fill='#fff' />
                   </Link>
-                  <Icon path='add_box' width='36px' height='36px' fill='#fff' />
+                  <Link to={`/app/play?${addPlayerToURL(players, playerId)}`} onClick={onSelect} className={classes.actionItem}>
+                    <Icon path='add_box' width='36px' height='36px' fill='#fff' />
+                  </Link>
                 </Flex>
                 <S3Image
                   width={imgWidht}

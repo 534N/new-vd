@@ -40,11 +40,11 @@ const styles = theme => ({
 class CamerasSubLayout extends React.Component {
 
   render() {
-    const { match, locState, width, auth, classes, location } = this.props;
+    const { match, locState, width, auth, classes, video: { players }} = this.props;
     const { locations } = locState;
     
     return (
-      <CamerasPageContext.Provider value={{ auth, width, selectedLocation: null}}>
+      <CamerasPageContext.Provider value={{ auth, width, selectedLocation: null, players}}>
         <AppBar position='sticky' color='default' classes={{colorDefault: classes.colorDefault}} style={{height: '65px', boxShadow: 'none', borderBottom: '1px solid #ddd'}}>
           <Toolbar>
             <Hidden mdUp>
@@ -76,6 +76,7 @@ class CamerasSubLayout extends React.Component {
 
 export default connect(state => {
   return {
-    auth: state.auth
+    auth: state.auth,
+    video: state.video
   };
 })(withStyles(styles)(CamerasSubLayout));

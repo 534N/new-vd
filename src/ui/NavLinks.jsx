@@ -30,6 +30,7 @@ const NavLinks = props => {
       <NavLinkComponent path='dashboard' name='Home' to='/app' exact />
       <NavLinkComponent path='bar_chart' name='Events' to='/app/events' />
       <NavLinkComponent path='videocam' name='Cameras' to={`/app/cameras${locationId}`} />
+      <NavLinkComponent path='exit' name='Log out' to='/app/logout' />
     </List>
   )
 }

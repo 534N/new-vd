@@ -38,21 +38,26 @@ class VideoContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.debug('>>> nextProps', nextProps)
+    const { playlist, video: { players }, locations, time, auth, user } = nextProps;
 
-    const {
-      video: {
-        players
-      }
-    } = nextProps;
+    const newPlaylist = {};
 
-    console.debug('>>> players', Object.keys(players))
+    Object.keys(playlist).filter(idx => {
+      const playerId = playlist[idx];
+      return !players[playerId]
+    }).map(idx => {
+      return newPlaylist[idx] = playlist[idx];
+    })
+    
+    this._kickOffVideoLoading({ locations, playlist: newPlaylist, time, auth, user });
   }
 
   render() {
-    const { video: { players }, locations, locationId, cameraId, streamId, time, auth, user, classes } = this.props;
+    const { video: { players }, auth, classes, playlist } = this.props;
     
     console.debug('>>> players', Object.keys(players))
+    console.debug('>>> playlist', Object.keys(playlist))
+
     return (
       <div className={classes.root}>
         <Grid container>
@@ -72,10 +77,17 @@ class VideoContainer extends React.Component {
   }
 
   _kickOffVideoLoading(props) {
-    const { locations, locationId, cameraId, streamId, time, auth, user } = props;
-    store.dispatch({ type: 'INIT_VIDEO', payload: this.props })
-    getM3u8(locations, locationId, cameraId, streamId, time);
-    listVideo(locations, locationId, cameraId, streamId, time, auth.tenantId, auth.jwtToken, user.user);
+    const { locations, playlist, time, auth, user } = props;
+
+    Object.keys(playlist).forEach(playerIdx => {
+      const playerId = playlist[playerIdx];
+
+      const [ locationId, cameraId, streamId ] = playerId.split('|');
+      store.dispatch({ type: 'INIT_VIDEO', payload: { playerId } })
+      getM3u8(locations, playerId, locationId, cameraId, streamId, time);
+      listVideo(locations, playerId, locationId, cameraId, streamId, time, auth.tenantId, auth.jwtToken, user.user);
+    })
+    
 
     // debugger
     // const mergedPlaylist = this._mergeSegments(segments)
@@ -103,7 +115,7 @@ class VideoContainer extends React.Component {
     // const recordingTime = ttf(playerTime * 1000);
     // this.setState({ recordingTime })
 
-    if (playerTime - playTime >= 10) {
+    if (!playTime || playerTime - playTime >= 10) {
       store.dispatch({ type: 'UPDATE_PLAY_TIME', meta: { playerId: id }, payload: playerTime })
     }
   }

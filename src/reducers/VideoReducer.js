@@ -44,12 +44,9 @@ const VideoReducer = (state = {
       case 'INIT_VIDEO':
         {
           const {
-            locationId,
-            cameraId,
-            streamId,
+            playerId
           } = action.payload;
 
-          const playerId = generatePlayerId({ locationId, cameraId, streamId });
           const playerState = {
             ...initPlayerState,
             id: playerId,
@@ -67,7 +64,7 @@ const VideoReducer = (state = {
 
       case 'SET_M3U8':
         {
-          const playerId = generatePlayerId(action.meta);
+          const { playerId } = action.meta;
           const players = state.players;
           const config = {
             ...players[playerId],
@@ -81,7 +78,7 @@ const VideoReducer = (state = {
 
       case 'LIST_VIDEO_PENDING':
         {
-          const playerId = generatePlayerId(action.meta);
+          const { playerId } = action.meta;
           const players = state.players;
           const config = {
             ...players[playerId],
@@ -99,7 +96,7 @@ const VideoReducer = (state = {
             data
           } = action.payload
 
-          const playerId = generatePlayerId(action.meta);
+          const { playerId } = action.meta;
 
           const players = state.players;
           const config = {
@@ -114,7 +111,7 @@ const VideoReducer = (state = {
 
       case 'LIST_VIDEO_REJECTED':
         {
-          const playerId = generatePlayerId(action.meta);
+          const { playerId } = action.meta;
 
           const players = state.players;
           const config = {

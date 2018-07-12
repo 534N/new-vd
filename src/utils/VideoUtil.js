@@ -8,7 +8,7 @@ import { isCloudOnly } from '../utils/FeatureUtil'
 
 const getDeviceURL = location => location.accessibleAddress || `https://${location.id}.solink.direct`;
 
-export const getM3u8 = (locations, locationId, cameraId, streamId, time) => {
+export const getM3u8 = (locations, playerId, locationId, cameraId, streamId, time) => {
   const location = _.find(locations, loc => loc.id === locationId);
   const start = +new Date(moment(time).startOf('day').format());
   const end = +new Date(moment(time).endOf('day').format());
@@ -19,6 +19,7 @@ export const getM3u8 = (locations, locationId, cameraId, streamId, time) => {
   store.dispatch({
     type: 'SET_M3U8',
     meta: {
+      playerId,
       locationId,
       cameraId,
       streamId
@@ -29,7 +30,7 @@ export const getM3u8 = (locations, locationId, cameraId, streamId, time) => {
   return m3u8;
 }
 
-export const listVideo = (locations, locationId, cameraId, streamId, time, tenantId, jwtToken, user) => {
+export const listVideo = (locations, playerId, locationId, cameraId, streamId, time, tenantId, jwtToken, user) => {
   const location = _.find(locations, loc => loc.id === locationId);
   const start = +new Date(moment(time).startOf('day').format());
   const end = +new Date(moment(time).endOf('day').format());
@@ -52,6 +53,6 @@ export const listVideo = (locations, locationId, cameraId, streamId, time, tenan
 
   store.dispatch({ 
     type: 'LIST_VIDEO', 
-    meta: { locationId, cameraId, streamId },
+    meta: { playerId },
     payload: axios(connect.listVideos(params)) })
 }

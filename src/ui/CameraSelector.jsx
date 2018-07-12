@@ -49,7 +49,7 @@ class CameraSelector extends React.Component {
 
 
   render() {
-    const { locations, selectedCamera, selectedLocation, classes, fill } = this.props;
+    const { locations, playlist, selectedLocation, classes, fill } = this.props;
     const { open } = this.state;
 
     return (
@@ -60,7 +60,7 @@ class CameraSelector extends React.Component {
               <Icon path='videocam' fill={fill || '#333'} />
             </SvgIcon>
           </IconButton>
-          <label className={classes.label}>{selectedCamera.name} @ {selectedLocation.name} </label>
+          {/* <label className={classes.label}>{selectedCamera.name} @ {selectedLocation.name} </label> */}
         </div>
         <Dialog
           open={open}

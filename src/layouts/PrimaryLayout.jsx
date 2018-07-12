@@ -16,7 +16,14 @@ import VideoPlayingSubLayout from './VideoPlayingSubLayout'
 import Mask from '../components/Mask'
 import ForceLogout from '../components/ForceLogout'
 
-const cameras = () => <div>Cameras go here</div>;
+
+const logout = () => {
+  store.dispatch({ type: 'USER_LOG_OUT', payload: {}})
+
+  return (
+    <Mask />
+  )
+}
 
 class PrimaryLayout extends React.Component {
 
@@ -53,6 +60,7 @@ class PrimaryLayout extends React.Component {
                 <Route path={`${match.path}/events`} component={EventsSubLayout} />
                 <Route path={`${match.path}/cameras`} render={props => <CamerasSubLayout {...props} locState={locations} locations={locations.locations} width={width} />} />
                 <Route path={`${match.path}/play`} render={props => <VideoPlayingSubLayout  {...props} locState={locations} width={width} {...props} /> } />
+                <Route path={`${match.path}/logout`} component={logout} />
                 <Redirect to={`${match.url}`} />
               </Switch>
           }
