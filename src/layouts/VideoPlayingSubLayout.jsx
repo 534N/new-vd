@@ -40,8 +40,6 @@ const styles = theme => ({
   }
 })
 
-const parsePlayerId = playerId => playerId.split('|');
-
 class VideoPlayingSubLayout extends React.Component {
   
   render() {
@@ -51,7 +49,7 @@ class VideoPlayingSubLayout extends React.Component {
     const playlist = queryString.parse(location.search);
 
     return (
-      <VideoPlayingContext.Provider value={{ auth, width, selectedLocation, players: playlist}}>
+      <VideoPlayingContext.Provider value={{ auth, width, selectedLocation, playlist}}>
         <div className={classes.root}>
           <AppBar position='sticky' color='default' classes={{colorDefault: classes.colorDefault}} style={{height: '65px'}}>
             <Toolbar> 
@@ -86,6 +84,5 @@ export default connect(state => {
     auth: state.auth,
     user: state.user,
     ...state.time,
-    video: state.video,
   };
 })(withStyles(styles)(VideoPlayingSubLayout));

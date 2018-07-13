@@ -36,16 +36,6 @@ const statusColor = {
 }
 
 const styles = theme => ({
-  infoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    padding: '5px',
-    background: 'rgba(0,0,0,0.7)',
-    color: '#fff',
-    width: '100%',
-    height: '30%'
-  },
   actionItem: {
     cursor: 'pointer'
   }
@@ -75,14 +65,14 @@ const getConsumer = context => {
   }
 }
 
-const addPlayerToURL = (players, id) => {
-  const playerIds = Object.values(players);
+const addPlayerToURL = (playlist, id) => {
+  const playerIds = Object.values(playlist);
 
   return playerIds.map((pid, idx) => (`player${idx}=${pid}`)).join('&') + `&player${playerIds.length}=${id}`
 }
 
 const replacePlayerURL = id => `player0=${id}`;
-
+const is360 = name => name.match(/360/);
 
 class CameraItem extends React.Component {
 
@@ -105,36 +95,25 @@ class CameraItem extends React.Component {
 
     const [{ id: streamId }] = streams;
     const { locationId } = match.params;
-
     const Consumer = getConsumer(context);
-
-    if (!Consumer) {
-      ErrorHandler.send(`Consumer error: ${Consumer}, context: ${context}`)
-      return <div />;
-    }
 
     return (
       <Consumer>
         {
-          ({ auth, width: windowWidth, selectedLocation, players }) => {
+          ({ auth, width: windowWidth, selectedLocation, playlist }) => {
             const { tenantId } = auth;
             const [imgWidht, imgHeight] = sizes[context][windowWidth];
 
-            const playerId = `${locationId || selectedLocation.id}|${cameraId}|${streamId}`;
+            const playerId = `${locationId || selectedLocation.id}|${cameraId}|${streamId}` + is360(name) ? '|is360' : '';
+            const active = Object.values(playlist).indexOf(playerId) > -1;
 
             return (
-              <div className='camera-item' style={{width: `${imgWidht}px`, height: `${imgHeight}px`}}>
+              <div className='camera-item' style={{width: `${imgWidht}px`, height: `${imgHeight}px`}} data-active={active}>
                 <Flex justifyContent='space-around' alignItems='center' className='camera-item-mask' >
-                  {
-                    false &&
-                    <Link to={`/app/play?locationId=${locationId || selectedLocation.id}&&cameraId=${cameraId}&&streamId=${streamId}`} onClick={onSelect} className={classes.actionItem}>
-                      <Icon path='play_circle' width='36px' height='36px' fill='#fff' />
-                    </Link>
-                  }
                   <Link to={`/app/play?${replacePlayerURL(playerId)}`} onClick={onSelect} className={classes.actionItem}>
                     <Icon path='play_circle' width='36px' height='36px' fill='#fff' />
                   </Link>
-                  <Link to={`/app/play?${addPlayerToURL(players, playerId)}`} onClick={onSelect} className={classes.actionItem}>
+                  <Link to={`/app/play?${addPlayerToURL(playlist, playerId)}`} onClick={onSelect} className={classes.actionItem}>
                     <Icon path='add_box' width='36px' height='36px' fill='#fff' />
                   </Link>
                 </Flex>
@@ -144,7 +123,7 @@ class CameraItem extends React.Component {
                   name={name}
                   src={thumbnail}
                   bucketPrefix={tenantId} />
-                <Flex className={classes.infoContainer}>
+                <Flex className='camera-info-container'>
                   <IconText text={name} labelStyle={{ fontSize: '14px' }} path='status' widht='10px' height='10px' fill={statusColor[status]} />
                   {
                     audioParams.enabled &&

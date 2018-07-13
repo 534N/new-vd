@@ -1,0 +1,92 @@
+.vr-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%; }
+  .vr-overlay .vr-canvas-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    jusitfy-content: center;
+    align-items: center;
+    background: #000; }
+  .vr-overlay .vr-controls {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    jusitfy-content: center;
+    align-items: center;
+    background: transparent;
+    opacity: 1;
+    color: #fff;
+    pointer-events: all;
+    cursor: -webkit-grab;
+    cursor: -moz-grab; }
+    .vr-overlay .vr-controls.mouse-down {
+      cursor: -webkit-grabbing;
+      cursor: -moz-grabbing; }
+    .vr-overlay .vr-controls .zoom-panel {
+      position: absolute;
+      top: 150px;
+      right: 50px;
+      width: 70px;
+      display: flex;
+      jusitfy-content: center;
+      align-items: center; }
+    .vr-overlay .vr-controls .padding-panel {
+      position: absolute;
+      top: 150px;
+      right: 100px;
+      width: 70px;
+      background: rgba(0, 0, 0, 0.28);
+      width: auto;
+      display: felx;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center; }
+    .vr-overlay .vr-controls .padding-sliders-container {
+      height: 220px;
+      display: felx;
+      flex-direction: row;
+      justify-content: space-around; }
+    .vr-overlay .vr-controls .padding-value {
+      width: auto;
+      margin: 5px;
+      display: felx;
+      align-self: center; }
+    .vr-overlay .vr-controls .padding-slider {
+      height: 200px; }
+    .vr-overlay .vr-controls .control-panel {
+      position: absolute;
+      top: 50px;
+      right: 50px;
+      width: 70px;
+      height: 70px;
+      opacity: 0.8;
+      background: #fff;
+      color: #888;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      jusitfy-content: center;
+      border-radius: 100px;
+      padding: 2px;
+      box-sizing: border-box;
+      box-shadow: 0 3px 3px rgba(0, 0, 0, 0.8); }
+      .vr-overlay .vr-controls .control-panel .top, .vr-overlay .vr-controls .control-panel .bottom {
+        display: flex;
+        jusitfy-content: center;
+        align-items: center; }
+      .vr-overlay .vr-controls .control-panel .middle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%; }
+      .vr-overlay .vr-controls .control-panel .zmdi {
+        cursor: pointer;
+        opacity: 0.8;
+        font-size: 1.5em; }
+        .vr-overlay .vr-controls .control-panel .zmdi:hover {
+          opacity: 1;
+          transform: scale(1.4); }

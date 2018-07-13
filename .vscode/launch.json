@@ -8,7 +8,7 @@
     {
       "type": "chrome",
       "request": "launch",
-      "name": "Launch Chrome against localhost",
+      "name": "Launch Chrome against cookie-hell",
       "url": "http://cookie-hell.solinkcloud.com",
       "webRoot": "${workspaceFolder}"
     }

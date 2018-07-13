@@ -22,6 +22,7 @@ const initPlayerState = {
   paused: false,
   ended: false,
   live: false,
+  is360: false,
   error: null,
 };
 

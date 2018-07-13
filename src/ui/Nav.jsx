@@ -98,7 +98,7 @@ const hasPlayerMounted = players => Object.keys(players).length > 0;
 class MiniDrawer extends React.Component {
   constructor(props) {
     super(props);
-    const { width, video } = props;
+    const { width } = props;
 
     this.state = {
       open: mdDown(width) ? false : true,
@@ -114,7 +114,7 @@ class MiniDrawer extends React.Component {
   }
 
   render() {
-    const { classes, theme, width, locations, video } = this.props;
+    const { classes, theme, width, locations, video: { players } } = this.props;
     const { open } = this.props;
 
     const content = (
@@ -135,7 +135,7 @@ class MiniDrawer extends React.Component {
     return (
       <div className={classes.root} id='app-nav'>
         {
-          (hasPlayerMounted(video.players) || mdUp(width)) &&
+          (hasPlayerMounted(players) || mdUp(width)) &&
           <Drawer
             variant='temporary'
             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
@@ -151,7 +151,7 @@ class MiniDrawer extends React.Component {
           </Drawer>
         }
         {
-          !hasPlayerMounted(video.players) &&
+          !hasPlayerMounted(players) &&
           <Hidden smDown implementation='css'>
             <Drawer
               variant='permanent'

@@ -1,6 +1,8 @@
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
+import queryString from 'query-string'
+import _ from 'lodash'
 
 import { store } from '../store'
 import Nav from '../ui/Nav'
@@ -14,7 +16,6 @@ import EventsSubLayout from './EventsSubLayout'
 import CamerasSubLayout from './CamerasSubLayout'
 import VideoPlayingSubLayout from './VideoPlayingSubLayout'
 import Mask from '../components/Mask'
-import ForceLogout from '../components/ForceLogout'
 
 
 const logout = () => {
@@ -26,6 +27,21 @@ const logout = () => {
 }
 
 class PrimaryLayout extends React.Component {
+  constructor(props) {
+    super(props);
+
+    const { match, location, video: { players } } = props;
+    const playlist = queryString.parse(location.search);
+
+    let redirect = null;
+
+    if (_.isEmpty(playlist) && !_.isEmpty(players)) {
+      const params = Object.keys(players).map((id, idx) => `player${idx}=${id}`).join('&');
+      // redirect = `${match.path}/play?${params}`;
+    }
+
+    this.state = { redirect };
+  }
 
   componentWillMount() {
     const { width } = this.props;
@@ -40,32 +56,31 @@ class PrimaryLayout extends React.Component {
   }
 
   render() {
-    const { match, width, locations, error } = this.props;
-
-    if (error) {
-      return <ForceLogout />
-    }
+    const { match, width, locations, video } = this.props;
+    const { redirect } = this.state;
 
     return (
-      <Grid container spacing={0} alignItems='stretch' style={{height: `100%`, overflowY: 'hidden'}}>
-        <Grid item >
-          <Nav width={width} locations={locations} />
-        </Grid>
-        <Grid item xs>
-          {
-            locations.fetching
-            ? <Mask text={`Loading locations`}/>
-            : <Switch>
-                <Route path={`${match.path}`} exact component={Home} />
-                <Route path={`${match.path}/events`} component={EventsSubLayout} />
-                <Route path={`${match.path}/cameras`} render={props => <CamerasSubLayout {...props} locState={locations} locations={locations.locations} width={width} />} />
-                <Route path={`${match.path}/play`} render={props => <VideoPlayingSubLayout  {...props} locState={locations} width={width} {...props} /> } />
-                <Route path={`${match.path}/logout`} component={logout} />
-                <Redirect to={`${match.url}`} />
-              </Switch>
-          }
-        </Grid>
-      </Grid>
+      redirect 
+        ? <Redirect to={redirect} />
+        : <Grid container spacing={0} alignItems='stretch' style={{height: `100%`, overflowY: 'hidden'}}>
+            <Grid item >
+              <Nav width={width} locations={locations} match={match} />
+            </Grid>
+            <Grid item xs>
+              {
+                locations.fetching
+                ? <Mask text={`Loading locations`}/>
+                : <Switch>
+                    <Route path={`${match.path}`} exact component={Home} />
+                    <Route path={`${match.path}/events`} component={EventsSubLayout} />
+                    <Route path={`${match.path}/cameras`} render={props => <CamerasSubLayout {...props} locState={locations} locations={locations.locations} width={width} />} />
+                    <Route path={`${match.path}/play`} render={props => <VideoPlayingSubLayout  {...props} locState={locations} width={width} video={video}/> } />
+                    <Route path={`${match.path}/logout`} component={logout} />
+                    <Redirect to={`${match.url}`} />
+                  </Switch>
+              }
+            </Grid>
+          </Grid>
     )
   }
 }
@@ -73,6 +88,6 @@ class PrimaryLayout extends React.Component {
 export default connect(state => {
   return {
     locations: state.locations,
-    ...state.error
+    video: state.video,
   };
 })(withWidth()(PrimaryLayout));

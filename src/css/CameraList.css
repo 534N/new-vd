@@ -14,7 +14,8 @@
   scrollbar-track-color: transparent; }
 
 #camera-list {
-  overflow: scroll; }
+  overflow: scroll;
+  padding: 1em 0 5em 0; }
   #camera-list::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 8px;

@@ -3,6 +3,7 @@ import Mask from '../components/Mask'
 import Hls from 'connect-hls.js';
 
 import PlayerOverlay from './PlayerOverlay'
+import VROverlay from '../components/VROverlay'
 
 class Player extends React.Component {
   constructor(props) {
@@ -54,12 +55,16 @@ class Player extends React.Component {
   }
 
   render() {
-    const { m3u8, id, multiPlay } = this.props;
+    const { m3u8, id, multiPlay, is360 } = this.props;
     const height = multiPlay ? '100%' : 'calc(100vw * 9 / 16)';
 
     return (
       <div style={{width: '100%', height: height, position: 'relative'}}>
-        <PlayerOverlay id={id} {...this.props} />
+        {
+          is360
+            ? <VROverlay />
+            : <PlayerOverlay id={id} {...this.props} />
+        }
         <video
           style={{
             objectFit: `fill`,

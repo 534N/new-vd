@@ -28,35 +28,6 @@ const WindowReducer = (state = {
   return state
 }
 
-const ErrorReducer = (state = {
-  error: false,
-}, action) => {
-  switch(action.type) {
-    case 'ERROR': 
-      {
-        state = {
-          ...state,
-          error: true
-        }
-        break
-      }
-
-    case 'USER_LOG_OUT':
-      {
-        state = {
-          ...state,
-          error: false
-        }
-        break
-      }
-
-    default: 
-      break
-  }
-
-  return state
-}
-
 const NavReducer = (state = {
   open: false,
 }, action) => {
@@ -95,6 +66,5 @@ export default combineReducers({
   time: DateTimeReducer,
   window: WindowReducer,
   video: VideoReducer,
-  error: ErrorReducer,
   nav: NavReducer,
 });

@@ -16,6 +16,7 @@ import callhome from '../api/Callhome';
 
 import logo from '../svg/solink.svg';
 import Flex from '../components/Flex';
+import { isAuthenticated } from '../utils/AuthUtil'
 
 import '../css/Login.css';
 
@@ -85,7 +86,7 @@ class Auth extends React.Component {
     return (
       <Flex justifyContent={`center`} alignItems={`center`} id='login-page'>
         <div id='lock-panel'>
-          <Redirect to={auth.auth0Authenticated ? from : '/auth/login' } />
+          <Redirect to={isAuthenticated(auth) ? from : '/auth/login' } />
         </div>
       </Flex>
     )

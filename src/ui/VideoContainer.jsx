@@ -61,9 +61,10 @@ class VideoContainer extends React.Component {
         {
           Object.keys(players).map(playerId => {
             const config = players[playerId];
+            const is360 = playerId.match(/\|is360/);
             return (
               <Grid key={playerId} item xs={12} sm={isMultiPlay(players) ? 6 : 12} md={isMultiPlay(players) ? 6 : 12} lg={isMultiPlay(players) ? 4 : 12} className={classes.playerWrap}>
-                <Player jwtToken={auth.jwtToken} {...config} multiPlay={isMultiPlay(players)} onTimeUpdate={this._onTimeUpdate.bind(this)} />
+                <Player jwtToken={auth.jwtToken} {...config} is360={is360} multiPlay={isMultiPlay(players)} onTimeUpdate={this._onTimeUpdate.bind(this)} />
               </Grid>
             )
           })

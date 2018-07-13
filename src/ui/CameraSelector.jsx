@@ -52,6 +52,7 @@ class CameraSelector extends React.Component {
     const { locations, playlist, selectedLocation, classes, fill } = this.props;
     const { open } = this.state;
 
+
     return (
       <div>
         <div className={classes.toggle}>
@@ -70,7 +71,7 @@ class CameraSelector extends React.Component {
           className={classes.root}>
           <DialogTitle id='scroll-dialog-title'>Cameras @ {selectedLocation.name}</DialogTitle>
           <DialogContent className={classes.content} id='cameralist-wrap'>
-            <CameraList locations={locations} context='video' onSelect={this._handleClose} match={{params: { locationId: selectedLocation.id }}} />
+            <CameraList locations={locations} context='video' onSelect={this._handleClose} match={{params: { locationId: selectedLocation.id }}}  />
           </DialogContent>
         </Dialog>
       </div>

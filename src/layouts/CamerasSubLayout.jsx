@@ -44,7 +44,7 @@ class CamerasSubLayout extends React.Component {
     const { locations } = locState;
     
     return (
-      <CamerasPageContext.Provider value={{ auth, width, selectedLocation: null, players}}>
+      <CamerasPageContext.Provider value={{ auth, width, selectedLocation: null, playlist: players}}>
         <AppBar position='sticky' color='default' classes={{colorDefault: classes.colorDefault}} style={{height: '65px', boxShadow: 'none', borderBottom: '1px solid #ddd'}}>
           <Toolbar>
             <Hidden mdUp>
