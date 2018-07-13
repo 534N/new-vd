@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link, withRouter } from 'react-router-dom'
-import { Switch, Route } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles'
 
@@ -8,9 +7,6 @@ import S3Image from '../components/S3Image'
 import Flex from '../components/Flex'
 import Icon from '../components/Icon'
 import IconText from '../components/IconText'
-
-import ErrorHandler from '../utils/ErrorHandler'
-
 
 import '../css/CameraItem.css'
 
@@ -104,7 +100,7 @@ class CameraItem extends React.Component {
             const { tenantId } = auth;
             const [imgWidht, imgHeight] = sizes[context][windowWidth];
 
-            const playerId = `${locationId || selectedLocation.id}|${cameraId}|${streamId}` + is360(name) ? '|is360' : '';
+            const playerId = `${locationId || selectedLocation.id}|${cameraId}|${streamId}${is360(name) ? '|is360' : ''}`;
             const active = Object.values(playlist).indexOf(playerId) > -1;
 
             return (

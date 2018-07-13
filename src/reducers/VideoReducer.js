@@ -163,6 +163,15 @@ const VideoReducer = (state = {
           break;
         }
 
+      case 'CLEAR_VIDEO_CACHE':
+        {
+          state = {
+            ...state,
+            players: {}
+          }
+
+          break;
+        }
 
       case 'REMOVE_VIDEO': 
         {
