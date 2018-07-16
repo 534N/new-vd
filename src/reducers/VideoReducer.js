@@ -24,6 +24,7 @@ const initPlayerState = {
   live: false,
   is360: false,
   error: null,
+  camera: null,
 };
 
 const VideoReducer = (state = {
@@ -46,7 +47,8 @@ const VideoReducer = (state = {
         {
           const {
             playerId,
-            replace
+            replace,
+            camera
           } = action.payload;
 
           // 
@@ -54,6 +56,7 @@ const VideoReducer = (state = {
           const playerState = {
             ...initPlayerState,
             id: playerId,
+            camera,
           };
 
           // 
@@ -167,7 +170,8 @@ const VideoReducer = (state = {
         {
           state = {
             ...state,
-            players: {}
+            players: {},
+            camera: null,
           }
 
           break;
@@ -194,6 +198,7 @@ const VideoReducer = (state = {
           state = {
             ...state,
             players: {},
+            camera: null,
           }
           break;
         }
@@ -204,6 +209,7 @@ const VideoReducer = (state = {
             ...state,
             fullscreen: false,
             players: {},
+            camera: null,
           }
           break;
         }

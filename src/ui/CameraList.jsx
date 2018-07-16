@@ -44,7 +44,12 @@ class CameraList extends React.Component {
 
     const { match, locations } = props;
     const { locationId } = match.params;
-    const selectedLocation = _.find(locations, loc => loc.id === locationId);
+    const selectedLocation = _.find(locations, loc => {
+      console.debug('loc >>> ', loc.id)
+      console.debug('locationId >>> ', locationId)
+      return loc.id === locationId
+    });
+
 
     this.state = {
       selectedLocation

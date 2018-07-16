@@ -6,7 +6,7 @@ import ProjectionDome from '../libs/ProjectionDome'
 
 import ('../css/VROverlay.css')
 
-export default class VROverlay extends React.Component {
+export default class VROverlay extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -70,7 +70,7 @@ export default class VROverlay extends React.Component {
   render() {
     return (
       <div className='vr-overlay' style={this.props.style}>
-        <div ref='canvasContainer' className='vr-canvas-container' />
+        <div ref='canvasContainer' style={{height: '100%'}} className='vr-canvas-container' />
         { this.renderControls() }
       </div>
     );

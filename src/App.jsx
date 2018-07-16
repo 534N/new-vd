@@ -24,6 +24,14 @@ import PrivateRoute from './PrivateRoute';
 import PrimaryLayout from './layouts/PrimaryLayout.jsx';
 import UnauthorizedLayout from './layouts/UnauthorizedLayout';
 
+window.addEventListener("beforeunload", function( event ) {
+  // make the close button ineffective
+  event.preventDefault();
+
+  
+  store.dispatch({ type: 'WINDOW_CLOSE', payload: {}})
+}, false);
+
 const App = props => (
   <MuiPickersUtilsProvider utils={MomentUtils}>
     <Provider store={store}>

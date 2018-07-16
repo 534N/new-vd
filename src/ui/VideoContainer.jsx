@@ -30,6 +30,10 @@ const styles = () => ({
 const isMultiPlay = players => Object.keys(players).length > 1;
 const isMultiRows = players => Object.keys(players).length > 2;
 
+const getCamera = (locations, locationId, cameraId) => {
+  const { cameras } = _.find(locations, l => l.id === locationId);
+  return _.find(cameras, c => c.cameraId === cameraId);
+}
 
 class VideoContainer extends React.Component {
   constructor(props) {
@@ -80,7 +84,9 @@ class VideoContainer extends React.Component {
       const playerId = playlist[playerIdx];
       
       const [ locationId, cameraId, streamId ] = playerId.split('|');
-      store.dispatch({ type: 'INIT_VIDEO', payload: { playerId, replace } })
+      const camera = getCamera(locations, locationId, cameraId);
+
+      store.dispatch({ type: 'INIT_VIDEO', payload: { playerId, replace, camera } })
       getM3u8(locations, playerId, locationId, cameraId, streamId, time);
       listVideo(locations, playerId, locationId, cameraId, streamId, time, auth.tenantId, auth.jwtToken, user.user);
     })

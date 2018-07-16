@@ -3,7 +3,11 @@ import Mask from '../components/Mask'
 import Hls from 'connect-hls.js';
 
 import PlayerOverlay from './PlayerOverlay'
-import VROverlay from '../components/VROverlay'
+import VROverlayWrap from './VROverlayWrap'
+
+
+
+
 
 class Player extends React.Component {
   constructor(props) {
@@ -62,7 +66,7 @@ class Player extends React.Component {
       <div style={{width: '100%', height: height, position: 'relative'}}>
         {
           is360
-            ? <VROverlay />
+            ? <VROverlayWrap videoElement={this.refs.roiPlayer} />
             : <PlayerOverlay id={id} {...this.props} />
         }
         <video
