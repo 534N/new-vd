@@ -173,17 +173,20 @@ export default class VROverlay extends React.PureComponent {
   videoElementReady(videoElement) {
     const h = this._determineHeight();
 
+    const { lat, lon } = this.props.position;
+    const { paddingX, paddingY } = this.state;
+
     this.p = new ProjectionDome(this.refs.canvasContainer, h * 16 / 9, h, videoElement, {
       inverseHPanning: true,
       inverseVPanning: true,
       speedX: 0.1,
       speedY: 0.1,
-      lon: this.props.position.lon,
-      lat: this.props.position.lat,
+      lon: lon,
+      lat: lat,
       mouseSensitivityX: IsMobile.phone ? 0.5 : 0.1,
       mouseSensitivityY: IsMobile.phone ? 0.5 : 0.1,
-      paddingX: this.state.paddingX,
-      paddingY: this.state.paddingY
+      paddingX: paddingX,
+      paddingY: paddingY
     });
 
     this.p.onloadeddata();

@@ -54,14 +54,14 @@ class VROverlayWrap extends React.PureComponent {
 
     this.state = {
       splits: initSplit,
+      position: initPositions[`split-${initSplit}`],
     };
   }
 
   componentWillReceiveProps(nextProps) {
     const { videoElement } = nextProps;
 
-    debugger
-    if (videoElement) {
+    if (videoElement && !this.initialized) {
       this._init360(videoElement)
     }
   }
@@ -70,7 +70,7 @@ class VROverlayWrap extends React.PureComponent {
     return (
       <div style={{
         position: 'absolute',
-        zIndex: 10000,
+        zIndex: 1000,
         height: '100%',
         width: '100%',
       }}>
@@ -80,8 +80,8 @@ class VROverlayWrap extends React.PureComponent {
   }
 
   _renderVROverlay() {
-    const { VRSettings = {}, togglePausePlay, videoElement } = this.props
-    const { splits } = this.state;
+    const { VRSettings = null, togglePausePlay, videoElement } = this.props
+    const { splits, position: positionState } = this.state;
 
     let renderList = [];
       
@@ -89,7 +89,7 @@ class VROverlayWrap extends React.PureComponent {
   
       const splitIndex = `split-${i}`;
       const style      = splitStyles[splitIndex];
-      const position   = initPositions[splitIndex];
+      const position   = positionState[i-1];
       const paddingX   = VRSettings ? VRSettings.widthRatio : 1.0;
       const paddingY   = VRSettings ? VRSettings.heightRatio : 1.0;
 
@@ -130,6 +130,8 @@ class VROverlayWrap extends React.PureComponent {
     for (let i = 1; i <= splits; i++) {
       this.refs[`vrOverlay-${i}`].videoElementReady(videoElement);
     }
+
+    this.initialized = true;
   }
 
   _updatePositions() {

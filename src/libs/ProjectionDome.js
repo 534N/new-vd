@@ -9,6 +9,8 @@ function ProjectionDome( parentEl, w, h, videoEl, options ) {
 
     this._video = videoEl;
 
+    console.debug('videoEl >>> ', videoEl)
+
     this.options = options || {};
 
     this._paddingX = -1;
@@ -178,7 +180,7 @@ ProjectionDome.prototype = {
                         fragmentShader:  ProjectionDome.fragmentShader2,
                         vertexShader:    ProjectionDome.vertexShader,
                         uniforms:        self._uniforms,
-                    // wireframe:        true
+                    wireframe:        true
                     })
 
                     // for tests only, draw wireframe
@@ -269,7 +271,6 @@ ProjectionDome.prototype = {
         
         // set our animate function to fire next time a frame is ready
         this._requestAnimationId = requestAnimationFrame( this.animate.bind(this) );
-
         if ( this._video.readyState === this._video.HAVE_ENOUGH_DATA) {
 
             if (!this._texture) { return; }
@@ -331,6 +332,7 @@ ProjectionDome.prototype = {
 
         if ( this._capture && typeof(this._capture) === 'function') {
             var imgUrl = this._renderer.domElement.toDataURL('image/png');
+
             this._capture(imgUrl);
             this._capture = null;
         }

@@ -77,6 +77,7 @@ class Auth extends React.Component {
 
   componentDidMount() {
     this.lock.show();
+    store.dispatch({ type: 'USER_LOG_OUT', payload: {} })
   }
 
   render() {
