@@ -53,7 +53,7 @@ export const configLocationParams = (l, localId, allowRemotePlayback) => {
     l.isLocal = true;
     l.useRelay = false;
   } else if (l.isRelayEnabled) {
-    l.accessibleAddress = l.vmsRelayUrl;
+    l.accessibleAddress = allowRemotePlayback ? l.vmsRelayUrl : l.vmsLocalHttpsUrl;
     l.isLocal = !allowRemotePlayback;
     l.useRelay = true;
   } else {

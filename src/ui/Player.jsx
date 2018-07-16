@@ -66,7 +66,7 @@ class Player extends React.Component {
       <div style={{width: '100%', height: height, position: 'relative'}}>
         {
           is360
-            ? <VROverlayWrap videoElement={this.refs.roiPlayer} />
+            ? <VROverlayWrap videoElement={this.refs.roiPlayer} multiPlay={multiPlay} />
             : <PlayerOverlay id={id} {...this.props} />
         }
         <video

@@ -180,7 +180,6 @@ ProjectionDome.prototype = {
                         fragmentShader:  ProjectionDome.fragmentShader2,
                         vertexShader:    ProjectionDome.vertexShader,
                         uniforms:        self._uniforms,
-                    wireframe:        true
                     })
 
                     // for tests only, draw wireframe

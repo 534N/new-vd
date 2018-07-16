@@ -8,14 +8,15 @@ import Grid from '@material-ui/core/Grid'
 import withWidth from '@material-ui/core/withWidth'
 
 // Sub Layouts
+import DashboardSubLayout from './DashboardSubLayout'
 import EventsSubLayout from './EventsSubLayout'
 import CamerasSubLayout from './CamerasSubLayout'
 import VideoPlayingSubLayout from './VideoPlayingSubLayout'
+
 import Mask from '../components/Mask'
 
 import { store } from '../store'
 import Nav from '../ui/Nav'
-import Home from '../pages/Home'
 import RedirectDialog from '../ui/RedirectDialog'
 
 
@@ -74,7 +75,7 @@ class PrimaryLayout extends React.Component {
             locations.fetching
             ? <Mask text={`Loading locations`}/>
             : <Switch>
-                <Route path={`${match.path}`} exact component={Home} />
+                <Route path={`${match.path}`} exact render={props => <DashboardSubLayout {...props} selectedLocation={locations.selectedLocation} locations={locations.locations} width={width} video={video} /> } />
                 <Route path={`${match.path}/events`} component={EventsSubLayout} />
                 <Route path={`${match.path}/cameras`} render={props => <CamerasSubLayout {...props} locState={locations} locations={locations.locations} width={width} />} />
                 <Route path={`${match.path}/play`} render={props => <VideoPlayingSubLayout  {...props} locState={locations} width={width} video={video}/> } />

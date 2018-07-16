@@ -6,6 +6,7 @@ import CustomerReducer from './reducers/CustomerReducer'
 import LocationsReducer from './reducers/LocationsReducer'
 import DateTimeReducer from './reducers/DateTimeReducer'
 import VideoReducer from './reducers/VideoReducer'
+import ChartReducer from './reducers/ChartReducer'
 
 
 const WindowReducer = (state = {
@@ -67,4 +68,5 @@ export default combineReducers({
   window: WindowReducer,
   video: VideoReducer,
   nav: NavReducer,
+  charts: ChartReducer,
 });
