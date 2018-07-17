@@ -1,13 +1,25 @@
 
 const charts = {
-  c1: {
+  top3: {
     id: 'c1',
     type: 'histogram',
     showOnDashboard: true,
     name: 'Top 3',
+    data: null,
+    unit: 'Revenue',
     // query: 'events/top3'
-    description: 'This is the top 3 histogram, you can change this description to anything you like'
+    description: 'This is the top 3 stores by total revenues'
+  },
+  void5: {
+    id: 'void5',
+    type: 'histogram',
+    showOnDashboard: true,
+    name: '5+ Voided Items',
+    data: null,
+    unit: '',
+    description: '5+ voided items',
   }
+
 }
 
 
@@ -40,6 +52,31 @@ const ChartReducer = (state = {
       //
       // SHARED ACTIONS
       //
+
+    case 'CHART_INFO_FULFILLED':
+      {
+        const { key } = action.meta;
+
+        const {
+          data
+        } = action.payload;
+
+
+        const chart = {
+          ...state.charts[key],
+          data
+        }
+
+        charts[key] = chart
+
+        state = {
+          ...state,
+          charts
+        }
+
+        break;
+      }
+
     case 'USER_LOG_OUT':
       {
         state = {
