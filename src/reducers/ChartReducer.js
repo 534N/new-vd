@@ -1,15 +1,17 @@
 
 const charts = {
-  top3: {
-    id: 'c1',
-    type: 'histogram',
-    showOnDashboard: true,
-    name: 'Top 3',
-    data: null,
-    unit: 'Revenue',
-    // query: 'events/top3'
-    description: 'This is the top 3 stores by total revenues'
-  },
+  // top3: {
+  //   id: 'top3',
+  //   type: 'aggregation',
+  //   showOnDashboard: true,
+  //   name: 'Top 3',
+  //   data: null,
+  //   unit: 'Revenue',
+  //   aggregation: 'sum',
+  //   config: 'top3Config',
+  //   query: 'getTop3Chart',
+  //   description: 'This is the top 3 stores by total revenues'
+  // },
   void5: {
     id: 'void5',
     type: 'histogram',
@@ -17,7 +19,10 @@ const charts = {
     name: '5+ Voided Items',
     data: null,
     unit: '',
+    query: 'getVoid5Chart',
+    config: 'void5Config',
     description: '5+ voided items',
+
   }
 
 }
@@ -27,32 +32,6 @@ const ChartReducer = (state = {
   charts: charts,
 }, action) => {
   switch (action.type) {
-    // case 'ADD_Chart':
-    //   {
-    //     const {
-    //       id,
-    //       type,
-    //       data
-    //     } = action.payload;
-
-    //     const charts = state.charts;
-    //     charts[id] = {
-    //       id,
-    //       type,
-    //       data,
-    //     }
-
-    //     state = {
-    //       ...state,
-    //       charts,
-    //     }
-    //     break;
-    //   }
-
-      //
-      // SHARED ACTIONS
-      //
-
     case 'CHART_INFO_FULFILLED':
       {
         const { key } = action.meta;
@@ -60,7 +39,6 @@ const ChartReducer = (state = {
         const {
           data
         } = action.payload;
-
 
         const chart = {
           ...state.charts[key],

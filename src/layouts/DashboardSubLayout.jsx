@@ -22,9 +22,9 @@ class DashboardSubLayout extends React.Component {
 
     return (
       <Grid container>
-        <Grid item xs={12} sm={6} md={6} lg={3}>
+        <Grid item xs={12} sm={6} md={8} lg={6}>
           {
-            Object.values(charts).map(chart => <Histogram key={chart.id} locations={locations} time={time} chart={chart} auth={auth}/>)
+            Object.values(charts).map((chart, idx) => <Histogram key={idx} locations={locations} time={time} chart={chart} auth={auth}/>)
           }
         </Grid>
       </Grid>

@@ -3,12 +3,13 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import numeral from 'numeral'
 import axios from 'axios'
-import ReactHighcharts from 'react-highcharts'
 import Highcharts from 'highcharts'
 import _ from 'lodash'
 
+import chartConfigs from '../reducers/configs/chartConfigs'
+import platform from '../api/Platform'
+
 import { store } from '../store'
-import Platform from '../api/Platform'
 
 
 /* ACTIONS */
@@ -162,8 +163,7 @@ class Histogram extends React.Component {
   constructor(props) {
     super(props);
 
-    const { auth, time } = props;
-    const { getTop3Chart } = Platform;
+    const { auth, time, chart } = props;
     const { time: date, timeZone, range } = time;
 
     const queryBody = {
@@ -172,7 +172,8 @@ class Histogram extends React.Component {
       range: range
     }
 
-    store.dispatch({ type: 'CHART_INFO', meta: { name: 'Top 3', key: 'top3' }, payload: axios(getTop3Chart(auth.jwtToken, queryBody)) })
+    const { name, id, query } = chart;
+    store.dispatch({ type: 'CHART_INFO', meta: { name, key: id }, payload: axios(platform[query](auth.jwtToken, queryBody)) })
   }
 
   componentDidUpdate() {
@@ -180,21 +181,23 @@ class Histogram extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { auth, time } = nextProps;
-    const { getTop3Chart, getVoid5Chart } = Platform;
-    const { time: date, timeZone, range } = time;
+    // const { auth, time, chart } = nextProps;
+    // const { time: date, timeZone, range } = time;
 
-    const queryBody = {
-      date,
-      timeZone,
-      range: range
-    }
+    // const queryBody = {
+    //   date,
+    //   timeZone,
+    //   range: range
+    // }
 
-    store.dispatch({ type: 'CHART_INFO', meta: { name: 'Top 3', key: 'top3' }, payload: axios(getTop3Chart(auth.jwtToken, queryBody)) })
-    store.dispatch({ type: 'CHART_INFO', meta: { name: 'Void 5+', key: 'void5' }, payload: axios(getVoid5Chart(auth.jwtToken, queryBody)) })
+    // const { name, id, query } = chart;
+    // store.dispatch({ type: 'CHART_INFO', meta: { name, key: id }, payload: axios(platform[query](auth.jwtToken, queryBody)) })
   }
 
   render() {
+    const { chart } = this.props;
+    const { id } = chart;
+
     return (
       <div id='histogram' ref='histogram'>
         <div>
@@ -203,7 +206,7 @@ class Histogram extends React.Component {
           <div onClick={this._changeRange.bind(this, 2)}>Month</div>
           <div onClick={this._changeRange.bind(this, 3)}>Year</div>
         </div>
-        <div id="container" style={{width:'100%', height:'400px'}}></div>
+        <div id={`chart-${id}`} />
       </div>
     );
   }
@@ -213,86 +216,48 @@ class Histogram extends React.Component {
   }
 
   _renderChart() {
-    const { time } = this.props;
-    const { range } = time;
-    const { charts } = this.props;
+    const { chart } = this.props;
 
-    Object.values(charts).map(c => {
-      
-      const config = {
-        chart: {
-          type: 'spline'
-        },
-        title: {
-          text: c.name
-        },
-        subtitle: {
-          text: c.description
-        },
-        xAxis: {
-          type: 'datetime',
-          labels: {
-            overflow: 'justify'
-          }
-        },
-        yAxis: {
-          title: {
-            text: c.unit
-          },
-          labels: {
-            formatter: function () {
-              return '$' + this.value;
-            }
-          }
-        },
-        tooltip: {
-          crosshairs: true,
-          shared: true
-        },
-        plotOptions: {
-          spline: {
-            lineWidth: 4,
-            states: {
-              hover: {
-                lineWidth: 5
-              }
-            },
-            marker: {
-              enabled: false
-            },
-            pointInterval: getInterval(range), // one hour
-            pointStart: moment().startOf(range)
-          }
-        },
-        series: this._generateSeries(c.data, 'sum')
-      }
+    const { name, id, description, data, unit, config, aggregation, type } = chart;
 
-      Highcharts.chart('container', config);
-    })
+    console.debug('data >>> ', data)
+    if (!data) {
+      return
+    }
+    Highcharts.chart(`chart-${id}`, chartConfigs[config](name, description, unit, this._generateSeries(data, type, aggregation)));
   }
 
-  _generateSeries = (data, type) => {
-
+  _generateSeries = (data, type, aggregation) => {
     const { locations } = this.props;
+    
+    if (type === 'aggregation') {
+      return data.map(d => {
+        const { results, key } = d;
+        const { name } = _.find(locations, l => l.id === key);
 
-    return data.map(d => {
-      const { results, key } = d;
+        return {
+          name: name,
+          data: results.map(rec => [+new Date(rec.startTime), parseInt(rec.stats[aggregation])])
+        }
+      });
+    } else if ( type === 'histogram') {
+      const transactions = { name: 'transaction', color: 'rgba(114, 191, 99, 0.8)', data: [] };
 
-      const { name } = _.find(locations, l => l.id === key);
+      const transactionData = data.results.map(d => _.find(d.results, r => d.type === 'transaction'))
 
-      return {
-        name: name,
-        // marker: {
-        //   symbol: 'square'
-        // },
-        data: results.map(rec => parseInt(rec.stats[type]))
-      }
-    });
+      debugger
+      // debugger
+      // Object.values(data.results).forEach(d => {
+      //   const { results } = d;
+      //   const t = _.find(results, o => o.type === 'transaction');
+      //   transactions.data.push(t.count);
+      // })
+
+      // return [transactions];
+    }
+
+    
   }
 }
 
-export default connect(state => {
-  return {
-    ...state.charts,
-  };
-})(Histogram);
+export default Histogram
