@@ -44,7 +44,7 @@ const top3Config = (name, description, yAxisLabel, series) => ({
 
 const void5Config = (name, description, yAxisLabel, series) => ({
   chart: {
-    type: 'column'
+    type: 'spline'
   },
   title: {
     text: name
@@ -54,22 +54,36 @@ const void5Config = (name, description, yAxisLabel, series) => ({
   },
   xAxis: {
     type: 'datetime',
-    crosshair: true
+    labels: {
+      overflow: 'justify'
+    }
   },
   yAxis: {
-    min: 0,
     title: {
       text: yAxisLabel
+    },
+    labels: {
+      formatter: v => {
+        console.debug('this >>> ', v)
+      //   return '$' + this.value
+      }
     }
   },
   tooltip: {
-    shared: true,
-    useHTML: true
+    crosshairs: true,
+    shared: true
   },
   plotOptions: {
-    column: {
-      pointPadding: 0.2,
-      borderWidth: 0
+    spline: {
+      lineWidth: 4,
+      states: {
+        hover: {
+          lineWidth: 5
+        }
+      },
+      marker: {
+        enabled: false
+      },
     }
   },
   series,

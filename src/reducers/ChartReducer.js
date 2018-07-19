@@ -18,7 +18,7 @@ const charts = {
     showOnDashboard: true,
     name: '5+ Voided Items',
     data: null,
-    unit: '',
+    unit: 'Revenue',
     query: 'getVoid5Chart',
     config: 'void5Config',
     description: '5+ voided items',

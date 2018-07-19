@@ -220,6 +220,7 @@ class Histogram extends React.Component {
 
     const { name, id, description, data, unit, config, aggregation, type } = chart;
 
+    
     console.debug('data >>> ', data)
     if (!data) {
       return
@@ -243,9 +244,11 @@ class Histogram extends React.Component {
     } else if ( type === 'histogram') {
       const transactions = { name: 'transaction', color: 'rgba(114, 191, 99, 0.8)', data: [] };
 
-      const transactionData = data.results.map(d => _.find(d.results, r => d.type === 'transaction'))
+      transactions.data = data.results.map(d => {
+        const rec = _.find(d.results, r => r.type === 'transaction') || {};
+        return parseInt(rec.totalAmountSum) || 0;
+      });
 
-      debugger
       // debugger
       // Object.values(data.results).forEach(d => {
       //   const { results } = d;
@@ -253,7 +256,7 @@ class Histogram extends React.Component {
       //   transactions.data.push(t.count);
       // })
 
-      // return [transactions];
+      return [transactions];
     }
 
     
