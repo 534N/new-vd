@@ -6,12 +6,12 @@ import axios from 'axios'
 import Highcharts from 'highcharts'
 import _ from 'lodash'
 
+
 import chartConfigs from '../reducers/configs/chartConfigs'
 import platform from '../api/Platform'
 
 import Mask from '../components/Mask'
 import { store } from '../store'
-
 
 /* ACTIONS */
 // import FilterActions from 'actions/FilterActions';
@@ -30,6 +30,12 @@ import { store } from '../store'
 /* MISC */
 /* SASS */
 import '../css/histogram.css';
+import BellCurve from 'highcharts/modules/histogram-bellcurve'
+import HighchartsMore from 'highcharts/highcharts-more'
+
+
+BellCurve(Highcharts)
+HighchartsMore(Highcharts)
 
 const categories = [
   {
@@ -175,9 +181,12 @@ class Histogram extends React.Component {
 
     const { name, id, query } = chart;
     store.dispatch({ type: 'CHART_INFO', meta: { name, key: id }, payload: axios(platform[query](auth.jwtToken, queryBody)) })
+
+    this.charts = {};
+
   }
 
-  componentDidUpdate() {
+  componentWillUpdate() {
     this._renderChart()
   }
 
@@ -192,25 +201,82 @@ class Histogram extends React.Component {
     }
 
     const { name, id, query, fetching } = chart;
-
-    console.debug('next round >>> ', fetching)
-    store.dispatch({ type: 'CHART_INFO', meta: { name, key: id }, payload: axios(platform[query](auth.jwtToken, queryBody)) })
   }
 
   render() {
     const { chart } = this.props;
     const { id, fetching } = chart;
 
-    console.debug('fetching >>> ', fetching)
     return (
-      <div ref='histogram'>
+      <div ref='histogram' style={{border: `1px solid #eee`}}>
         {
-          fetching &&
+          false && fetching &&
           <Mask />
         }
-        <div id={`chart-${id}`} />
+        <div id={`chart-${id}`} height='200px' onMouseEnter={this._mouseEnterChart.bind(this)} onMouseLeave={this._mouseLeaveChart.bind(this)} />
       </div>
     );
+  }
+
+  _mouseEnterChart(e) {
+
+    const id = e.target.id;
+    const chart = this.charts[id];
+
+    const { 
+      userOptions: { subtitle },
+      currentResponsive: {
+        mergedOptions: {
+          chart: {
+            height: currentHeight,
+          }
+        }
+      }
+    } = chart;
+
+    chart.update({
+      chart: {
+        height: currentHeight + 100
+      },
+      yAxis: {
+        visible: true,
+      },
+      subtitle,
+      legend: {
+        enabled: true,
+      },
+    })
+  }
+
+  _mouseLeaveChart(e) {
+
+    const id = e.target.id;
+    const chart = this.charts[id];
+
+    const {
+      currentResponsive: {
+        mergedOptions: {
+          chart: {
+            height,
+          }
+        }
+      }
+    } = chart;
+
+    chart.update({
+      chart: {
+        height
+      },
+      yAxis: {
+        visible: false,
+      },
+      subtitle: {
+        text: null,
+      },
+      legend: {
+        enabled: false,
+      },
+    })
   }
 
   _changeRange(rangeIdx) {
@@ -220,12 +286,12 @@ class Histogram extends React.Component {
   _renderChart() {
     const { chart } = this.props;
     const { name, id, description, data, unit, config, aggregation, type, fetching } = chart;
-console.debug('name >>> ', name)
-console.debug('data >>> ', data)
     if (!data || fetching) {
       return
     }
-    Highcharts.chart(`chart-${id}`, chartConfigs[config](name, description, unit, this._generateSeries(data, type, aggregation)));
+    this.charts[`chart-${id}`] = Highcharts.chart(`chart-${id}`, chartConfigs[config](name, description, unit, this._generateSeries(data, type, aggregation)));
+
+
   }
 
   _generateSeries = (data, type, aggregation) => {
@@ -241,7 +307,7 @@ console.debug('data >>> ', data)
           data: results.map(rec => [+new Date(rec.startTime), parseInt(rec.stats[aggregation])])
         }
       });
-    } else if ( type === 'histogram') {
+    } else if ( type === 'combined') {
       const totalAmount = {
         type: 'spline',
         name: 'Total Amount',
@@ -269,10 +335,10 @@ console.debug('data >>> ', data)
       });
 
       return [ totalCount, totalAmount  ];
+    } else if ( type === 'histogram') {
+      
     }
-
-    
-  }
+  } 
 }
 
 export default Histogram

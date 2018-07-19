@@ -30,8 +30,18 @@ const getVoid5Chart = (jwtToken, params) => ({
   }
 })
 
+const allEventsChart = (jwtToken, params) => ({
+  method: 'GET',
+  url: `${host}/events/histogram`,
+  headers: getHeader(jwtToken),
+  data: {
+    ...params,
+  }
+})
+
 
 export default {
   getTop3Chart,
   getVoid5Chart,
+  allEventsChart
 }

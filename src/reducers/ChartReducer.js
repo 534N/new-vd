@@ -15,7 +15,7 @@ const charts = {
   },
   void5: {
     id: 'void5',
-    type: 'histogram',
+    type: 'combined',
     showOnDashboard: true,
     name: '5+ Voided Items',
     data: null,
@@ -24,7 +24,19 @@ const charts = {
     config: 'void5Config',
     description: '5+ voided items',
     fetching: false,
+  },
+  spiderWeb: {
+    id: 'spiderWeb',
+    type: 'spider',
+    showOnDashboard: true,
+    name: 'Regular histogram',
+    data: null,
+    unit: 'Events',
+    query: 'allEventsChart',
+    config: 'spiderWebConfig',
+    description: 'testing histogram',
   }
+
 
 }
 
@@ -59,25 +71,25 @@ const ChartReducer = (state = {
         break;
       }
 
-    case 'CHART_INFO_PENDING':
-      {
-        const { key } = action.meta;
+    // case 'CHART_INFO_PENDING':
+    //   {
+    //     const { key } = action.meta;
 
-        const chart = {
-          ...state.charts[key],
-          fetching: true,
-          timestamp: +new Date(),
-        }
+    //     const chart = {
+    //       ...state.charts[key],
+    //       fetching: true,
+    //       timestamp: +new Date(),
+    //     }
 
-        charts[key] = chart
+    //     charts[key] = chart
 
-        state = {
-          ...state,
-          charts
-        }
+    //     state = {
+    //       ...state,
+    //       charts
+    //     }
 
-        break;
-      }
+    //     break;
+    //   }
 
     case 'USER_LOG_OUT':
       {
