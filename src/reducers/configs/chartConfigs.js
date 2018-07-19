@@ -19,7 +19,9 @@ const top3Config = (name, description, yAxisLabel, series) => ({
       text: yAxisLabel
     },
     labels: {
-      formatter: () => '$' + this.value
+      formatter: function() {
+        return '$' + this.value;
+      } 
     }
   },
   tooltip: {
@@ -43,8 +45,11 @@ const top3Config = (name, description, yAxisLabel, series) => ({
 })
 
 const void5Config = (name, description, yAxisLabel, series) => ({
+  // chart: {
+  //   type: 'spline'
+  // },
   chart: {
-    type: 'spline'
+    zoomType: 'xy'
   },
   title: {
     text: name
@@ -52,23 +57,31 @@ const void5Config = (name, description, yAxisLabel, series) => ({
   subtitle: {
     text: description
   },
-  xAxis: {
+  xAxis: [{
     type: 'datetime',
     labels: {
       overflow: 'justify'
     }
-  },
-  yAxis: {
-    title: {
-      text: yAxisLabel
-    },
-    labels: {
-      formatter: v => {
-        console.debug('this >>> ', v)
-      //   return '$' + this.value
+  }],
+  yAxis: [
+    {
+      title: {
+        text: yAxisLabel
+      },
+      labels: {
+        formatter: function() {
+          return '$' + this.value;
+        }
       }
-    }
-  },
+    },
+    {
+      title: {
+        text: 'Count'
+      },
+      opposite: true
+    },
+
+  ],
   tooltip: {
     crosshairs: true,
     shared: true

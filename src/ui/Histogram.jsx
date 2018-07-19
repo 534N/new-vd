@@ -242,11 +242,30 @@ class Histogram extends React.Component {
         }
       });
     } else if ( type === 'histogram') {
-      const transactions = { name: 'transaction', color: 'rgba(114, 191, 99, 0.8)', data: [] };
+      const totalAmount = {
+        type: 'spline',
+        name: 'Total Amount',
+        yAxis: 0,
+        color: 'rgba(114, 191, 99, 0.8)',
+        data: []
+      };
 
-      transactions.data = data.results.map(d => {
+      const totalCount = {
+        type: 'column',
+        name: 'Number of transactions',
+        yAxis: 1,
+        color: 'rgba(150, 150, 150, 0.5)',
+        data: []
+      };
+
+      totalAmount.data = data.results.map(d => {
         const rec = _.find(d.results, r => r.type === 'transaction') || {};
         return parseInt(rec.totalAmountSum) || 0;
+      });
+
+      totalCount.data = data.results.map(d => {
+        const rec = _.find(d.results, r => r.type === 'transaction') || {};
+        return parseInt(rec.count) || 0;
       });
 
       // debugger
@@ -256,7 +275,7 @@ class Histogram extends React.Component {
       //   transactions.data.push(t.count);
       // })
 
-      return [transactions];
+      return [ totalCount, totalAmount  ];
     }
 
     
