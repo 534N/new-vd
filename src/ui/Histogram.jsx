@@ -9,6 +9,7 @@ import _ from 'lodash'
 import chartConfigs from '../reducers/configs/chartConfigs'
 import platform from '../api/Platform'
 
+import Mask from '../components/Mask'
 import { store } from '../store'
 
 
@@ -181,31 +182,32 @@ class Histogram extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // const { auth, time, chart } = nextProps;
-    // const { time: date, timeZone, range } = time;
+    const { auth, time, chart } = nextProps;
+    const { time: date, timeZone, range } = time;
 
-    // const queryBody = {
-    //   date,
-    //   timeZone,
-    //   range: range
-    // }
+    const queryBody = {
+      date,
+      timeZone,
+      range: range
+    }
 
-    // const { name, id, query } = chart;
-    // store.dispatch({ type: 'CHART_INFO', meta: { name, key: id }, payload: axios(platform[query](auth.jwtToken, queryBody)) })
+    const { name, id, query, fetching } = chart;
+
+    console.debug('next round >>> ', fetching)
+    store.dispatch({ type: 'CHART_INFO', meta: { name, key: id }, payload: axios(platform[query](auth.jwtToken, queryBody)) })
   }
 
   render() {
     const { chart } = this.props;
-    const { id } = chart;
+    const { id, fetching } = chart;
 
+    console.debug('fetching >>> ', fetching)
     return (
-      <div id='histogram' ref='histogram'>
-        <div>
-          <div onClick={this._changeRange.bind(this, 0)}>Day</div>
-          <div onClick={this._changeRange.bind(this, 1)}>Week</div>
-          <div onClick={this._changeRange.bind(this, 2)}>Month</div>
-          <div onClick={this._changeRange.bind(this, 3)}>Year</div>
-        </div>
+      <div ref='histogram'>
+        {
+          fetching &&
+          <Mask />
+        }
         <div id={`chart-${id}`} />
       </div>
     );
@@ -217,12 +219,10 @@ class Histogram extends React.Component {
 
   _renderChart() {
     const { chart } = this.props;
-
-    const { name, id, description, data, unit, config, aggregation, type } = chart;
-
-    
-    console.debug('data >>> ', data)
-    if (!data) {
+    const { name, id, description, data, unit, config, aggregation, type, fetching } = chart;
+console.debug('name >>> ', name)
+console.debug('data >>> ', data)
+    if (!data || fetching) {
       return
     }
     Highcharts.chart(`chart-${id}`, chartConfigs[config](name, description, unit, this._generateSeries(data, type, aggregation)));
@@ -267,13 +267,6 @@ class Histogram extends React.Component {
         const rec = _.find(d.results, r => r.type === 'transaction') || {};
         return parseInt(rec.count) || 0;
       });
-
-      // debugger
-      // Object.values(data.results).forEach(d => {
-      //   const { results } = d;
-      //   const t = _.find(results, o => o.type === 'transaction');
-      //   transactions.data.push(t.count);
-      // })
 
       return [ totalCount, totalAmount  ];
     }
