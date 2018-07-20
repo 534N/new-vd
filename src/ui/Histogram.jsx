@@ -204,11 +204,12 @@ class Histogram extends React.Component {
   }
 
   render() {
-    const { chart } = this.props;
+    const { chart, width } = this.props;
     const { id, fetching } = chart;
 
+    console.debug('width >>> ', width)
     return (
-      <div ref='histogram' style={{border: `1px solid #eee`}}>
+      <div ref='histogram' >
         {
           false && fetching &&
           <Mask />
@@ -219,29 +220,13 @@ class Histogram extends React.Component {
   }
 
   _mouseEnterChart(e) {
-
     const id = e.target.id;
     const chart = this.charts[id];
 
-    const { 
-      userOptions: { subtitle },
-      currentResponsive: {
-        mergedOptions: {
-          chart: {
-            height: currentHeight,
-          }
-        }
-      }
-    } = chart;
-
     chart.update({
-      chart: {
-        height: currentHeight + 100
-      },
       yAxis: {
         visible: true,
       },
-      subtitle,
       legend: {
         enabled: true,
       },
@@ -249,29 +234,12 @@ class Histogram extends React.Component {
   }
 
   _mouseLeaveChart(e) {
-
     const id = e.target.id;
     const chart = this.charts[id];
 
-    const {
-      currentResponsive: {
-        mergedOptions: {
-          chart: {
-            height,
-          }
-        }
-      }
-    } = chart;
-
     chart.update({
-      chart: {
-        height
-      },
       yAxis: {
         visible: false,
-      },
-      subtitle: {
-        text: null,
       },
       legend: {
         enabled: false,

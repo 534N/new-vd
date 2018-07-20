@@ -1,5 +1,17 @@
 
 const charts = {
+  rtTransactions: {
+    id: 'rtTransactions',
+    type: 'combined',
+    showOnDashboard: true,
+    name: '',
+    data: null,
+    unit: '',
+    config: 'rtTransactions',
+    query: 'transactionsInLastMin',
+    description: 'This is the top 3 stores by total revenues',
+    fetching: false,
+  },
   top3: {
     id: 'top3',
     type: 'aggregation',

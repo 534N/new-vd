@@ -39,9 +39,27 @@ const allEventsChart = (jwtToken, params) => ({
   }
 })
 
+const transactionsInLastMin = (jwtToken, params) => ({
+  method: 'GET',
+  url: `${host}/events`,
+  headers: getHeader(jwtToken),
+  data: {
+    end: +new Date() - 60 * 1000,
+    mininum_should_match: 1,
+    should: [
+      { term: { type: 'transaction' } }
+    ],
+    sorts: [
+      { startTime: { order: 'desc'}}
+    ],
+    timeFieldToSearchOn: 'startTime',
+    ...params,
+  }
+})
 
 export default {
   getTop3Chart,
   getVoid5Chart,
-  allEventsChart
+  allEventsChart,
+  transactionsInLastMin
 }
