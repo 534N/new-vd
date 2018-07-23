@@ -29,8 +29,11 @@ class DashboardSubLayout extends React.Component {
 
     return (
       <Grid container spacing={16} style={{padding: '1em', background: `#f5f5f5`, height: '100%'}}>
+        <Grid item xs={12} sm={12} md={12} lg={12} >
+          <Histogram width={width} locations={locations} time={time} chart={charts.rtTransactions} auth={auth} ignoreHover={true} />
+        </Grid>
         {
-          Object.values(charts).map((chart, idx) => (
+          Object.values(charts).filter(c => c.type !== 'rt').map((chart, idx) => (
             <Grid item xs={12} sm={6} md={6} lg={4} key={idx} >
               <Card>
                 <CardContent>

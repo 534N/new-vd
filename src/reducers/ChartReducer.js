@@ -2,7 +2,7 @@
 const charts = {
   rtTransactions: {
     id: 'rtTransactions',
-    type: 'combined',
+    type: 'rt',
     showOnDashboard: true,
     name: '',
     data: null,

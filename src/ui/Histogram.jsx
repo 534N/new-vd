@@ -180,6 +180,8 @@ class Histogram extends React.Component {
     }
 
     const { name, id, query } = chart;
+
+    console.debug('platform[query]', platform[query](auth.jwtToken, queryBody))
     store.dispatch({ type: 'CHART_INFO', meta: { name, key: id }, payload: axios(platform[query](auth.jwtToken, queryBody)) })
 
     this.charts = {};
@@ -220,6 +222,12 @@ class Histogram extends React.Component {
   }
 
   _mouseEnterChart(e) {
+    const { ignoreHover } = this.props;
+
+    if (ignoreHover) {
+      return;
+    }
+
     const id = e.target.id;
     const chart = this.charts[id];
 
@@ -234,6 +242,12 @@ class Histogram extends React.Component {
   }
 
   _mouseLeaveChart(e) {
+    const { ignoreHover } = this.props;
+
+    if (ignoreHover) {
+      return;
+    }
+
     const id = e.target.id;
     const chart = this.charts[id];
 

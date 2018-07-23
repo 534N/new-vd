@@ -43,8 +43,9 @@ const responsive = {
 
 const rtTransactions = (name, description, yAxisLabel, series) => ({
   chart: {
+    backgroundColor: '#f5f5f5',
     type: 'scatter',
-    margin: [70, 50, 60, 80],
+    height: 200,
     events: {
       click: function (e) {
         // find the clicked values and the series
@@ -59,20 +60,23 @@ const rtTransactions = (name, description, yAxisLabel, series) => ({
     }
   },
   title: {
-    text: 'User supplied data'
+    text: ''
   },
   subtitle: {
-    text: 'Click the plot area to add a point. Click a point to remove it.'
+    text: ''
   },
   xAxis: {
-    gridLineWidth: 1,
-    minPadding: 0.2,
-    maxPadding: 0.2,
-    maxZoom: 60
+    type: 'datetime',
+    // gridLineWidth: 1,
+    // minPadding: 0.2,
+    // maxPadding: 0.2,
+    // maxZoom: 60,
+    // visible: false,
   },
   yAxis: {
+    // visible: false,
     title: {
-      text: 'Value'
+      text: ''
     },
     minPadding: 0.2,
     maxPadding: 0.2,
@@ -105,8 +109,8 @@ const rtTransactions = (name, description, yAxisLabel, series) => ({
   },
   series: [{
     data: [
-      [20, 20],
-      [80, 80]
+      [1532140008377, 20],
+      [1532140108377, 80]
     ]
   }]
 
