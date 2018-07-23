@@ -7,7 +7,7 @@ import LocationsReducer from './reducers/LocationsReducer'
 import DateTimeReducer from './reducers/DateTimeReducer'
 import VideoReducer from './reducers/VideoReducer'
 import ChartReducer from './reducers/ChartReducer'
-
+import RTChartReducer from './reducers/RTChartReducer'
 
 const WindowReducer = (state = {
   width: null,
@@ -69,4 +69,5 @@ export default combineReducers({
   video: VideoReducer,
   nav: NavReducer,
   charts: ChartReducer,
+  rtChart: RTChartReducer,
 });

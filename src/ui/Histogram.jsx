@@ -170,7 +170,7 @@ class Histogram extends React.Component {
   constructor(props) {
     super(props);
 
-    const { auth, time, chart } = props;
+    const { auth, time, chart, repeatInterval } = props;
     const { time: date, timeZone, range } = time;
 
     const queryBody = {
@@ -181,8 +181,14 @@ class Histogram extends React.Component {
 
     const { name, id, query } = chart;
 
-    console.debug('platform[query]', platform[query](auth.jwtToken, queryBody))
-    store.dispatch({ type: 'CHART_INFO', meta: { name, key: id }, payload: axios(platform[query](auth.jwtToken, queryBody)) })
+    if (repeatInterval) {
+      store.dispatch({ type: 'CHART_INFO', meta: { name, key: id }, payload: axios(platform[query](auth.jwtToken, queryBody)) })
+      setInterval(() => {
+        store.dispatch({ type: 'CHART_INFO', meta: { name, key: id }, payload: axios(platform[query](auth.jwtToken, queryBody)) })
+      }, repeatInterval)
+    } else {
+      store.dispatch({ type: 'CHART_INFO', meta: { name, key: id }, payload: axios(platform[query](auth.jwtToken, queryBody)) })
+    }
 
     this.charts = {};
 
@@ -317,8 +323,17 @@ class Histogram extends React.Component {
       });
 
       return [ totalCount, totalAmount  ];
-    } else if ( type === 'histogram') {
-      
+    } else if (type === 'rt') {
+      const totalCount = {
+        data: []
+      };
+
+      totalCount.data = data.results.filter(r => r.type === 'transaction').map(d => {
+        const { details } = d;
+        return [ new Date(details['Time']), details['Total amount'] ];
+      });
+
+      return [ totalCount ]
     }
   } 
 }

@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles'
 
 import Histogram from '../ui/Histogram'
+import RTChart from '../ui/RTChart'
 
 import '../css/DashboardSubLayout.css';
 
@@ -23,16 +24,16 @@ class DashboardSubLayout extends React.Component {
     }
   }
 
-
   render() {
     const { charts, locations, time, video, auth, width } = this.props;
 
+    console.debug('charts >>> ', charts)
     return (
       <Grid container spacing={16} style={{padding: '1em', background: `#f5f5f5`, height: '100%'}}>
         <Grid item xs={12} sm={12} md={12} lg={12} >
-          <Histogram width={width} locations={locations} time={time} chart={charts.rtTransactions} auth={auth} ignoreHover={true} />
+          <RTChart width={width} time={time} auth={auth} />
         </Grid>
-        {
+        { false &&
           Object.values(charts).filter(c => c.type !== 'rt').map((chart, idx) => (
             <Grid item xs={12} sm={6} md={6} lg={4} key={idx} >
               <Card>
@@ -57,7 +58,7 @@ class DashboardSubLayout extends React.Component {
 export default connect(state => {
   return {
     time: state.time,
-    ...state.charts,
+    // ...state.charts,
     auth: state.auth,
   };
 })(DashboardSubLayout);

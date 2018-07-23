@@ -41,20 +41,24 @@ const responsive = {
 }
 
 
-const rtTransactions = (name, description, yAxisLabel, series) => ({
+const rtTransactions = (series) => {
+        console.debug('>>> ', series)
+
+  return({
   chart: {
     backgroundColor: '#f5f5f5',
-    type: 'scatter',
+    type: 'spline',
     height: 200,
     events: {
       click: function (e) {
         // find the clicked values and the series
+
         var x = Math.round(e.xAxis[0].value),
           y = Math.round(e.yAxis[0].value),
           series = this.series[0];
 
         // Add it
-        series.addPoint([x, y]);
+        // series.addPoint([x, y]);
 
       }
     }
@@ -67,14 +71,8 @@ const rtTransactions = (name, description, yAxisLabel, series) => ({
   },
   xAxis: {
     type: 'datetime',
-    // gridLineWidth: 1,
-    // minPadding: 0.2,
-    // maxPadding: 0.2,
-    // maxZoom: 60,
-    // visible: false,
   },
   yAxis: {
-    // visible: false,
     title: {
       text: ''
     },
@@ -94,7 +92,13 @@ const rtTransactions = (name, description, yAxisLabel, series) => ({
     enabled: false
   },
   plotOptions: {
+    spline: {
+      marker: {
+        enabled: true
+      }
+    },
     series: {
+      animation: false,
       lineWidth: 1,
       point: {
         events: {
@@ -108,13 +112,11 @@ const rtTransactions = (name, description, yAxisLabel, series) => ({
     }
   },
   series: [{
-    data: [
-      [1532140008377, 20],
-      [1532140108377, 80]
-    ]
+    data: series
   }]
 
 })
+}
 
 const top3Config = (name, description, yAxisLabel, series) => ({
   chart: {

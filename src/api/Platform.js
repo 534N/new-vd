@@ -39,19 +39,20 @@ const allEventsChart = (jwtToken, params) => ({
   }
 })
 
-const transactionsInLastMin = (jwtToken, params) => ({
+const transactionsInLastMin = (jwtToken, start, end) => ({
   method: 'POST',
   url: `${host}/events/query`,
   headers: getHeader(jwtToken),
   data: {
-      end: new Date(+new Date() - 60 * 1000),
-      mininum_should_match: 1,
-      should: [{ term: { type: 'transaction' } }],
-      sorts: [
-        { startTime: { order: 'desc'}}
-      ],
-      timeFieldToSearchOn: 'startTime',
-      ...params,
+    start,
+    end,
+    mininum_should_match: 1,
+    should: [{ term: { type: 'transaction' } }],
+    sorts: [
+      { startTime: { order: 'desc'}}
+    ],
+    timeFieldToSearchOn: 'startTime',
+      // ...params,
   }
 })
 
