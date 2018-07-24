@@ -46,76 +46,56 @@ const rtTransactions = (series) => {
 
   return({
   chart: {
-    backgroundColor: '#f5f5f5',
-    type: 'spline',
-    height: 200,
-    events: {
-      click: function (e) {
-        // find the clicked values and the series
-
-        var x = Math.round(e.xAxis[0].value),
-          y = Math.round(e.yAxis[0].value),
-          series = this.series[0];
-
-        // Add it
-        // series.addPoint([x, y]);
-
-      }
-    }
+    zoomType: 'x',
+    height: 100,
+    backgroundColor: '#4E4E51',
+  },
+  xAxis: {
+    type: 'datetime',
+    visible: false,
+  },
+  yAxis: {
+    visible: false,
   },
   title: {
     text: ''
   },
-  subtitle: {
-    text: ''
-  },
-  xAxis: {
-    type: 'datetime',
-    dateTimeLabelFormats: { // don't display the dummy year
-      month: '%e. %b',
-      year: '%b'
-    },
-  },
-  yAxis: {
-    title: {
-      text: ''
-    },
-    minPadding: 0.2,
-    maxPadding: 0.2,
-    maxZoom: 60,
-    plotLines: [{
-      value: 0,
-      width: 1,
-      color: '#808080'
-    }]
-  },
   legend: {
     enabled: false
   },
-  exporting: {
-    enabled: false
-  },
   plotOptions: {
-    spline: {
+    area: {
+      fillColor: {
+        linearGradient: {
+          x1: 0,
+          y1: 0,
+          x2: 0,
+          y2: 1
+        },
+        stops: [
+          [0, 'rgba(13, 190, 187, 0.5)'],
+          [1, 'rgba(78, 78, 81, 0)']
+        ]
+      },
       marker: {
-        enabled: true
-      }
+        radius: 2
+      },
+      lineWidth: 1,
+      states: {
+        hover: {
+          lineWidth: 1
+        }
+      },
+      threshold: null
     },
     series: {
       animation: false,
       lineWidth: 1,
-      point: {
-        events: {
-          'click': function () {
-            if (this.series.data.length > 1) {
-              this.remove();
-            }
-          }
-        }
-      }
     }
   },
   series: [{
+    type: 'area',
+    color: 'rgba(13, 190, 187, 0.6)',
     data: series
   }]
 

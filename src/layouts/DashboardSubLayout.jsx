@@ -27,9 +27,8 @@ class DashboardSubLayout extends React.Component {
   render() {
     const { charts, locations, time, video, auth, width } = this.props;
 
-    console.debug('charts >>> ', charts)
     return (
-      <Grid container spacing={16} style={{padding: '1em', background: `#f5f5f5`, height: '100%'}}>
+      <Grid container spacing={16} style={{ padding: '1em', background: `#4E4E51`, height: '100%'}}>
         <Grid item xs={12} sm={12} md={12} lg={12} >
           <RTChart width={width} time={time} auth={auth} />
         </Grid>

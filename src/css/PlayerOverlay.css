@@ -4,10 +4,4 @@
   left: 0;
   height: 100%;
   background: rgba(0, 0, 0, 0.3);
-  opacity: 0;
   z-index: 1; }
-  .player-overlay[data-fetching=true] {
-    opacity: 1;
-    background: #000; }
-  .player-overlay:hover {
-    opacity: 1; }

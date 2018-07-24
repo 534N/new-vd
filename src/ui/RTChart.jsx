@@ -53,9 +53,12 @@ class RTChart extends React.Component {
 
     if (!this.chart) {
       this.chart = Highcharts.chart(`chart-${id}`, chartConfigs[config](seriesData));
+
+      
     } else {
       this.chart.update({
-        series: [{ data: seriesData }],
+        series: [{
+          type: 'area', color: 'rgba(13, 190, 187, 0.6)', data: seriesData }],
       })
     }
   }

@@ -10,6 +10,9 @@ import Icon from '../components/Icon'
 import IconText from '../components/IconText'
 import LoadingSVG from '../svg/loading-cylon.svg'
 
+import EditorTest from './EditorTest'
+import Editor from './Polygon'
+
 import '../css/PlayerOverlay.css'
 
 const styles = () => {
@@ -21,6 +24,14 @@ const styles = () => {
 const removePlayer = id => {
   store.dispatch({ type: 'REMOVE_VIDEO', payload: id})
 }
+
+const pin = {
+  label: 'Pin1',
+  color: '#e3e3e3AA',
+  points: [
+    [50, 50],
+  ],
+};
 
 const RemoveVideoButton = ({ id }) => {
   return (
@@ -47,11 +58,19 @@ class PlayerOverlay extends React.Component {
     super(props);
   }
 
+  componentDidMount() {
+    const { id } = this.props;
+    const obj = document.getElementById(id)
+
+    const rect = obj.getBoundingClientRect();
+
+  }
+
   render() {
     const { fetching, error, playTime, playing, id } = this.props;
 
     return (
-      <Flex alignItems='center' justifyContent='center' className='player-overlay' width='100%' data-fetching={this._keepOverlayUp()} id={id}>
+      <Flex ref='playerOverlay' alignItems='center' justifyContent='center' className='player-overlay' width='100%' data-fetching={this._keepOverlayUp()} id={id}>
         {
           fetching && !error &&
             <img src={LoadingSVG} />
@@ -64,7 +83,8 @@ class PlayerOverlay extends React.Component {
           error &&
           <ErrorMsg error={`Oops! There was a problem loading this video`} id={id} />
         }
-        
+        <EditorTest />
+        <Editor />
       </Flex>
     )
   }
