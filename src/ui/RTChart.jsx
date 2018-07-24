@@ -36,11 +36,11 @@ class RTChart extends React.Component {
     const end = this.lastQueried;
 
     store.dispatch({ type: 'RT_EVENT_CHART_INFO', payload: axios(platform[query](auth.jwtToken, start, end)) })
-    // setInterval(() => {
-    //   const newEnd = new Date(+new Date() - 5 * 1000);
-    //   store.dispatch({ type: 'RT_EVENT_CHART_INFO', payload: axios(platform[query](auth.jwtToken)), start: this.lastQueried, newEnd })
-    //   this.lastQueried = newEnd;
-    // }, interval)
+    setInterval(() => {
+      const newEnd = new Date(+new Date() - 5 * 1000);
+      store.dispatch({ type: 'RT_EVENT_CHART_INFO', payload: axios(platform[query](auth.jwtToken)), start: this.lastQueried, newEnd })
+      this.lastQueried = newEnd;
+    }, interval)
 
     this.chart = null;
   }
@@ -49,31 +49,21 @@ class RTChart extends React.Component {
     const { chart: { data: newData } } = nextProps;
     const { chart: { data: oldData, id, config } } = this.props;
 
+    const seriesData = Object.values(newData).sort((a, b) => new Date(a.time) - new Date(b.time)).map(d => [ +new Date(d.time), d.amount]);
 
     if (!this.chart) {
-
-      const seriesData = Object.values(newData).map(d => [ new Date(d.time), d.amount ]);
       this.chart = Highcharts.chart(`chart-${id}`, chartConfigs[config](seriesData));
     } else {
-      const seriesData = Object.values(newData).map(d => [new Date(d.time), d.amount]);
       this.chart.update({
-        series: seriesData,
+        series: [{ data: seriesData }],
       })
     }
-
-    
-
-  }
-
-  componentDidMount() {
-    // this._renderChart()
   }
 
   render() {
     const { chart, width } = this.props;
     const { id } = chart;
 
-    console.debug('chart >>>> ', chart)
     return (
       <div ref='RTChart' >
         <div id={`chart-${id}`} height='200px' />
@@ -81,12 +71,7 @@ class RTChart extends React.Component {
     );
   }
 
-  _renderChart() {
-    const { chart } = this.props;
-    const { id, data, config } = chart;
-
-    this.chart = Highcharts.chart(`chart-${id}`, chartConfigs[config](data));
-  }
+  
 }
 
 export default connect(state => {

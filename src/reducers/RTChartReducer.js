@@ -19,7 +19,7 @@ const RTChartReducer = (state = {
 
         const { data } = state;
         
-        _.sortBy(results.filter(r => r.type === 'transaction'), o => o.startTime).forEach(d => {
+        results.filter(r => r.type === 'transaction').forEach(d => {
           const { details } = d;
 
           if (details['Time']) {

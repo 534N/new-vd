@@ -71,6 +71,10 @@ const rtTransactions = (series) => {
   },
   xAxis: {
     type: 'datetime',
+    dateTimeLabelFormats: { // don't display the dummy year
+      month: '%e. %b',
+      year: '%b'
+    },
   },
   yAxis: {
     title: {
