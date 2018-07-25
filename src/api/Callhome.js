@@ -53,5 +53,14 @@ export default {
         forceImpoersonate: false,
       }
     }
+  },
+
+  annotations(jwtToken, camId, data) {
+    return {
+      method: 'PATCH',
+      url: `${callhome_url}/api/cameras/${camId}`,
+      headers: getHeader(jwtToken),
+      data,
+    }
   }
 }

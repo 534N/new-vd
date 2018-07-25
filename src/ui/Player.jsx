@@ -59,7 +59,8 @@ class Player extends React.Component {
   }
 
   render() {
-    const { m3u8, id, multiPlay, is360 } = this.props;
+    const { m3u8, id, multiPlay, is360, camera: { id: callhomeCameraId } } = this.props;
+
     const height = multiPlay ? '100%' : 'calc(100vw * 9 / 16)';
 
     return (
@@ -67,7 +68,7 @@ class Player extends React.Component {
         {
           is360
             ? <VROverlayWrap videoElement={this.refs.roiPlayer} multiPlay={multiPlay} />
-            : <PlayerOverlay id={id} {...this.props} />
+            : <PlayerOverlay id={id} cameraId={callhomeCameraId} {...this.props} />
         }
         <video
           style={{

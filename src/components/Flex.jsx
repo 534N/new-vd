@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 const Flex = styled.div`
-  position: relative;
+  position: ${({ position }) => position || `relative`};
   display: flex;
   width: ${({ width }) => width || `100%`};
   height: ${({ height }) => height || `auto`};

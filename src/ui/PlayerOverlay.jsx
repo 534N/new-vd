@@ -10,7 +10,7 @@ import Icon from '../components/Icon'
 import IconText from '../components/IconText'
 import LoadingSVG from '../svg/loading-cylon.svg'
 
-import Editor from './Polygon'
+import PolygonEditor from './PolygonEditor'
 
 import '../css/PlayerOverlay.css'
 
@@ -66,7 +66,7 @@ class PlayerOverlay extends React.Component {
   }
 
   render() {
-    const { fetching, error, playTime, playing, id } = this.props;
+    const { fetching, error, playTime, playing, id, jwtToken, cameraId } = this.props;
 
     return (
       <Flex ref='playerOverlay' alignItems='center' justifyContent='center' className='player-overlay' width='100%' data-fetching={this._keepOverlayUp()} id={id}>
@@ -75,14 +75,14 @@ class PlayerOverlay extends React.Component {
             <img src={LoadingSVG} />
         }
         {
-          !fetching && !error && playing && id &&
+          false && !fetching && !error && playing && id &&
           <RemoveVideoButton id={id} />
         }
         {
           error &&
           <ErrorMsg error={`Oops! There was a problem loading this video`} id={id} />
         }
-        <Editor />
+        <PolygonEditor jwtToken={jwtToken} cameraId={cameraId} />
       </Flex>
     )
   }

@@ -36,11 +36,11 @@ class RTChart extends React.Component {
     const end = this.lastQueried;
 
     store.dispatch({ type: 'RT_EVENT_CHART_INFO', payload: axios(platform[query](auth.jwtToken, start, end)) })
-    setInterval(() => {
-      const newEnd = new Date(+new Date() - 5 * 1000);
-      store.dispatch({ type: 'RT_EVENT_CHART_INFO', payload: axios(platform[query](auth.jwtToken)), start: this.lastQueried, newEnd })
-      this.lastQueried = newEnd;
-    }, interval)
+    // setInterval(() => {
+    //   const newEnd = new Date(+new Date() - 5 * 1000);
+    //   store.dispatch({ type: 'RT_EVENT_CHART_INFO', payload: axios(platform[query](auth.jwtToken)), start: this.lastQueried, newEnd })
+    //   this.lastQueried = newEnd;
+    // }, interval)
 
     this.chart = null;
   }
