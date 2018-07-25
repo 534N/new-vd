@@ -1,84 +1,44 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { store } from '../store'
+import Circle from './Circle'
+/* Feature detection */
+let passiveSupported = false;
+
+try {
+  window.addEventListener('test', null, Object.defineProperty({}, 'passive', { get: function() { passiveSupported = true; } }));
+} catch(err) {}
 
 const styles = {
-  circle: {
-    cursor: 'move',
-    fill: 'transparent',
-    stroke: '#0088cc',
-    strokeWidth: 3,
-  },
   polygon: {
-    fill: 'rgba(0, 136, 204, 0.5)'
+    fill: 'rgba(0, 136, 204, 0.5)',
+    cursor: 'move'
   }
 }
 
-const initialPoints = [
-  [ 100, 100 ],
-  [ 130, 100 ],
-  [ 160, 100 ],
-  [ 160, 130 ],
-  [ 160, 160 ],
-  [ 130, 160 ],
-  [ 100, 160 ],
-  [ 100, 130 ],
-];
+const initPosition = [ 200, 200 ];
 
-class Circle extends React.Component {
-  constructor(props) {
-    super(props)
+const generatePoints = (pos, width, height) => {
+  const [ x, y ] = pos;
 
-    const { cx, cy } = props;
+  const x0 = x - width / 2;
+  const x1 = x;
+  const x2 = x + width / 2;
 
-    this.mouseDown = false;
+  const y0 = y - height / 2;
+  const y1 = y;
+  const y2 = y + height / 2;
 
-    this.state = {
-      cx,
-      cy,
-    };
-  }
-
-  componentDidMount() {
-    const c = this.refs.circle;
-
-    c.addEventListener('mousedown', this.onMouseDown.bind(this))
-    c.addEventListener('mousemove', this.onMouseMove.bind(this));
-    c.addEventListener('mouseup', this.onMouseUp.bind(this));
-  }
-
-  render() {
-    const { r } = this.props;
-    const { cx, cy } = this.state;
-
-    return (
-      <circle ref='circle' cx={cx} cy={cy} r={r} style={styles.circle} />
-    )
-  }
-
-  onMouseDown() {
-    this.mouseDown = true
-    console.debug('mouse down')
-  }
-
-  onMouseUp() {
-    this.mouseDown = false
-    console.debug('mouse up')
-  }
-
-  onMouseMove({ offsetX, offsetY }) {
-    if (!this.mouseDown) {
-      console.debug('no more')
-      return;
-    }
-
-    const { updateXY } = this.props;
-    
-    this.setState({
-      cx: offsetX,
-      cy: offsetY,
-    });
-
-    updateXY(offsetX, offsetY);
-  }
+  return [
+    [ x0, y0 ],
+    [ x1, y0 ],
+    [ x2, y0 ],
+    [ x2, y1 ],
+    [ x2, y2 ],
+    [ x1, y2 ],
+    [ x0, y2 ],
+    [ x0, y1 ],
+  ]
 }
 
 const Polygon = ({ points, style }) => {
@@ -94,33 +54,92 @@ class Editor extends React.Component {
     super(props)
 
     this.state = {
-      points: initialPoints,
+      points: generatePoints(initPosition, 200, 200),
+      active: null,
     };
   }
 
+  componentDidMount() {
+    const p = this.refs.pEditor;
+
+    p.addEventListener('mousedown', this._onMouseDown, passiveSupported ? {passive: true} : false )
+    p.addEventListener('mousemove', this._onMouseMove, passiveSupported ? {passive: true} : false );
+    p.addEventListener('mouseup', this._onMouseUp, passiveSupported ? {passive: true} : false );
+  }
+
+  componentWillUnmount() {
+    const p = this.refs.pEditor;
+
+    p.removeEventListener('mousedown', this._onMouseDown)
+    p.removeEventListener('mousemove', this._onMouseMove);
+    p.removeEventListener('mouseup', this._onMouseUp);
+  }
+
   render() {
-    const { points } = this.state;
+    const { points, active } = this.state;
 
     return (
-      <svg width='100%' height='100%'>
+      <svg ref='pEditor' width='100%' height='100%'>
         {
-          points.map(([x, y], idx) => <Circle key={`${x}-${y}`} cx={x} cy={y} r={10} updateXY={this._updatePoint.bind(this, idx)}/>)
+          points.map(([x, y], idx) => <Circle key={`${idx}`} id={idx} cx={x} cy={y} idx={idx} active={active === idx} />)
         }
         <Polygon points={points} style={styles.polygon} />
       </svg>
     )
   }
 
-  _updatePoint(idx, x, y) {
-    const { points } = this.state;
+  _onMouseDown = e => {
+    const { target } = e;
+    const { nodeName, id } = target;
 
-    points[idx] = [ x, y ];
+    if (nodeName === 'circle') {
+      this.setState({
+        active: parseInt(id),
+      })
+    } else if (nodeName === 'polygon') {
+      this.setState({
+        active: 'all',
+      })
+    }
+  }
 
+  _onMouseUp = () => {
     this.setState({
-      points
+      active: null,
     })
   }
+
+  _onMouseMove = ({ offsetX, offsetY }) => {
+    const { active, points } = this.state;
+
+    if (!active) {
+      return;
+    }
+
+    if (active === 'all') {
+      const newPoints = points.map(([ x, y ]) => [ offsetX - x, offsetY - y])
+
+      console.debug('newpoints', newPoints)
+      this.setState({
+        points: newPoints
+      })
+
+    } else {
+      points[active] = [ offsetX, offsetY ];
+      
+      this.setState({
+        points
+      })
+    }
+
+    
+
+    
+  }
 }
+
+
+
 
 const getPt = (r, evt) =>  {
   // const r = this.svgRef.current.getBoundingClientRect()
@@ -130,4 +149,10 @@ const getPt = (r, evt) =>  {
   ]
 }
 
-export default Editor
+
+export default Editor;
+// export default connect(state => {
+//   return {
+//     polygon: state.polygon,
+//   };
+// })(Editor);

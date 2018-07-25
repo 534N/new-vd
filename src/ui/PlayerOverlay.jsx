@@ -10,7 +10,6 @@ import Icon from '../components/Icon'
 import IconText from '../components/IconText'
 import LoadingSVG from '../svg/loading-cylon.svg'
 
-import EditorTest from './EditorTest'
 import Editor from './Polygon'
 
 import '../css/PlayerOverlay.css'
@@ -83,7 +82,6 @@ class PlayerOverlay extends React.Component {
           error &&
           <ErrorMsg error={`Oops! There was a problem loading this video`} id={id} />
         }
-        <EditorTest />
         <Editor />
       </Flex>
     )
