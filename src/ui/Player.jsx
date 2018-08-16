@@ -1,6 +1,7 @@
 import React from 'react';
-import Mask from '../components/Mask'
 import Hls from 'connect-hls.js';
+import { store } from '../store';
+
 
 import PlayerOverlay from './PlayerOverlay'
 import VROverlayWrap from './VROverlayWrap'
@@ -143,12 +144,14 @@ class Player extends React.Component {
 
   _handleTimeUpdate(d) {
 
-    const { id, onTimeUpdate } = this.props;
+    const { id } = this.props;
     const currentTick = parseInt(d.target.currentTime);
 
     if (this.currentTick !== currentTick) {
       this.currentTick = currentTick;
-      onTimeUpdate(id, currentTick)
+      // onTimeUpdate(id, currentTick)
+
+      store.dispatch({ type: 'UPDATE_PLAY_TIME', meta: { playerId: id }, payload: currentTick })
     }
 
   }

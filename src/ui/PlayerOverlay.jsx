@@ -82,7 +82,6 @@ class PlayerOverlay extends React.Component {
           error &&
           <ErrorMsg error={`Oops! There was a problem loading this video`} id={id} />
         }
-        <PolygonEditor jwtToken={jwtToken} cameraId={cameraId} />
       </Flex>
     )
   }
