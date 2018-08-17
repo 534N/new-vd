@@ -18,7 +18,9 @@ const styles = () => ({
     width: '100%',
     minHeight: 'calc(100vw * 9 / 16)',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column'
   },
   playerWrap: {
     display: 'flex',
@@ -70,12 +72,13 @@ class VideoContainer extends React.Component {
             return (
               <Grid key={playerId} item xs={12} sm={isMultiPlay(players) ? 6 : 12} md={isMultiPlay(players) ? 6 : 12} lg={isMultiPlay(players) ? 4 : 12} className={classes.playerWrap}>
                 <Player jwtToken={auth.jwtToken} {...config} is360={is360} multiPlay={isMultiPlay(players)} />
-                <Timeline {...config} multiPlay={isMultiPlay(players)} />
               </Grid>
             )
           })
         }
         </Grid>
+
+        <Timeline multiPlay={isMultiPlay(players)} />
       </div>
     )
   }
