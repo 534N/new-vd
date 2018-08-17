@@ -40,7 +40,7 @@ const styles = theme => ({
 class CamerasSubLayout extends React.Component {
 
   render() {
-    const { match, locState, width, auth, classes, video: { players }} = this.props;
+    const { match, locState, width, auth, classes, video: { players }, time } = this.props;
     const { locations } = locState;
     
     return (
@@ -58,8 +58,8 @@ class CamerasSubLayout extends React.Component {
                 </SvgIcon>
               </IconButton>
             </Hidden>
-            <LocationSelector />
-            <DatePicker />
+            <LocationSelector locations={locations}/>
+            <DatePicker time={time}/>
           </Toolbar>
         </AppBar>
         <Switch>
@@ -77,6 +77,5 @@ class CamerasSubLayout extends React.Component {
 export default connect(state => {
   return {
     auth: state.auth,
-    video: state.video
   };
 })(withStyles(styles)(CamerasSubLayout));

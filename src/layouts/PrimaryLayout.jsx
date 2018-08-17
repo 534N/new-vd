@@ -58,7 +58,7 @@ class PrimaryLayout extends React.Component {
   }
 
   render() {
-    const { match, width, locations, video } = this.props;
+    const { match, width, locations, video, time } = this.props;
     const { redirect } = this.state;
 
     return (
@@ -77,8 +77,8 @@ class PrimaryLayout extends React.Component {
             : <Switch>
                 <Route path={`${match.path}`} exact render={props => <DashboardSubLayout {...props} selectedLocation={locations.selectedLocation} locations={locations.locations} width={width} video={video} /> } />
                 <Route path={`${match.path}/events`} component={EventsSubLayout} />
-                <Route path={`${match.path}/cameras`} render={props => <CamerasSubLayout {...props} locState={locations} locations={locations.locations} width={width} />} />
-                <Route path={`${match.path}/play`} render={props => <VideoPlayingSubLayout  {...props} locState={locations} width={width} video={video}/> } />
+                <Route path={`${match.path}/cameras`} render={props => <CamerasSubLayout {...props} locState={locations} locations={locations.locations} width={width} video={video} time={time} />} />
+                <Route path={`${match.path}/play`} render={props => <VideoPlayingSubLayout  {...props} locState={locations} width={width} video={video} time={time}/> } />
                 <Route path={`${match.path}/logout`} component={logout} />
                 <Redirect to={`${match.url}`} />
               </Switch>
@@ -92,6 +92,7 @@ class PrimaryLayout extends React.Component {
 export default connect(state => {
   return {
     locations: state.locations,
+    ...state.time,
     video: state.video,
   };
 })(withWidth()(PrimaryLayout));

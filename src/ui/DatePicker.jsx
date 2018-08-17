@@ -85,8 +85,4 @@ class DatePickerComp extends React.Component {
   
 }
 
-export default connect(state => {
-  return {
-    ...state.time
-  }  
-})(withStyles(styles)(DatePickerComp))
+export default withStyles(styles)(DatePickerComp)

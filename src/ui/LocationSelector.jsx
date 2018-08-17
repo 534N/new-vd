@@ -92,8 +92,4 @@ class LocationSelector extends React.Component {
   }
 }
 
-export default connect(state => {
-  return {
-    ...state.locations
-  };
-})(withStyles(styles)(LocationSelector));
+export default withStyles(styles)(LocationSelector);

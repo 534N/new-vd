@@ -63,7 +63,7 @@ class VideoPlayingSubLayout extends React.Component {
                 </SvgIcon>
               </IconButton>
               <CameraSelector fill='#fff' locations={locations} selectedLocation={selectedLocation} playlist={playlist} />
-              <DatePicker fill='#fff'/>
+              <DatePicker fill='#fff' time={time}/>
             </Toolbar>
           </AppBar>
           <Switch>
@@ -83,6 +83,5 @@ export default connect(state => {
   return {
     auth: state.auth,
     user: state.user,
-    ...state.time,
   };
 })(withStyles(styles)(VideoPlayingSubLayout));
