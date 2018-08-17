@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-
-import moment from 'moment';
-import _ from 'lodash';
+import Axis from './Axis';
 
 export default class extends Component {
   constructor(props) {
@@ -16,8 +13,8 @@ export default class extends Component {
   render() {
     console.debug('>>> ', this.props)
     return (
-      <div>
-      </div>
+      <svg>
+      </svg>
     )
   }
 
