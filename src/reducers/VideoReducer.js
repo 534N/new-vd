@@ -1,4 +1,7 @@
+import _ from 'lodash'
+
 const generatePlayerId = meta => Object.values(meta).join('-');
+
 const savePlayerConfigToState = (players, playerId, config, state) => {
   players[playerId] = config;
   state = {
@@ -29,6 +32,7 @@ const initPlayerState = {
 
 const VideoReducer = (state = {
     lastUpdate: +new Date(),
+    primaryPlayerId: null,
     players: {},
     fullscreen: false,
   }, action) => {
@@ -51,6 +55,7 @@ const VideoReducer = (state = {
             camera
           } = action.payload;
 
+          let { primaryPlayerId } = state;
           // 
           // initialize a new player state with the player id
           const playerState = {
@@ -64,6 +69,12 @@ const VideoReducer = (state = {
           const players = replace ? {} : {
             ...state.players
           };
+
+          // 
+          // set primary player id
+          if (_.isEmpty(players)) {
+            primaryPlayerId = playerId;
+          }
           
           // 
           // set the players object
@@ -73,6 +84,7 @@ const VideoReducer = (state = {
           // set state
           const newState = {
             ...state,
+            primaryPlayerId,
             players,
             lastUpdate: +new Date(),
           };

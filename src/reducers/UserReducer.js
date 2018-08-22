@@ -1,5 +1,5 @@
 import jwtDecode from 'jwt-decode'
-import { allowRemotePlayback } from './utils/User'
+import { allowRemotePlaybackFunc } from './utils/User'
 
 const userReducer = (state = {
   metadata: null,
@@ -37,7 +37,7 @@ const userReducer = (state = {
 
         const permissions = {
           ...state.permissions,
-          allowRemotePlayback: allowRemotePlayback(user_metadata)
+          allowRemotePlayback: allowRemotePlaybackFunc(user_metadata)
         };
         
         state = {

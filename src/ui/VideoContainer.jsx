@@ -38,6 +38,22 @@ const getCamera = (locations, locationId, cameraId) => {
   return _.find(cameras, c => c.cameraId === cameraId);
 }
 
+const playerWidth = (screenWidth, players, primaryPlayerId, playerId) => {
+  if (isMultiPlay(players)) {
+    // if (primaryPlayerId === playerId) {
+    //   return 8;
+    // } else {
+      if (screenWidth === 'lg' && Object.keys(players).length > 2) {
+        return 4;
+      } else {
+        return 6;
+      }
+    // }
+  } else {
+    return 12;
+  }
+}
+
 class VideoContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -60,7 +76,7 @@ class VideoContainer extends React.Component {
   }
 
   render() {
-    const { video: { players }, auth, classes } = this.props;
+    const { video: { players, primaryPlayerId }, auth, classes } = this.props;
 
     return (
       <div className={classes.root}>
@@ -70,7 +86,7 @@ class VideoContainer extends React.Component {
             const config = players[playerId];
             const is360 = playerId.match(/\|is360/);
             return (
-              <Grid key={playerId} item xs={12} sm={isMultiPlay(players) ? 6 : 12} md={isMultiPlay(players) ? 6 : 12} lg={isMultiPlay(players) ? 4 : 12} className={classes.playerWrap}>
+              <Grid key={playerId} item xs={12} sm={playerWidth('sm', players, primaryPlayerId, playerId)} md={playerWidth('md', players, primaryPlayerId, playerId)} lg={playerWidth('lg', players, primaryPlayerId, playerId)} className={classes.playerWrap}>
                 <Player jwtToken={auth.jwtToken} {...config} is360={is360} multiPlay={isMultiPlay(players)} />
               </Grid>
             )

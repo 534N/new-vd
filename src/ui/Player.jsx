@@ -15,6 +15,7 @@ class Player extends React.Component {
     super(props);
 
     this.currentTick = 0;
+    this.playerReady = false;
   }
 
   componentDidMount() {
@@ -27,11 +28,22 @@ class Player extends React.Component {
         videoElement.addEventListener('loadeddata', this._handleDataLoaded.bind(this));
         videoElement.addEventListener('seeking', this._handleSeeking.bind(this));
         videoElement.addEventListener('seeked', this._handleSeeked.bind(this));
+
+        this.playerReady = true;
       });
     }
   }
 
   componentWillUnmount() {
+    this.playerReady = false;
+
+    const videoElement = this.refs.roiPlayer;
+
+    videoElement.removeEventListener('timeupdate', this._handleTimeUpdate.bind(this));
+    videoElement.removeEventListener('loadeddata', this._handleDataLoaded.bind(this));
+    videoElement.removeEventListener('seeking', this._handleSeeking.bind(this));
+    videoElement.removeEventListener('seeked', this._handleSeeked.bind(this));
+
     if (this.hls) {
       this.hls.destroy();
     }
@@ -143,6 +155,9 @@ class Player extends React.Component {
   }
 
   _handleTimeUpdate(d) {
+    if (!this.playerReady) {
+      return;
+    }
 
     const { id } = this.props;
     const currentTick = parseInt(d.target.currentTime);

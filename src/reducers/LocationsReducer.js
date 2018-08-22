@@ -1,9 +1,7 @@
 import jwtDecode from 'jwt-decode';
 
 import { isAccessibleInternally, configLocationParams } from './utils/Locations'
-import { allowRemotePlayback } from './utils/User'
-
-const userPermissions = {};
+import { allowRemotePlaybackFunc } from './utils/User'
 
 const LocationsReducer = (state = {
   locations: null,
@@ -11,6 +9,7 @@ const LocationsReducer = (state = {
   error: false,
   selectedLocation: null,
   localId: null,
+  allowRemotePlayback: false,
 }, action) => {
   switch (action.type) {
     
@@ -49,9 +48,12 @@ const LocationsReducer = (state = {
     case 'SELECTED_LOCATION':
       {
         const selectedLocation = action.payload;
-        const { localId } = state;
+        const {
+          localId,
+          allowRemotePlayback
+        } = state;
         
-        if (!localId && userPermissions.allowRemotePlayback) {
+        if (!localId && allowRemotePlayback) {
           isAccessibleInternally(selectedLocation, isAccessible => {
             if (isAccessible) {
               selectedLocation.accessibleAddress = selectedLocation.vmsLocalHttpsUrl || selectedLocation.vmsLocalUrl;
@@ -67,7 +69,7 @@ const LocationsReducer = (state = {
           });
         }
 
-        configLocationParams(selectedLocation, localId, userPermissions.allowRemotePlayback)
+        configLocationParams(selectedLocation, localId, allowRemotePlayback)
         
         state = {
           ...state,
@@ -90,7 +92,10 @@ const LocationsReducer = (state = {
           user_metadata
         } = user;
 
-        userPermissions.allowRemotePlayback = allowRemotePlayback(user_metadata)
+        state = {
+          ...state,
+          allowRemotePlayback: allowRemotePlaybackFunc(user_metadata)
+        }
 
         break;
       }

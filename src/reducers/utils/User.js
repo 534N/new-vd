@@ -1,1 +1,1 @@
-export const allowRemotePlayback = (metadata) => !(metadata.playbackSource.toLowerCase() === 'local');
+export const allowRemotePlaybackFunc = (metadata) => !(metadata.playbackSource.toLowerCase() === 'local');
