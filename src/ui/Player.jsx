@@ -6,10 +6,6 @@ import { store } from '../store';
 import PlayerOverlay from './PlayerOverlay'
 import VROverlayWrap from './VROverlayWrap'
 
-
-
-
-
 class Player extends React.Component {
   constructor(props) {
     super(props);
@@ -161,22 +157,14 @@ class Player extends React.Component {
 
     const { id, ttf, primaryClockTime, primaryPlayerTime, primaryPlayerId } = this.props;
     const currentTick = parseInt(d.target.currentTime) * 1000;
-    const thisPlayerTime = parseInt(ttf(currentTick));
-
     const adjustedCurrentTick = ttf.invert(primaryClockTime);
-    
 
-    console.debug('currentTick ', currentTick)
-    console.debug('adjustedCurrentTick ', adjustedCurrentTick)
-
-    if (currentTick !== adjustedCurrentTick && id !== primaryPlayerId) {
+    if (currentTick / 1000 !== adjustedCurrentTick / 1000 && id !== primaryPlayerId) {
       this._seek(adjustedCurrentTick / 1000)
-// debugger
       this.currentTick = adjustedCurrentTick;
       store.dispatch({ type: 'UPDATE_PLAY_TIME', meta: { playerId: id }, payload: adjustedCurrentTick })
     } else if (this.currentTick !== currentTick) {
       this.currentTick = currentTick;
-
       store.dispatch({ type: 'UPDATE_PLAY_TIME', meta: { playerId: id }, payload: currentTick })
     }
   }

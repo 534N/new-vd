@@ -76,7 +76,7 @@ class VideoContainer extends React.Component {
   }
 
   render() {
-    const { video: { players, primaryPlayerId }, auth, classes } = this.props;
+    const { video: { players, primaryPlayerId }, auth, classes, time } = this.props;
 
     return (
       <div className={classes.root}>
@@ -86,19 +86,18 @@ class VideoContainer extends React.Component {
             const config = players[playerId];
             const is360 = playerId.match(/\|is360/);
 
-            const { ttf: primaryTTF, playTime: primaryPlayerTime } = players[primaryPlayerId];
+            const { ttf: primaryTTF, playTime: primaryPlayerTime, recordings } = players[primaryPlayerId];
             const primaryClockTime = primaryTTF ? parseInt(primaryTTF(primaryPlayerTime)) : 0;
 
             return (
               <Grid key={playerId} item xs={12} sm={playerWidth('sm', players, primaryPlayerId, playerId)} md={playerWidth('md', players, primaryPlayerId, playerId)} lg={playerWidth('lg', players, primaryPlayerId, playerId)} className={classes.playerWrap}>
-                <Player jwtToken={auth.jwtToken} {...config} is360={is360} multiPlay={isMultiPlay(players)} primaryPlayerId={primaryPlayerId} primaryPlayerTime={primaryPlayerTime} primaryClockTime={primaryClockTime} />
+                <Player jwtToken={auth.jwtToken} {...config} is360={is360} time={time} multiPlay={isMultiPlay(players)} primaryPlayerId={primaryPlayerId} primaryPlayerTime={primaryPlayerTime} primaryClockTime={primaryClockTime} recordings={recordings}/>
               </Grid>
             )
           })
         }
         </Grid>
 
-        <Timeline multiPlay={isMultiPlay(players)} />
       </div>
     )
   }

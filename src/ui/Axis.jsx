@@ -1,7 +1,9 @@
-import React from 'react';
-import * as d3Axis from 'd3-axis';
-import { select as d3Select } from 'd3-selection';
-import { timeFormat } from 'd3-time-format';
+import React from 'react'
+import * as d3Axis from 'd3-axis'
+import { select as d3Select } from 'd3-selection'
+import { timeFormat } from 'd3-time-format'
+
+import '../css/Axis.css'
 
 export default class Axis extends React.Component {
   componentDidMount() {
@@ -13,11 +15,11 @@ export default class Axis extends React.Component {
   }
 
   render() {
-    const { orient, translate } = this.props;
+    const { translate } = this.props;
 
     return (
       <g
-        className={`Axis Axis-${orient}`}
+        className={`axis axis-bottom`}
         ref={(el) => { this.axisElement = el; }}
         transform={translate} />
     )

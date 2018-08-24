@@ -10,6 +10,7 @@ import Icon from '../components/Icon'
 import IconText from '../components/IconText'
 import LoadingSVG from '../svg/loading-cylon.svg'
 
+import Timeline from './Timeline'
 import PolygonEditor from './PolygonEditor'
 
 import '../css/PlayerOverlay.css'
@@ -17,6 +18,14 @@ import '../css/PlayerOverlay.css'
 const styles = {
   root: {
     
+  },
+  timeline: {
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    width: '100%',
+    display: 'flex',
+    // background: 'rgba(0,0,0,0.5)',
   },
   timestamp: {
     color: '#fff',
@@ -61,6 +70,9 @@ const ErrorMsg = ({ error, id }) => (
 class PlayerOverlay extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      playerWidth: 0,
+    }
   }
 
   componentDidMount() {
@@ -68,11 +80,14 @@ class PlayerOverlay extends React.Component {
     const obj = document.getElementById(id)
 
     const rect = obj.getBoundingClientRect();
-
+    this.setState({
+      playerWidth: rect.width,
+    })
   }
 
   render() {
-    const { fetching, error, playTime, playing, id, primaryPlayerId, ttf } = this.props;
+    const { fetching, error, playTime, playing, id, primaryPlayerId, ttf, time, recordings } = this.props;
+    const { playerWidth } = this.state;
 
     return (
       <Flex ref='playerOverlay' alignItems='center' justifyContent='center' className='player-overlay' width='100%' data-fetching={this._keepOverlayUp()} id={id}>
@@ -90,7 +105,7 @@ class PlayerOverlay extends React.Component {
         }
         {
           fetching && !error &&
-            <img src={LoadingSVG} />
+          <img src={LoadingSVG} />
         }
         {
           false && !fetching && !error && playing && id &&
@@ -99,6 +114,12 @@ class PlayerOverlay extends React.Component {
         {
           error &&
           <ErrorMsg error={`Oops! There was a problem loading this video`} id={id} />
+        }
+        {
+          playerWidth > 0 && !fetching && !error && ttf &&
+          <div style={styles.timeline}>
+            <Timeline time={time} width={playerWidth} recordings={recordings} simple/>
+          </div>
         }
       </Flex>
     )
