@@ -1,6 +1,31 @@
 import _ from 'lodash'
+import { scaleLinear } from 'd3-scale';
 
 const generatePlayerId = meta => Object.values(meta).join('-');
+const storePlayerDomain = recordingData => {
+  let playTime = 0;
+  let playerDomain = [];
+
+  for (let i = 0; i < recordingData.length; i++) {
+    const duration = recordingData[i].end - recordingData[i].start;
+
+    playerDomain.push(playTime);
+    playerDomain.push(playTime + duration);
+    playTime += duration;
+  }
+  return { playerDomain: playerDomain, playTime: playTime, filteredRecordingData: recordingData };
+}
+
+const storeRecordingDomain = recordingData => {
+  let recordingDomain = [];
+
+  for (let i = 0; i < recordingData.length; i++) {
+    recordingDomain.push(recordingData[i].start);
+    recordingDomain.push(recordingData[i].end);
+  }
+  return recordingDomain;
+}
+
 
 const savePlayerConfigToState = (players, playerId, config, state) => {
   players[playerId] = config;
@@ -124,15 +149,21 @@ const VideoReducer = (state = {
       case 'LIST_VIDEO_FULFILLED':
         {
           const {
-            data
-          } = action.payload
+            data: { videos },
+          } = action.payload;
 
-          const { playerId } = action.meta;
+          const { 
+            playerId
+          } = action.meta;
+
+          const { playerDomain } = storePlayerDomain(videos);
+          const recordingDomain = storeRecordingDomain(videos);
 
           const players = state.players;
           const config = {
             ...players[playerId],
-            recordings: data.videos
+            recordings: videos,
+            ttf: scaleLinear().domain(playerDomain).range(recordingDomain),
           }
 
           state = savePlayerConfigToState(players, playerId, config, state);
@@ -178,6 +209,17 @@ const VideoReducer = (state = {
           break;
         }
 
+      case 'SET_PRIMARY':
+        {
+          const id = action.payload;
+          state = {
+            ...state,
+            primaryPlayerId: id
+          };
+
+          break;
+        }
+
       case 'CLEAR_VIDEO_CACHE':
         {
           state = {
@@ -196,7 +238,6 @@ const VideoReducer = (state = {
           const { players } = state;
           delete(players[id]);
 
-          debugger
           state = {
             ...state,
             players

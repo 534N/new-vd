@@ -3,10 +3,20 @@
   top: 0
   left: 0
   height: 100%
-  background: rgba(0,0,0,0.3)
   // opacity: 0
   z-index: 1
+  cursor: default
+  &:hover
+    // background: rgba(0,0,0,0.3)
 
+  .primary-indicator
+    color: #fff
+    padding: 10px
+    fontWeight: 100
+    cursor: pointer
+    background: rgba(0,0,0,0.1)
+    &[data-active=true]
+      background: #0088cc
   // &[data-fetching=true]
   //   opacity: 1
   //   background: #000

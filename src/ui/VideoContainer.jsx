@@ -85,9 +85,13 @@ class VideoContainer extends React.Component {
           Object.keys(players).map(playerId => {
             const config = players[playerId];
             const is360 = playerId.match(/\|is360/);
+
+            const { ttf: primaryTTF, playTime: primaryPlayerTime } = players[primaryPlayerId];
+            const primaryClockTime = primaryTTF ? parseInt(primaryTTF(primaryPlayerTime)) : 0;
+
             return (
               <Grid key={playerId} item xs={12} sm={playerWidth('sm', players, primaryPlayerId, playerId)} md={playerWidth('md', players, primaryPlayerId, playerId)} lg={playerWidth('lg', players, primaryPlayerId, playerId)} className={classes.playerWrap}>
-                <Player jwtToken={auth.jwtToken} {...config} is360={is360} multiPlay={isMultiPlay(players)} />
+                <Player jwtToken={auth.jwtToken} {...config} is360={is360} multiPlay={isMultiPlay(players)} primaryPlayerId={primaryPlayerId} primaryPlayerTime={primaryPlayerTime} primaryClockTime={primaryClockTime} />
               </Grid>
             )
           })
@@ -111,42 +115,6 @@ class VideoContainer extends React.Component {
       getM3u8(locations, playerId, locationId, cameraId, streamId, time);
       listVideo(locations, playerId, locationId, cameraId, streamId, time, auth.tenantId, auth.jwtToken, user.user);
     })
-    
-
-    // debugger
-    // const mergedPlaylist = this._mergeSegments(segments)
-    // const { playerDomain } = this._storePlayerDomain(segments);
-    // const recordingDomain = this._storeRecordingDomain(segments);
-
-  }
-
-  _onTimeUpdate(id, playerTime) {
-    // const { ttf, m3u8 } = this.state;
-
-    const {
-      video: {
-        players
-      }
-    } = this.props;
-
-    if (!players[id]) {
-      return
-    }
-
-    
-    const {
-      playTime
-    } = players[id];
-    // if (!m3u8) {
-    //   return;
-    // }
-
-    // const recordingTime = ttf(playerTime * 1000);
-    // this.setState({ recordingTime })
-
-    if (!playTime || playerTime - playTime >= 10) {
-      store.dispatch({ type: 'UPDATE_PLAY_TIME', meta: { playerId: id }, payload: playerTime })
-    }
   }
 
   _mergeSegments(segments) {
@@ -181,30 +149,6 @@ class VideoContainer extends React.Component {
     });
 
     return merged;
-  }
-
-  _storePlayerDomain(recordingData) {
-    let playTime = 0;
-    let playerDomain = [];
-
-    for (let i = 0; i < recordingData.length; i++) {
-      const duration = recordingData[i].end - recordingData[i].start;
-
-      playerDomain.push(playTime);
-      playerDomain.push(playTime + duration);
-      playTime += duration;
-    }
-    return { playerDomain: playerDomain, playTime: playTime, filteredRecordingData: recordingData };
-  }
-
-  _storeRecordingDomain(recordingData) {
-    let recordingDomain = [];
-
-    for (let i = 0; i < recordingData.length; i++) {
-      recordingDomain.push(recordingData[i].start);
-      recordingDomain.push(recordingData[i].end);
-    }
-    return recordingDomain;
   }
 }
 

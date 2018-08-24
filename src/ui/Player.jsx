@@ -26,8 +26,8 @@ class Player extends React.Component {
 
         videoElement.addEventListener('timeupdate', this._handleTimeUpdate.bind(this));
         videoElement.addEventListener('loadeddata', this._handleDataLoaded.bind(this));
-        videoElement.addEventListener('seeking', this._handleSeeking.bind(this));
-        videoElement.addEventListener('seeked', this._handleSeeked.bind(this));
+        // videoElement.addEventListener('seeking', this._handleSeeking.bind(this));
+        // videoElement.addEventListener('seeked', this._handleSeeked.bind(this));
 
         this.playerReady = true;
       });
@@ -41,8 +41,8 @@ class Player extends React.Component {
 
     videoElement.removeEventListener('timeupdate', this._handleTimeUpdate.bind(this));
     videoElement.removeEventListener('loadeddata', this._handleDataLoaded.bind(this));
-    videoElement.removeEventListener('seeking', this._handleSeeking.bind(this));
-    videoElement.removeEventListener('seeked', this._handleSeeked.bind(this));
+    // videoElement.removeEventListener('seeking', this._handleSeeking.bind(this));
+    // videoElement.removeEventListener('seeked', this._handleSeeked.bind(this));
 
     if (this.hls) {
       this.hls.destroy();
@@ -159,16 +159,26 @@ class Player extends React.Component {
       return;
     }
 
-    const { id } = this.props;
-    const currentTick = parseInt(d.target.currentTime);
+    const { id, ttf, primaryClockTime, primaryPlayerTime, primaryPlayerId } = this.props;
+    const currentTick = parseInt(d.target.currentTime) * 1000;
+    const thisPlayerTime = parseInt(ttf(currentTick));
 
-    if (this.currentTick !== currentTick) {
+    const adjustedCurrentTick = ttf.invert(primaryClockTime);
+    
+
+    console.debug('currentTick ', currentTick)
+    console.debug('adjustedCurrentTick ', adjustedCurrentTick)
+
+    if (currentTick !== adjustedCurrentTick && id !== primaryPlayerId) {
+      this._seek(adjustedCurrentTick / 1000)
+// debugger
+      this.currentTick = adjustedCurrentTick;
+      store.dispatch({ type: 'UPDATE_PLAY_TIME', meta: { playerId: id }, payload: adjustedCurrentTick })
+    } else if (this.currentTick !== currentTick) {
       this.currentTick = currentTick;
-      // onTimeUpdate(id, currentTick)
 
       store.dispatch({ type: 'UPDATE_PLAY_TIME', meta: { playerId: id }, payload: currentTick })
     }
-
   }
 
   _handleDataLoaded() {

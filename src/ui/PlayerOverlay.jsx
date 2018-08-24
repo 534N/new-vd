@@ -1,6 +1,6 @@
 import React from 'react'
 import { store } from '../store'
-
+import moment from 'moment'
 import { withStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import SvgIcon from '@material-ui/core/SvgIcon'
@@ -14,9 +14,15 @@ import PolygonEditor from './PolygonEditor'
 
 import '../css/PlayerOverlay.css'
 
-const styles = () => {
+const styles = {
   root: {
     
+  },
+  timestamp: {
+    color: '#fff',
+    background: 'rgba(0,0,0,0.5',
+    padding: '10px',
+    fontWeight: 100,
   }
 }
 
@@ -66,10 +72,22 @@ class PlayerOverlay extends React.Component {
   }
 
   render() {
-    const { fetching, error, playTime, playing, id, jwtToken, cameraId } = this.props;
+    const { fetching, error, playTime, playing, id, primaryPlayerId, ttf } = this.props;
 
     return (
       <Flex ref='playerOverlay' alignItems='center' justifyContent='center' className='player-overlay' width='100%' data-fetching={this._keepOverlayUp()} id={id}>
+        {
+          playing && playTime >= 0 &&
+          <div className='primary-indicator' data-active={primaryPlayerId === id} onClick={this._setPrimary}>
+            P
+          </div>
+        }
+        {
+          playing && playTime >= 0 && ttf &&
+          <div style={styles.timestamp} >
+            { moment(parseInt(ttf(playTime))).format() }
+          </div>
+        }
         {
           fetching && !error &&
             <img src={LoadingSVG} />
@@ -86,7 +104,13 @@ class PlayerOverlay extends React.Component {
     )
   }
 
-  _keepOverlayUp() {
+  _setPrimary = () => {
+    const { id } = this.props;
+
+    store.dispatch({ type: 'SET_PRIMARY', payload: id })
+  }
+
+  _keepOverlayUp = () => {
     const { fetching, error } = this.props;
 
     return !!(fetching || error);
@@ -99,4 +123,4 @@ class PlayerOverlay extends React.Component {
 
 }
 
-export default withStyles(styles)(PlayerOverlay);
+export default PlayerOverlay;
