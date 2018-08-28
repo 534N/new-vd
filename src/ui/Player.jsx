@@ -77,7 +77,7 @@ class Player extends React.Component {
         {
           is360
             ? <VROverlayWrap videoElement={this.refs.roiPlayer} multiPlay={multiPlay} />
-            : <PlayerOverlay id={id} cameraId={callhomeCameraId} {...this.props} />
+            : <PlayerOverlay {...this.props} id={id} cameraId={callhomeCameraId} onSeek={this._seek}/>
         }
         <video
           style={{
@@ -93,22 +93,22 @@ class Player extends React.Component {
     )
   }
 
-  _play() {
+  _play = () => {
     const p = this.refs.roiPlayer;
     p.play();
   }
 
-  _pause() {
+  _pause = () => {
     const p = this.refs.roiPlayer;
     p.pause();
   }
 
-  _seek(target) {
+  _seek = target => {
     let p = this.refs.roiPlayer;
     p.currentTime = target;
   }
 
-  _initializeHLS(cb) {
+  _initializeHLS = cb => {
     const { m3u8, jwtToken } = this.props;
 
     const config = {
@@ -145,12 +145,12 @@ class Player extends React.Component {
     });
   }
 
-  _startPlayback() {
+  _startPlayback = () => {
     const { start } = this.props;
     this.hls.startLoad(start);
   }
 
-  _handleTimeUpdate(d) {
+  _handleTimeUpdate = d => {
     if (!this.playerReady) {
       return;
     }
@@ -169,28 +169,28 @@ class Player extends React.Component {
     }
   }
 
-  _handleDataLoaded() {
+  _handleDataLoaded = () => {
 
   }
 
-  _handleSeeking() {
+  _handleSeeking = () => {
     const { onSeeking } = this.props;
     onSeeking();
   }
 
-  _handleSeeked() {
+  _handleSeeked = () => {
     const { onSeeked } = this.props;
     onSeeked();
   }
 
-  _changePlaybackRate(value) {
+  _changePlaybackRate = value => {
     const vid = this.refs.roiPlayer;
     if (vid) {
       vid.playbackRate = value;
     }
   }
 
-  _eventListeners() {
+  _eventListeners = () => {
     return {
       loadeddata: this.props.onLoadedData,
       canplay: this.props.onCanPlay,

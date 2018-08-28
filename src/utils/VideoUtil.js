@@ -56,3 +56,12 @@ export const listVideo = (locations, playerId, locationId, cameraId, streamId, t
     meta: { playerId },
     payload: axios(connect.listVideos(params)) })
 }
+
+export const getKeyFrameURL = (locations, locationId, cameraId, streamId, start, duration) => {
+  const location = _.find(locations, loc => loc.id === locationId); 
+  const deviceUrl = getDeviceURL(location);
+
+  return `${deviceUrl}/cameras/${cameraId}/streams/${streamId}/thumb/${start}_${duration}`;
+}
+
+

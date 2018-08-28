@@ -1,7 +1,6 @@
 import React from 'react'
-import { connect } from 'react-redux';
-import { scaleLinear } from 'd3-scale';
 import _ from 'lodash'
+import moment from 'moment'
 
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -76,7 +75,7 @@ class VideoContainer extends React.Component {
   }
 
   render() {
-    const { video: { players, primaryPlayerId }, auth, classes, time } = this.props;
+    const { video: { players, primaryPlayerId }, auth, classes, time, locations } = this.props;
 
     return (
       <div className={classes.root}>
@@ -91,7 +90,17 @@ class VideoContainer extends React.Component {
 
             return (
               <Grid key={playerId} item xs={12} sm={playerWidth('sm', players, primaryPlayerId, playerId)} md={playerWidth('md', players, primaryPlayerId, playerId)} lg={playerWidth('lg', players, primaryPlayerId, playerId)} className={classes.playerWrap}>
-                <Player jwtToken={auth.jwtToken} {...config} is360={is360} time={time} multiPlay={isMultiPlay(players)} primaryPlayerId={primaryPlayerId} primaryPlayerTime={primaryPlayerTime} primaryClockTime={primaryClockTime} recordings={recordings}/>
+                <Player
+                  {...config}
+                  jwtToken={auth.jwtToken}
+                  is360={is360}
+                  time={time}
+                  locations={locations}
+                  multiPlay={isMultiPlay(players)}
+                  primaryPlayerId={primaryPlayerId}
+                  primaryPlayerTime={primaryPlayerTime}
+                  primaryClockTime={primaryClockTime}
+                  recordings={recordings}/>
               </Grid>
             )
           })
@@ -114,40 +123,6 @@ class VideoContainer extends React.Component {
       getM3u8(locations, playerId, locationId, cameraId, streamId, time);
       listVideo(locations, playerId, locationId, cameraId, streamId, time, auth.tenantId, auth.jwtToken, user.user);
     })
-  }
-
-  _mergeSegments(segments) {
-    let merged = [];
-    let current = {};
-
-    const inSec = timestamp => parseInt(timestamp / 1000) * 1000;
-
-    segments.forEach(({ start, end, ...props }, idx) => {
-      if (idx === 0) {
-        current = { start: start, end: end, ...props };
-
-        return;
-      }
-
-      if (idx === segments.length - 1) {
-        merged.push(Object.assign({}, current));
-      }
-
-      const currentEndInSec = inSec(current.end);
-      const startInSec = inSec(start);
-
-      if (currentEndInSec === startInSec) {
-        current.end = end;
-
-        return;
-      } else {
-        merged.push(Object.assign({}, current));
-        current = { start: start, end: end, ...props };
-      }
-
-    });
-
-    return merged;
   }
 }
 

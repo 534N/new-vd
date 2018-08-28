@@ -15,7 +15,9 @@ import PolygonEditor from './PolygonEditor'
 
 import '../css/PlayerOverlay.css'
 
-const styles = {
+const styles = multiplay => ({
+  previewImageWidth: multiplay ? 160 : 192,
+  previewImageHeight: multiplay ? 90 : 108,
   root: {
     
   },
@@ -25,15 +27,39 @@ const styles = {
     bottom: 0,
     width: '100%',
     display: 'flex',
-    // background: 'rgba(0,0,0,0.5)',
+    backgroundImage: 'linear-gradient(transparent, rgba(0,0,0,0.6))',
+  },
+  timelineWrap: {
+    overflow: 'hidden',
   },
   timestamp: {
     color: '#fff',
     background: 'rgba(0,0,0,0.5',
     padding: '10px',
     fontWeight: 100,
+  },
+  preview: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    border: '2px solid #000',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  previewTimestamp: {
+    position: 'absolute',
+    bottom: 0,
+    left: 'auto',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    color: '#fff',
+    background: '#000',
+    padding: '5px',
+    fontSize: '12px',
+    fontWeight: 100,
+    zIndex: 1
   }
-}
+})
 
 const removePlayer = id => {
   store.dispatch({ type: 'REMOVE_VIDEO', payload: id})
@@ -86,8 +112,11 @@ class PlayerOverlay extends React.Component {
   }
 
   render() {
-    const { fetching, error, playTime, playing, id, primaryPlayerId, ttf, time, recordings } = this.props;
-    const { playerWidth } = this.state;
+    const { fetching, error, playTime, playing, id, primaryPlayerId, ttf, time, recordings, onSeek, locations, multiPlay } = this.props;
+    const { playerWidth, showPreview, previewUrl, mouseTime, mouseX } = this.state;
+
+    const [ locationId, cameraId, streamId ] = id.split('|');
+    const playerId = id.split('|').join('-');
 
     return (
       <Flex ref='playerOverlay' alignItems='center' justifyContent='center' className='player-overlay' width='100%' data-fetching={this._keepOverlayUp()} id={id}>
@@ -99,7 +128,7 @@ class PlayerOverlay extends React.Component {
         }
         {
           playing && playTime >= 0 && ttf &&
-          <div style={styles.timestamp} >
+          <div style={styles(multiPlay).timestamp} >
             { moment(parseInt(ttf(playTime))).format() }
           </div>
         }
@@ -117,8 +146,32 @@ class PlayerOverlay extends React.Component {
         }
         {
           playerWidth > 0 && !fetching && !error && ttf &&
-          <div style={styles.timeline}>
-            <Timeline time={time} width={playerWidth} recordings={recordings} simple/>
+          <div style={styles(multiPlay).timeline}>
+            {
+              showPreview && previewUrl &&
+              <div style={{...styles(multiPlay).preview, transform: `translate(${mouseX - styles(multiPlay).previewImageWidth / 2 - 2}px, ${0 - (styles(multiPlay).previewImageHeight - 20)}px)`}}>
+                <div style={styles(multiPlay).previewTimestamp}>{moment(mouseTime).format('HH:mm:ss')}</div>
+                <img src={previewUrl} width={styles(multiPlay).previewImageWidth} height={styles(multiPlay).previewImageHeight} />
+              </div>
+            }
+            <div style={styles(multiPlay).timelineWrap}>
+              <Timeline
+                multiPlay={multiPlay}
+                locations={locations}
+                locationId={locationId}
+                cameraId={cameraId}
+                streamId={streamId}
+                id={playerId}
+                onSeek={onSeek}
+                ttf={ttf}
+                time={time}
+                width={playerWidth}
+                playTime={parseInt(ttf(playTime))}
+                recordings={recordings}
+                updateShowTooltip={this._updateShowTooltip}
+                updatePreviewUrl={this._updatePreviewUrl}
+                simple />
+            </div>
           </div>
         }
       </Flex>
@@ -137,7 +190,19 @@ class PlayerOverlay extends React.Component {
     return !!(fetching || error);
   }
 
+  _updateShowTooltip = status => {
+    this.setState({
+      showPreview: status,
+    });
+  }
 
+  _updatePreviewUrl = ({ previewUrl, mouseTime, mouseX }) => {
+    this.setState({
+      previewUrl,
+      mouseTime,
+      mouseX
+    })
+  }
 
  
 

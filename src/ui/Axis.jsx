@@ -15,12 +15,13 @@ export default class Axis extends React.Component {
   }
 
   render() {
-    const { translate } = this.props;
+    const { translate, barHeight } = this.props;
 
     return (
       <g
         className={`axis axis-bottom`}
         ref={(el) => { this.axisElement = el; }}
+        style={{strokeWidth: barHeight}}
         transform={translate} />
     )
   }
