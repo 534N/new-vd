@@ -12,6 +12,8 @@ import LoadingSVG from '../svg/loading-cylon.svg'
 
 import Timeline from './Timeline'
 import PolygonEditor from './PolygonEditor'
+import ResponsiveWrap from '../components/ResponsiveWrap'
+
 
 import '../css/PlayerOverlay.css'
 
@@ -97,22 +99,28 @@ class PlayerOverlay extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      playerWidth: 0,
+      playerWidth: props.parentWidth,
     }
   }
 
+  componentWillReceiveProps({ parentWidth }) {
+    this.setState({
+      playerWidth: parentWidth,
+    })
+  }
+
   componentDidMount() {
-    const { id } = this.props;
+    const { id, parentWidth } = this.props;
     const obj = document.getElementById(id)
 
     const rect = obj.getBoundingClientRect();
     this.setState({
-      playerWidth: rect.width,
+      playerWidth: parentWidth //rect.width,
     })
   }
 
   render() {
-    const { fetching, error, playTime, playing, id, primaryPlayerId, ttf, time, recordings, onSeek, locations, multiPlay } = this.props;
+    const { loading, fetching, error, playTime, playing, id, primaryPlayerId, ttf, time, recordings, onSeek, locations, multiPlay } = this.props;
     const { playerWidth, showPreview, previewUrl, mouseTime, mouseX } = this.state;
 
     const [ locationId, cameraId, streamId ] = id.split('|');
@@ -133,7 +141,7 @@ class PlayerOverlay extends React.Component {
           </div>
         }
         {
-          fetching && !error &&
+          (loading || fetching) && !error &&
           <img src={LoadingSVG} />
         }
         {
@@ -209,4 +217,4 @@ class PlayerOverlay extends React.Component {
 
 }
 
-export default PlayerOverlay;
+export default ResponsiveWrap(PlayerOverlay);

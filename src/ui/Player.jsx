@@ -10,6 +10,11 @@ class Player extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      loading: true,
+      ended: false,
+    };
+
     this.currentTick = 0;
     this.playerReady = false;
   }
@@ -22,8 +27,10 @@ class Player extends React.Component {
 
         videoElement.addEventListener('timeupdate', this._handleTimeUpdate.bind(this));
         videoElement.addEventListener('loadeddata', this._handleDataLoaded.bind(this));
-        // videoElement.addEventListener('seeking', this._handleSeeking.bind(this));
-        // videoElement.addEventListener('seeked', this._handleSeeked.bind(this));
+        videoElement.addEventListener('seeking', this._handleSeeking.bind(this));
+        videoElement.addEventListener('seeked', this._handleSeeked.bind(this));
+        // videoElement.addEventListener('ended', this._handleEnded.bind(this));
+        videoElement.addEventListener('playing', this._handlePlaying.bind(this));
 
         this.playerReady = true;
       });
@@ -37,8 +44,10 @@ class Player extends React.Component {
 
     videoElement.removeEventListener('timeupdate', this._handleTimeUpdate.bind(this));
     videoElement.removeEventListener('loadeddata', this._handleDataLoaded.bind(this));
-    // videoElement.removeEventListener('seeking', this._handleSeeking.bind(this));
-    // videoElement.removeEventListener('seeked', this._handleSeeked.bind(this));
+    videoElement.removeEventListener('seeking', this._handleSeeking.bind(this));
+    videoElement.removeEventListener('seeked', this._handleSeeked.bind(this));
+    // videoElement.removeEventListener('ended', this._handleEnded.bind(this));
+    videoElement.removeEventListener('playing', this._handlePlaying.bind(this));
 
     if (this.hls) {
       this.hls.destroy();
@@ -69,6 +78,7 @@ class Player extends React.Component {
 
   render() {
     const { m3u8, id, multiPlay, is360, camera: { id: callhomeCameraId } } = this.props;
+    const { loading, ended } = this.state;
 
     const height = multiPlay ? '100%' : 'calc(100vw * 9 / 16)';
 
@@ -77,7 +87,7 @@ class Player extends React.Component {
         {
           is360
             ? <VROverlayWrap videoElement={this.refs.roiPlayer} multiPlay={multiPlay} />
-            : <PlayerOverlay {...this.props} id={id} cameraId={callhomeCameraId} onSeek={this._seek}/>
+            : <PlayerOverlay {...this.props} id={id} cameraId={callhomeCameraId} onSeek={this._seek} loading={loading} ended={ended} />
         }
         <video
           style={{
@@ -174,13 +184,28 @@ class Player extends React.Component {
   }
 
   _handleSeeking = () => {
-    const { onSeeking } = this.props;
-    onSeeking();
+    this.setState({
+      loading: true,
+    })
   }
 
   _handleSeeked = () => {
-    const { onSeeked } = this.props;
-    onSeeked();
+    this.setState({
+      loading: false,
+    })
+  }
+
+  _handleEnded = () => {
+    this.setState({
+      loading: false,
+      ended: true,
+    })
+  }
+
+  _handlePlaying = () => {
+    this.setState({
+      loading: false,
+    })
   }
 
   _changePlaybackRate = value => {
